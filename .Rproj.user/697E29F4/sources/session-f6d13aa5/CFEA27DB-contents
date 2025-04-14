@@ -1,0 +1,72 @@
+source(here::here("scripts", "libs.R"))
+
+# 1. load data
+dat <- read_csv(here("data", "poisson_data.csv"))
+
+
+# 2. check structure
+summary(dat)
+glimpse(dat)
+
+
+# Descriptive stats
+
+
+# log() and exp() change the values back and forth from log to not log
+dat$units |> mean()
+dat$temp |> mean() 
+
+
+dat |> 
+  group_by(city) |>
+  summarize(
+    avg_temp = mean(temp), 
+    avg_units = mean(units)
+  )
+
+
+# 3. fit inclusive and nested models
+#    test for interactions/main effects
+
+mod_0 <- glm(
+  formula = units ~ 1,
+  data = dat,
+  family = poisson(link = "log")
+)
+
+summary(mod_0)
+
+mod_1 <- glm(
+  formula = units ~ 1 + temp,
+  data = dat,
+  family = poisson(link = "log")
+)
+
+summary(mod_1)
+
+exp(2.4836512 + (0.0391199 * 100)) # THE DECIMALS MATTER
+
+
+# 4. summary of best model
+
+
+
+
+# 5. write up of output
+
+
+
+# 6. generate and save plot
+
+dat |>
+  ggplot() + 
+  aes(x = temp, y = units, color = city) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(
+    method = "glm", 
+    method.args = list(family = "poisson"),
+    fullrange = TRUE
+  ) +
+  scale_y_continuous(breaks = seq(0, 1200, 100)) # to change increments on y-axis
+
+

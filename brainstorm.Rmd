@@ -1,0 +1,123 @@
+---
+title: "brainstorm"
+output: html_document
+---
+
+The data consists of values for 
+
+- speaker (initials)
+
+- island 
+
+- textgridlabel? 
+
+- word
+
+- previous label and following label
+
+- start, end, duration 
+
+- f0_20, f0_50, f0_80
+
+- f1 midpoint 
+
+- f2 midpoint
+
+- f3 midpoint
+
+- intensity midpoint
+
+
+**Rolando's notes**
+
+(2) The CSV has some acoustic measurements for the phoneme "v", and for the vowels before and after it. I've included the F0 at different points (which should give us an idea of voicing), the duration of the phoneme, its intensity, and the F1, F2 and F3 of the vowels before and after it. Our hypothesis is that, sometimes, the "v" is closer to a "w", with more voicing and intensity, and a longer duration perhaps? 
+
+(3) If you would like to extract other measurements (that Praat might be able to give us), please let me know. Also, if you want particular audio samples, let me know the file name and time.
+
+
+**Hypotheses to test**
+
+1. Is w associated with more voicing (f0 at different points) than v?
+
+2. Is w associated with higher intensity than v?
+
+3. Is w associated with a longer duration than v?
+
+
+**Plan**
+
+Tidy the data 
+
+1. read csv file 
+
+```{r}
+#| label: read-csv
+#| message: false
+#| warning: false
+
+library("tidyverse")
+library("here")
+
+
+source(here::here("scripts", "libs.R"))
+
+untidy_data <- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
+
+```
+
+Then we can preview the data!
+
+
+```{r}
+#| label: glimpse-cim
+
+glimpse(untidy_data)
+
+```
+
+Good lord it's messy! We should tidy it.
+
+2. mutate the data so that we only have columns for name, island, textgridlabel, word, each f0 value, intensity, duration 
+
+```{r}
+#| label: tidy-cim
+#| message: false
+#| warning: false
+
+dat <- untidy_data |>
+  filter(TextGridLabel == "v") |>
+  select(speaker, island, Word, f0_20.point, f0_50.point, f0_80.point, duration, intensity = intensity_midpoint) |>
+  write_csv("tidy_cim.csv")
+
+#sort by island
+
+#remove rows that have NA values
+
+
+```
+
+
+3. filter textgridlabel so that it only has values of w and v **DONE!**
+
+
+4. present tidy data as: name, island, Word, duration, f0_20, f0_50, f0_80, intensity
+
+```{r}
+#| label: show-tidy-data
+#| warning: false
+#| message: false
+
+knitr::kable(dat)
+
+```
+
+
+
+5. fit a linear model to see for textgridtoken values of w and v, how do f0 points progress? add a line of best fit for w and v
+
+6. calculate average intensity for w and v 
+
+7. calculate average duration for w and v
+
+8. repeat 5-7 with data sorted by island to see if island has any interaction
+
