@@ -59,7 +59,6 @@ library("tidyverse")
 library("tidyr")
 library("here")
 
-
 source(here::here("scripts", "libs.R"))
 
 untidy_data <- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
@@ -72,7 +71,7 @@ Then we can preview the data!
 ```{r}
 #| label: glimpse-cim
 
-glimpse(untidy_data)
+#glimpse(untidy_data)
 
 ```
 
@@ -113,11 +112,101 @@ knitr::kable(head(dat))
 ```
 
 
-5. fit a linear model to see for textgridtoken values of w and v, how do f0 points progress? add a line of best fit for w and v
+5. fit a general additive model (GAM) to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
 
-6. calculate average intensity for w and v 
+**anova? GLM? use poisson???**
 
-7. calculate average duration for w and v
+```{r}
+#| label: f0_dur_mod
+#| warning: false
+#| message: false
 
-8. repeat 5-7 with data sorted by island to see if island has any interaction
+mod_f0 <- dat |>
+  ggplot() + 
+  aes(x = duration, y = f0_20, color = island) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(
+    method = "glm", 
+    family = poisson(link = "log"))
+
+print(mod_f0)
+
+```
+
+```{r}
+#| warning: false
+#| message: false
+
+
+```
+
+
+```{r}
+#| label: duration-by-island
+#| warning: false
+#| message: false
+
+mod1 <- lm(formula = duration ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = duration, color = island) +
+  geom_boxplot()
+
+print(mod1)
+
+```
+
+
+```{r}
+#| label: intensity-by-island
+#| warning: false
+#| message: false
+
+mod2 <- lm(formula = intensity ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = intensity, color = island) +
+  geom_boxplot()
+
+print(mod2)
+
+```
+
+**Calculate descriptive statistics for mod1 and mod2???**
+
+```{r}
+#| label: descriptive-stats
+#| warning: false
+#| message: false
+
+#summary(mod1)
+
+#summary(mod2)
+
+```
+
+6. calculate average intensity for w **DONE**
+
+```{r}
+#| label: avg-intensity
+#| message: false
+#| warning: false
+
+mean(dat$intensity)
+
+```
+
+
+7. calculate average duration for w **DONE**
+
+```{r}
+#| label: avg-dur
+#| message: false
+#| warning: false
+
+mean(dat$duration)
+
+```
+
+
+
+8. repeat 5-7 with data sorted by island to see if island has any interaction **???**
 
