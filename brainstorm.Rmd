@@ -112,9 +112,9 @@ knitr::kable(head(dat))
 ```
 
 
-5. fit a general additive model (GAM) to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
+5. fit model to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
 
-**anova? GLM? use poisson???**
+- **do the same thing the paper i did my online pres on. plot all the f0 values on y axis and time on x axis, color by island**
 
 ```{r}
 #| label: f0_dur_mod
@@ -133,28 +133,11 @@ print(mod_f0)
 
 ```
 
-```{r}
-#| warning: false
-#| message: false
 
 
-```
 
 
-```{r}
-#| label: duration-by-island
-#| warning: false
-#| message: false
-
-mod1 <- lm(formula = duration ~ island, data = dat) |>
-  ggplot() +
-  aes(x = island, y = duration, color = island) +
-  geom_boxplot()
-
-print(mod1)
-
-```
-
+6. calculate average intensity for w **DONE**
 
 ```{r}
 #| label: intensity-by-island
@@ -170,20 +153,6 @@ print(mod2)
 
 ```
 
-**Calculate descriptive statistics for mod1 and mod2???**
-
-```{r}
-#| label: descriptive-stats
-#| warning: false
-#| message: false
-
-#summary(mod1)
-
-#summary(mod2)
-
-```
-
-6. calculate average intensity for w **DONE**
 
 ```{r}
 #| label: avg-intensity
@@ -198,6 +167,20 @@ mean(dat$intensity)
 7. calculate average duration for w **DONE**
 
 ```{r}
+#| label: duration-by-island
+#| warning: false
+#| message: false
+
+mod1 <- lm(formula = duration ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = duration, color = island) +
+  geom_boxplot()
+
+print(mod1)
+
+```
+
+```{r}
 #| label: avg-dur
 #| message: false
 #| warning: false
@@ -206,6 +189,18 @@ mean(dat$duration)
 
 ```
 
+**Calculate descriptive statistics for mod1 and mod2**
+
+```{r}
+#| label: descriptive-stats
+#| warning: false
+#| message: false
+
+summary(mod1)
+
+summary(mod2)
+
+```
 
 
 8. repeat 5-7 with data sorted by island to see if island has any interaction **???**
