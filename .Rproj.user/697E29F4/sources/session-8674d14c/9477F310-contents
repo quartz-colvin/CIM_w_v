@@ -114,6 +114,7 @@ knitr::kable(head(dat))
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 5. fit model to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
 
@@ -123,6 +124,11 @@ knitr::kable(head(dat))
 
 **anova? GLM? use poisson???**
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+5. fit a general additive model (GAM) to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
+
+**anova? GLM? use poisson???**
+>>>>>>> Stashed changes
 =======
 5. fit a general additive model (GAM) to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
 
@@ -153,6 +159,7 @@ print(mod_f0)
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 
 
@@ -176,13 +183,18 @@ print(mod2)
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 ```{r}
 #| warning: false
 #| message: false
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -192,6 +204,7 @@ print(mod2)
 
 
 ```{r}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
@@ -213,6 +226,8 @@ mean(dat$intensity)
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 #| label: duration-by-island
 #| warning: false
 #| message: false
@@ -228,8 +243,11 @@ print(mod1)
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -278,7 +296,10 @@ mean(dat$intensity)
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -292,6 +313,7 @@ mean(dat$duration)
 
 ```
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
@@ -309,6 +331,8 @@ summary(mod2)
 ```
 =======
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
