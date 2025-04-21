@@ -1,0 +1,212 @@
+---
+title: "brainstorm"
+output: html_document
+---
+
+The data consists of values for 
+
+- speaker (initials)
+
+- island 
+
+- textgridlabel? 
+
+- word
+
+- previous label and following label
+
+- start, end, duration 
+
+- f0_20, f0_50, f0_80
+
+- f1 midpoint 
+
+- f2 midpoint
+
+- f3 midpoint
+
+- intensity midpoint
+
+
+**Rolando's notes**
+
+(2) The CSV has some acoustic measurements for the phoneme "v", and for the vowels before and after it. I've included the F0 at different points (which should give us an idea of voicing), the duration of the phoneme, its intensity, and the F1, F2 and F3 of the vowels before and after it. Our hypothesis is that, sometimes, the "v" is closer to a "w", with more voicing and intensity, and a longer duration perhaps? 
+
+(3) If you would like to extract other measurements (that Praat might be able to give us), please let me know. Also, if you want particular audio samples, let me know the file name and time.
+
+
+**Hypotheses to test**
+
+1. Is w associated with more voicing (f0 at different points) than v?
+
+2. Is w associated with higher intensity than v?
+
+3. Is w associated with a longer duration than v?
+
+
+**Plan**
+
+Tidy the data 
+
+1. read csv file plus setup
+
+```{r}
+#| label: read-csv
+#| message: false
+#| warning: false
+
+library("tidyverse")
+library("tidyr")
+library("here")
+
+source(here::here("scripts", "libs.R"))
+
+untidy_data <- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
+
+```
+
+Then we can preview the data!
+
+
+```{r}
+#| label: glimpse-cim
+
+#glimpse(untidy_data)
+
+```
+
+Good lord it's messy! We should tidy it.
+
+2. mutate the data so that we only have columns for name, island, textgridlabel, word, each f0 value, intensity, duration 
+
+```{r}
+#| label: tidy-cim
+#| message: false
+#| warning: false
+
+dat <- untidy_data |>
+  drop_na() |>   # remove rows that have NA values
+  filter(TextGridLabel == "v") |>
+  arrange(island, Word) |>   # group by island
+  select(island, word = Word, f0_20 = f0_20.point, f0_50 = f0_50.point, f0_80 = f0_80.point, duration, intensity = intensity_midpoint) |>
+  write_csv("tidy_cim.csv")
+
+
+```
+
+
+3. filter textgridlabel so that it only has values of w and v **DONE!**
+
+
+4. present tidy data as: name, island, Word, duration, f0_20, f0_50, f0_80, intensity
+
+**Here is the tidy data, but not the whole table because it is quite lengthy.**
+
+```{r}
+#| label: show-tidy-data
+#| warning: false
+#| message: false
+
+knitr::kable(head(dat))
+
+```
+
+
+5. fit a general additive model (GAM) to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
+
+**anova? GLM? use poisson???**
+
+```{r}
+#| label: f0_dur_mod
+#| warning: false
+#| message: false
+
+mod_f0 <- dat |>
+  ggplot() + 
+  aes(x = duration, y = f0_20, color = island) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(
+    method = "glm", 
+    family = poisson(link = "log"))
+
+print(mod_f0)
+
+```
+
+```{r}
+#| warning: false
+#| message: false
+
+
+```
+
+
+```{r}
+#| label: duration-by-island
+#| warning: false
+#| message: false
+
+mod1 <- lm(formula = duration ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = duration, color = island) +
+  geom_boxplot()
+
+print(mod1)
+
+```
+
+
+```{r}
+#| label: intensity-by-island
+#| warning: false
+#| message: false
+
+mod2 <- lm(formula = intensity ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = intensity, color = island) +
+  geom_boxplot()
+
+print(mod2)
+
+```
+
+**Calculate descriptive statistics for mod1 and mod2???**
+
+```{r}
+#| label: descriptive-stats
+#| warning: false
+#| message: false
+
+#summary(mod1)
+
+#summary(mod2)
+
+```
+
+6. calculate average intensity for w **DONE**
+
+```{r}
+#| label: avg-intensity
+#| message: false
+#| warning: false
+
+mean(dat$intensity)
+
+```
+
+
+7. calculate average duration for w **DONE**
+
+```{r}
+#| label: avg-dur
+#| message: false
+#| warning: false
+
+mean(dat$duration)
+
+```
+
+
+
+8. repeat 5-7 with data sorted by island to see if island has any interaction **???**
+
