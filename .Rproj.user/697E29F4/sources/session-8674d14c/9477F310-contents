@@ -112,9 +112,15 @@ knitr::kable(head(dat))
 ```
 
 
+<<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 5. fit model to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
 
 - **do the same thing the paper i did my online pres on. plot all the f0 values on y axis and time on x axis, color by island**
+=======
+5. fit a general additive model (GAM) to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
+
+**anova? GLM? use poisson???**
+>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
 
 ```{r}
 #| label: f0_dur_mod
@@ -133,6 +139,7 @@ print(mod_f0)
 
 ```
 
+<<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 
 
 
@@ -150,11 +157,18 @@ mod2 <- lm(formula = intensity ~ island, data = dat) |>
   geom_boxplot()
 
 print(mod2)
+=======
+```{r}
+#| warning: false
+#| message: false
+
+>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
 
 ```
 
 
 ```{r}
+<<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 #| label: avg-intensity
 #| message: false
 #| warning: false
@@ -167,6 +181,8 @@ mean(dat$intensity)
 7. calculate average duration for w **DONE**
 
 ```{r}
+=======
+>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
 #| label: duration-by-island
 #| warning: false
 #| message: false
@@ -180,6 +196,51 @@ print(mod1)
 
 ```
 
+<<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
+=======
+
+```{r}
+#| label: intensity-by-island
+#| warning: false
+#| message: false
+
+mod2 <- lm(formula = intensity ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = intensity, color = island) +
+  geom_boxplot()
+
+print(mod2)
+
+```
+
+**Calculate descriptive statistics for mod1 and mod2???**
+
+```{r}
+#| label: descriptive-stats
+#| warning: false
+#| message: false
+
+#summary(mod1)
+
+#summary(mod2)
+
+```
+
+6. calculate average intensity for w **DONE**
+
+```{r}
+#| label: avg-intensity
+#| message: false
+#| warning: false
+
+mean(dat$intensity)
+
+```
+
+
+7. calculate average duration for w **DONE**
+
+>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
 ```{r}
 #| label: avg-dur
 #| message: false
@@ -189,6 +250,7 @@ mean(dat$duration)
 
 ```
 
+<<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 **Calculate descriptive statistics for mod1 and mod2**
 
 ```{r}
@@ -201,6 +263,8 @@ summary(mod1)
 summary(mod2)
 
 ```
+=======
+>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
 
 
 8. repeat 5-7 with data sorted by island to see if island has any interaction **???**
