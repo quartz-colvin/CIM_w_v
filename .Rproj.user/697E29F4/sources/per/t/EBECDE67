@@ -3,24 +3,24 @@
     "path": "C:/Users/court/OneDrive/Desktop/CIM/CIM_w_v_analysis/manuscript/cim_w_v_manuscript.Rmd",
     "project_path": "manuscript/cim_w_v_manuscript.Rmd",
     "type": "r_markdown",
-    "hash": "3219988352",
+    "hash": "1012881591",
     "contents": "",
     "dirty": false,
     "created": 1745244360654.0,
-    "source_on_save": false,
+    "source_on_save": true,
     "relative_order": 5,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "2,21",
-        "scrollLine": "0"
+        "cursorPosition": "48,0",
+        "scrollLine": "45"
     },
     "folds": "",
-    "lastKnownWriteTime": 1745244316,
+    "lastKnownWriteTime": 1745244850,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1745244316,
+    "last_content_update": 1745244850401,
     "read_only": false,
     "read_only_alternatives": []
 }
