@@ -1,8 +1,19 @@
 {
+<<<<<<< Updated upstream
+=======
+<<<<<<<< Updated upstream:.Rproj.user/A388C36A/sources/per/t/AEA02ECB
+    "id": "AEA02ECB",
+    "path": "~/GitHub/CIM_w_v/manuscript/cim_w_v_manuscript.Rmd",
+    "project_path": "manuscript/cim_w_v_manuscript.Rmd",
+    "type": "r_markdown",
+    "hash": "3219988352",
+========
+>>>>>>> Stashed changes
     "id": "9477F310",
     "path": "C:/Users/court/OneDrive/Desktop/CIM/CIM_w_v_analysis/brainstorm.Rmd",
     "project_path": "brainstorm.Rmd",
     "type": "r_markdown",
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310
     "hash": "983458054",
 =======
@@ -11,11 +22,19 @@
     "contents": "",
     "dirty": false,
     "created": 1744664420999.0,
+=======
+    "hash": "0",
+>>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310
+    "contents": "",
+    "dirty": false,
+    "created": 1745184720036.0,
+>>>>>>> Stashed changes
     "source_on_save": true,
     "relative_order": 2,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310
         "cursorPosition": "50,9",
         "scrollLine": "50"
@@ -27,6 +46,19 @@
     "source_window": "",
     "last_content_update": 1745244321,
 =======
+=======
+<<<<<<<< Updated upstream:.Rproj.user/A388C36A/sources/per/t/AEA02ECB
+        "cursorPosition": "198,0",
+        "scrollLine": "194"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1745186668,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1745186668269,
+========
+>>>>>>> Stashed changes
         "cursorPosition": "5,32",
         "scrollLine": "0"
     },
@@ -36,7 +68,11 @@
     "collab_server": "",
     "source_window": "",
     "last_content_update": 1745169167236,
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310
+=======
+>>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310
+>>>>>>> Stashed changes
     "read_only": false,
     "read_only_alternatives": []
 }

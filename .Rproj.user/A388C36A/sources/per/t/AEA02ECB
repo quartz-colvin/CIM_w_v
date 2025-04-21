@@ -1,9 +1,17 @@
 {
+<<<<<<<< Updated upstream:.Rproj.user/A388C36A/sources/per/t/AEA02ECB
     "id": "AEA02ECB",
     "path": "~/GitHub/CIM_w_v/manuscript/cim_w_v_manuscript.Rmd",
     "project_path": "manuscript/cim_w_v_manuscript.Rmd",
     "type": "r_markdown",
     "hash": "3219988352",
+========
+    "id": "9477F310",
+    "path": "C:/Users/court/OneDrive/Desktop/CIM/CIM_w_v_analysis/brainstorm.Rmd",
+    "project_path": "brainstorm.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+>>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310
     "contents": "",
     "dirty": false,
     "created": 1745184720036.0,
@@ -12,6 +20,7 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
+<<<<<<<< Updated upstream:.Rproj.user/A388C36A/sources/per/t/AEA02ECB
         "cursorPosition": "198,0",
         "scrollLine": "194"
     },
@@ -21,6 +30,17 @@
     "collab_server": "",
     "source_window": "",
     "last_content_update": 1745186668269,
+========
+        "cursorPosition": "5,32",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1745169167,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1745169167236,
+>>>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310
     "read_only": false,
     "read_only_alternatives": []
 }

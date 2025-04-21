@@ -112,6 +112,7 @@ knitr::kable(head(dat))
 ```
 
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 5. fit model to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
 
@@ -121,6 +122,11 @@ knitr::kable(head(dat))
 
 **anova? GLM? use poisson???**
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+5. fit a general additive model (GAM) to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
+
+**anova? GLM? use poisson???**
+>>>>>>> Stashed changes
 
 ```{r}
 #| label: f0_dur_mod
@@ -139,6 +145,7 @@ print(mod_f0)
 
 ```
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 
 
@@ -158,16 +165,22 @@ mod2 <- lm(formula = intensity ~ island, data = dat) |>
 
 print(mod2)
 =======
+=======
+>>>>>>> Stashed changes
 ```{r}
 #| warning: false
 #| message: false
 
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+>>>>>>> Stashed changes
 
 ```
 
 
 ```{r}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 #| label: avg-intensity
 #| message: false
@@ -183,6 +196,8 @@ mean(dat$intensity)
 ```{r}
 =======
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+>>>>>>> Stashed changes
 #| label: duration-by-island
 #| warning: false
 #| message: false
@@ -196,8 +211,11 @@ print(mod1)
 
 ```
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 =======
+=======
+>>>>>>> Stashed changes
 
 ```{r}
 #| label: intensity-by-island
@@ -240,7 +258,10 @@ mean(dat$intensity)
 
 7. calculate average duration for w **DONE**
 
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+>>>>>>> Stashed changes
 ```{r}
 #| label: avg-dur
 #| message: false
@@ -250,6 +271,7 @@ mean(dat$duration)
 
 ```
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:.Rproj.user/697E29F4/sources/per/t/9477F310-contents
 **Calculate descriptive statistics for mod1 and mod2**
 
@@ -265,6 +287,8 @@ summary(mod2)
 ```
 =======
 >>>>>>> Stashed changes:.Rproj.user/697E29F4/sources/session-8674d14c/9477F310-contents
+=======
+>>>>>>> Stashed changes
 
 
 8. repeat 5-7 with data sorted by island to see if island has any interaction **???**
