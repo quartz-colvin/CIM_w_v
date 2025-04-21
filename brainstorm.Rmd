@@ -48,7 +48,7 @@ The data consists of values for
 
 Tidy the data 
 
-1. read csv file 
+1. read csv file plus setup
 
 ```{r}
 #| label: read-csv

@@ -1,9 +1,9 @@
 {
     "id": "9477F310",
-    "path": "C:/Users/court/OneDrive/Desktop/CIM_w_v/brainstorm.Rmd",
+    "path": "C:/Users/court/OneDrive/Desktop/CIM/CIM_w_v_analysis/brainstorm.Rmd",
     "project_path": "brainstorm.Rmd",
     "type": "r_markdown",
-    "hash": "2344856945",
+    "hash": "983458054",
     "contents": "",
     "dirty": false,
     "created": 1744664420999.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "92,27",
-        "scrollLine": "81"
+        "cursorPosition": "14,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1744668646,
+    "lastKnownWriteTime": 1745244321,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1744668646912,
+    "last_content_update": 1745244321,
     "read_only": false,
     "read_only_alternatives": []
 }
