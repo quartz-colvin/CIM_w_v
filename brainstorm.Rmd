@@ -43,6 +43,7 @@ The data consists of values for
 
 3. Is w associated with a longer duration than v?
 
+4. 
 
 **Plan**
 
@@ -58,6 +59,8 @@ Tidy the data
 library("tidyverse")
 library("tidyr")
 library("here")
+library("itsadug")
+library("mgcv")
 
 source(here::here("scripts", "libs.R"))
 
@@ -71,7 +74,7 @@ Then we can preview the data!
 ```{r}
 #| label: glimpse-cim
 
-#glimpse(untidy_data)
+head(untidy_data)
 
 ```
 
@@ -87,10 +90,27 @@ Good lord it's messy! We should tidy it.
 dat <- untidy_data |>
   drop_na() |>   # remove rows that have NA values
   filter(TextGridLabel == "v") |>
+  pivot_longer(
+    cols = c("f0_20.point", "f0_50.point", "f0_80.point"),
+    names_to = "percent",
+    values_to = "hz"
+  ) |>
   arrange(island, Word) |>   # group by island
-  select(island, word = Word, f0_20 = f0_20.point, f0_50 = f0_50.point, f0_80 = f0_80.point, duration, intensity = intensity_midpoint) |>
+  select(island, word = Word, percent, hz, duration, intensity = intensity_midpoint) |>
   write_csv("tidy_cim.csv")
 
+```
+
+```{r}
+#| label: change-percents
+#| warning: false
+#| message: false
+
+dat$percent[dat$percent == 'f0_20.point'] <- "20"
+
+dat$percent[dat$percent == 'f0_50.point'] <- "50"
+
+dat$percent[dat$percent == 'f0_80.point'] <- "80"
 
 ```
 
@@ -114,25 +134,32 @@ knitr::kable(head(dat))
 
 5. fit model to see for textgridtoken v, how do f0 points progress? add a line of best fit for w and v
 
-- **do the same thing the paper i did my online pres on. plot all the f0 values on y axis and time on x axis, color by island**
+- **do the same thing the paper i did my online pres on. plot all the f0 values on y axis and time on x axis, color by island ???**
 
 ```{r}
-#| label: f0_dur_mod
+#| label: f0-traj-mod
 #| warning: false
 #| message: false
+#| out-width: "100%"
 
 mod_f0 <- dat |>
   ggplot() + 
-  aes(x = duration, y = f0_20, color = island) +
-  geom_point(alpha = 0.2) +
+  aes(x = duration, y = hz, color = island) +
+  geom_point() +
   geom_smooth(
-    method = "glm", 
-    family = poisson(link = "log"))
+    method="glm",
+    method.args = list(family = "poisson")
+  ) +
+  facet_wrap(~island) +
+  labs(
+    title = "F0 values by duration across the Cook Islands", 
+    x = "Duration", 
+    y = "F0 (Hz)"
+  ) 
 
 print(mod_f0)
 
 ```
-
 
 
 
@@ -202,6 +229,4 @@ summary(mod2)
 
 ```
 
-
-8. repeat 5-7 with data sorted by island to see if island has any interaction **???**
 

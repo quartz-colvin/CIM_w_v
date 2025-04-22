@@ -1,0 +1,3280 @@
+---
+title: "DS4Ling Class Notes"
+author: "Quartz Colvin"
+date: "2025-02-24"
+output: 
+  html_document: 
+    highlight: pygments
+    theme: lumen
+---
+
+Load libraries and setup 
+
+```{r}
+#| label: load-libs
+#| message: false
+#| warning: false
+
+library("ggplot2")
+library("ggfortify")
+
+library("tidyverse")
+library("devtools")
+
+#install_github("jvcasillas/ds4ling") # the package the prof made for the class
+
+library("ds4ling")
+library("untidydata")
+library("patchwork")
+library("languageR")
+library("rstanarm")
+library("lme4")
+
+
+```
+
+```{r}
+#| label: ggplot-examples
+
+# Fit some models
+mod1 <- lm(mpg ~ wt, data = mtcars)
+mod2 <- lm(dist ~ speed, data = cars[1:20, ])
+
+summary(mod1)
+summary(mod2)
+
+cars[1:20, ] |>
+  ggplot() + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  coord_cartesian(ylim = c(-10, 50), xlim = c(-5, 15))
+
+
+# Assumptions
+
+# 1.
+# The regression model is linear in parameters
+# Eyeball it
+
+
+mtcars |> 
+  ggplot() + 
+  aes(x = wt, y = mpg) + 
+  geom_point()
+
+
+
+cars[1:20, ] |>
+  ggplot() + 
+  aes(x = speed, y = dist) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  coord_cartesian(ylim = c(-10, 50), xlim = c(-5, 15))
+
+
+
+# 2. 
+# The mean of residuals is zero
+# How to check?: Check model summary and test manually
+
+options(scipen = 999)
+
+mean(mod1$residuals)
+
+mean(mod2$residuals)
+
+
+
+
+
+# 3.
+# Homoskedasticity of residuals or equal variance
+# How to check? autoplot, diagnosis functions
+# What are you looking for? more or less same 'blob' along x axis
+
+
+# instead of autoplot() cuz it didn't work 
+diagnosis(mod1)
+diagnosis(mod2)
+
+# 4.
+# No autocorrelation of residuals (important for time series data)
+# When the residuals are autocorrelated, it means that the current value 
+# is dependent of the previous values and that there is an unexplained 
+# pattern in the Y variable that shows up
+
+#
+# How to check? 2 methods
+#
+
+# 4a. afc plot
+acf(mod1$residuals)   # visual inspection
+data(economics)       # bad example
+bad_auto <- lm(pce ~ pop, data = economics)
+acf(bad_auto$residuals)  # highly autocorrelated from the picture.
+
+
+# 4b. Durbin-Watson test
+# lmtest::dwtest(mod1)
+# lmtest::dwtest(bad_auto)
+
+#
+# How to fix it?
+#
+
+# One option: Add lag1 as predictor and refit model
+# econ_data  <- data.frame(economics, resid_bad_auto = bad_auto$residuals)
+# econ_data1 <- slide(econ_data, Var = "resid_bad_auto", NewVar = "lag1", slideBy = -1)
+# econ_data2 <- na.omit(econ_data1)
+# bad_auto2  <- lm(pce ~ pop + lag1, data = econ_data2)
+
+# acf(bad_auto2$residuals)
+# lawstat::runs.test(bad_auto2$residuals)
+# lmtest::dwtest(bad_auto2)
+# summary(bad_auto2)
+
+#
+# What happened? Adding the lag variable removes the autocorrelation so now 
+# we can interpret the parameter of interest.
+#
+# (you might never do this... we will learn a better way to deal with this later)
+#
+
+
+
+# 5. predictor and residuals are not correlated
+# How to check? cor.test
+cor.test(mtcars$wt, mod1$residuals)
+
+
+# give me rows 1-20 in this dataset, give me the "speed" column!
+cor.test(cars[1:20, "speed"], mod2$residuals)
+
+
+
+# 6. 
+# Normality of residuals
+# (increasingly bad)
+autoplot(mod1, which = 2)
+autoplot(mod2, which = 2)
+autoplot(bad_auto, which = 2)
+
+
+diagnosis(mod1)
+diagnosis(mod2)
+
+# turn vector to dataset
+as_tibble(mod2$residuals) |>
+  ggplot() + 
+  aes(x = value) + 
+  geom_histogram(bins = 5) #change bin size
+
+vocab_data
+mod3 <- lm(vocab ~ ages, data = vocab_data)
+diagnosis(mod3)
+
+
+
+#
+# You can check some assumptions automatically
+# (I don't really trust this method)
+gvlma::gvlma(mod1)
+gvlma::gvlma(mod2)
+gvlma::gvlma(bad_auto)
+
+```
+
+# Basic R-markdown examples
+
+```{r}
+#| label: test
+2 + 2
+```
+
+
+```{r}
+#| label: fig-cars
+#| message: false
+#| warning: false
+#| out-width: "100%"
+
+ggplot(mtcars) + 
+  aes(x = drat, y = mpg) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+```{r}
+#| label: in-line-code
+#| echo: false
+
+x <- 2 + 2
+
+```
+
+Hello, this is prose! 
+
+The bilingual group had a mean of `r x`.
+
+# ggplot weeks
+
+```{r}
+#| label: glimpse-test-scores
+
+glimpse(test_scores_rm)
+
+```
+
+
+'cor()' calculates the same as 'cor.test()' but it doesn't also give you a hypothesis test
+
+```{r}
+#| label: cor_test_scores
+
+test_scores_rm$test1
+
+cor(test_scores_rm$test1, test_scores_rm$test2)
+
+```
+
+
+```{r}
+#| label: test-scores-plot
+
+test_scores_rm |> 
+  ggplot() +
+  aes(x = test1, y = test2) +
+  geom_point()
+```
+
+
+
+'cor.test()' is what asks if the value of r is equal to 0
+
+
+# ggplot still
+
+```{r}
+#| label: explore
+
+glimpse(mtcars)
+head(mtcars)
+dim(mtcars)
+summary(mtcars)
+```
+
+```{r}
+#| label: some-plots
+# This is our template
+# Aes() generates the axes on the blank plot
+mtcars |>
+  ggplot() + 
+  aes(x = disp, y = mpg) + # We add a layer to the plot to generate the points!
+  geom_point()
+
+mtcars |> 
+  ggplot() + 
+  aes(x = disp, y = mpg) + 
+  geom_boxplot()
+
+
+mtcars |> 
+  ggplot() + 
+  aes(x = factor(am), y = mpg) +
+  stat_summary(
+    fun.data = mean_sdl,
+    geom = 'pointrange'
+  )
+  
+```
+
+```{r}
+#| label: simple-transformations
+# Select columns with 'select()'
+mtcars |> 
+  select(mpg, displacement = disp, am)
+
+
+# Selects columns from mpg to drat
+mtcars |> 
+  select(mpg:drat)
+
+# Select and filter 
+# Use mutate to add a new column
+mtcars |> 
+  select(mpg, displacement = disp, am) |>
+  filter(am == 1, mpg >= 23) |>
+  mutate(
+    mpg_100 = mpg + 100, 
+    z_mpg = (mpg - mean(mpg)) / sd(mpg))
+
+
+
+# 'dplyr::' before the function name forces it to choose that function name FROM THAT PACKAGE!!!! Useful if you have a naming conflict between packages
+
+# filter by cyl that equals 6
+mtcars |>
+  dplyr::filter(cyl == 6) 
+
+
+# filter by mpg values that are less than 20 and greater than 14
+mtcars |> 
+  filter(mpg < 20 & mpg > 14)
+
+# filter by mpg values that are greater than 20 OR disp values less than 200
+mtcars |>
+  filter(mpg > 20 | disp < 200)
+
+
+# ARRANGING TIME
+
+
+
+# arrange mtcars dataset based on cyl and disp
+mtcars |>
+  arrange(cyl, disp)
+
+# arrange mtcars dataset based on mpg from highest to lowest
+mtcars |>
+  arrange(desc(mpg))
+
+mtcars
+# Aggregate summarizes with 'group_by' and 'summarize'
+mtcars |> 
+  group_by(am) |>
+  summarize(
+    avg = mean(mpg),
+    sd = sd(mpg)
+    )
+```
+
+```{r}
+#| label: exercises_in_class
+
+# mutate time!!!!
+
+# select the mpg column and then create a new column called mpg_x2 that doubles every value in the dataframe
+
+mtcars |> 
+  select(mpg) |>
+  mutate(mpg_x2 = mpg * 2)
+
+
+# create a new column called mpg_c that centers the mpg data by subtracting the mean value of mpg from every value in the dataframe
+
+mtcars |>
+  select(mpg) |>
+  mutate(mpg_c = mpg - mean(mpg)) |>
+  summarize(avg = mean(mpg_c), 
+            sd = sd(mpg))
+
+# create a new column called value that applies the label 'good' to cars that get over 18 mpg and the label 'bad' to cars that get 18 mpg or less
+
+mtcars |>
+  select(mpg) |>
+  mutate(value = if_else(
+    condition = mpg > 18,
+    true = "good",
+    false = "bad"
+    )
+  )
+
+```
+
+
+WHAT ABOUT IF WE WANT A THIRD COLUMN? Use mutate() + case_when() !!!
+
+use instead of nesting if_else statements.
+
+CONDITIONS:
+1. if age of learning is less than 12 and L1 is Spanish, then heritage speaker
+2. if age of learning is less than 12 and L1 is English, then early learner 
+3. if age of learning is greater than 12, then late learner
+4. if age of learning is NA, then monolingual
+
+```{r}
+#| label: mutate-casewhen
+
+# create new column called 'opinion' 
+# CONDITIONS: 
+# if mpg is greater than 20, then 'good'
+# if mpg is less than 20, but greater than 15, then 'meh'
+# if mpg is less than 15, then 'bad'
+
+mtcars |>
+  select(mpg) |> 
+  mutate(
+    opinion = case_when(
+      mpg >= 20 ~ "good", 
+      mpg < 20 & mpg > 15 ~ "meh",
+      mpg <= 15 ~ "bad"
+    )
+  ) |> # now let's make a boxplot of these!
+  ggplot() + 
+  aes(x = opinion, y = mpg) + 
+  geom_boxplot()
+
+```
+
+```{r}
+#| label: tidy-data
+pre_post |>
+  separate(
+    col = id,
+    into = c("language", "num"), 
+    sep = 4
+  ) |>
+  separate( # split a column into multiple
+    col = spec, # the column that you want to split into 2 
+    into = c("group", "proficiency"), # new 2 columns
+    sep = "_" # separate at this character in the values in that column
+  )
+```
+
+
+
+
+```{r}
+#| label: pivot-examples
+
+# PIVOT LONGER 
+pre_post |>
+  pivot_longer(
+    cols = c("test1", "test2"),
+    names_to = "test",
+    values_to = "scores"
+  ) |> # PIVOT WIDER
+  pivot_wider(
+    names_from = test,
+    values_from = scores
+  ) |>
+  mutate(diff = test2 - test1)
+
+```
+
+
+```{r}
+#| label: lang_diversity_dataset
+
+language_diversity |>
+  pivot_wider(
+    names_from = Measurement,
+    values_from = Value
+  ) |>
+  ggplot() + 
+  aes(x = log(Langs), y = log(Area)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") 
+
+```
+
+
+```{r}
+#| label: tidy_csv
+
+# Make a CSV file from the wider dataset 
+language_diversity |>
+  pivot_wider(
+    names_from = Measurement,
+    values_from = Value
+  ) |>
+  write_csv("lang_tidy.csv")
+```
+
+
+```{r}
+#| label: read_csv
+
+lng_dv <- read_csv("lang_tidy.csv")
+
+```
+
+```{r}
+#| label: some-cor-test-plots
+
+test_scores_rm |> 
+  ggplot() + 
+  aes(x = test1, y = test2) + 
+  geom_point()
+cor.test(test_scores_rm$test1, test_scores_rm$test2)
+
+```
+
+
+# 24 FEB 2025
+
+The linear model: 
+
+- allows us to test for a linear relationship between 2 or more variables
+
+- can be used to 1) quantify the strength of a relationship and 2) predict 
+
+Remember y=a + bx ? 
+
+Bivariate regression:
+
+- the linear model is basically the same as linear algebra, with two subtle differences 
+
+1. we fit the line through data points (measurements, observations) 
+
+2. we use slightly different terminology 
+
+- response ~ intercept + (slope * predictor)
+
+- y (with a hat) = a + bx
+
+Measurement error 
+
+- we rarely (never) find a perfectly linear relationship in our data
+
+- most relationships are not perfectly linear 
+
+- our measurements are not perfect 
+- there is error in everything (normal distrubution)
+
+- we account for error in our models: y(hat) = a + bx + e(rror)
+
+- the difference between y(hat) and y is called PREDICTION ERROR (TPE)
+
+- TPE is the sum of the prediction error of all observations 
+
+- this measurement isn't ideal because negative values cancel out the positive ones- thus, we square them 
+
+- we call this the sum of square of the errors (SSE)
+
+if a line doesn't minimize the sum of the squares of the errors, then its NOT the best fit line for the data 
+
+
+TERMINOLOGY
+
+- the best fit line is determined using the ordinary least squares method 
+
+- in other words, we try to find the best line that minimizes the distance between the predicted values and the observed data 
+
+- the distances representing deviations from the regression line are called residuals 
+
+- the best fit line is the one that reduces the sum of squares of the error term (this is a measure of the variability around the best fit line)
+
+We can't measure anything perfectly. There is always error!!!
+
+
+PRACTICE
+
+Using the mtcars dataset, we can fit a model with the following variables:
+
+- response variable: mpg
+
+- predictor: wt
+
+we will fit the model using the linear equation! 
+
+- mpg = B0 + B1(wt) + error
+
+- to do this in R, we use the lm() function
+
+```{r}
+#| label: linear_equation
+
+model <- lm(mpg ~ wt, data = mtcars)  # fits the model, doesn't print anything though!
+
+summary(model) # prints a summary of the model
+```
+
+The coefficient of determination 
+
+- an overall assessment of model fit 
+
+- R squared is the variance explained by your model 
+
+- ranges from 0 to 1
+
+- literally calculated as r times r
+
+- what does it mean to explain variance? 
+
+
+y = an observed, measured value of y 
+
+y(-) = the mean value of y 
+
+y(hat) = a value of y predicted by our model (along the regression line)
+
+# A quick review
+
+### Classical MRC 
+
+In classical Multiple Regression/Correlation (MRC) predictors are continuous variables
+
+**Recall**
+
+- Darwinian theory predicted continuous variation in traits
+
+- Galton and Pearson created a model for continuous variables
+
+- Discontinuous (categorical) variables were not considered
+
+In real life we do run into dichotomous/discontinuous variables
+
+Or… if an entire experimental group gets one treatment and another group gets a different treatment, this is also discontinuous
+
+### Classical ANOVA
+
+Classical Analysis of Variance (ANOVA) assumes that all predictors are discontinuous variables
+
+ANOVA methods are often abused by forcing continuous variables into discontinuous form (this can reduce your statistical power by as much as 50%)
+
+### Both types of variables 
+
+**Categorical** vs **Continuous**
+
+Categorical
+
+- Smoker/non-smoker
+
+- Native speaker/L2 learner
+
+- Voiced/voiceless
+
+- stressed/unstressed
+
+Continuous
+
+- age
+
+- weight 
+
+- amount of exercise
+
+- mpg
+
+- VOT
+
+### The modern GLM 
+
+Modern GLM includes both MRC and ANOVA
+
+- MRC predictors are all continuous
+
+- ANOVA predictors are all discontinuous/categorical
+
+- But both MRC and ANOVA are both part of the same big thing: the GLM
+
+
+### A unified model
+
+Before ANOVA and MRC were unified, we could not account for both levels of measurement within the same model
+
+The modern GLM can accommodate any combination of categorical and continuous variables
+
+This was not known until 1968 (Cohen, 1968)
+
+So now we can construct mixed models with both categorical and continuous variables
+
+
+# A brief history
+
+**Experimental Psychology**
+(Fechner, Weber, and Wundt)
+
+
+- Relied more on typological approach
+
+- Categorically distinct groupings to design/carry out experiments
+
+- This led to the development of ANOVA (Fisher)
+
+**Differential Psychology**
+(Galton and Pearson)
+
+- Influenced by Darwinian thinking
+
+- Based on individual differences
+
+- Led to the development of MRC
+
+
+
+
+
+
+
+
+### The two disciplines
+
+**MRC and ANOVA are both part of the same GLM model but, over time, they began to diverge from each other:**
+
+- We need them both, but historically this separation occurred
+
+**Fisher (experimentalists) vs. Pearson (observationalists):**
+
+- A personal/family feud existed between them
+
+- Pearson was principle figure in stats, criticized 
+- Fisher’s use of chi-square test in an old paper
+
+- Thought Fisher had done a disservice to statistics (see Lenhard, 2006)
+
+- Both angry, held grudges
+
+### Sir Ronald Aylmer Fisher
+
+Did agricultural experiments with plants at Rothamsted Experimental Station at Harpenden, Hertfordshire, England (Studies in Crop Variation, 1919)
+
+Actually did controlled experiments
+
+Unlike the other differential psychologists who just did observational studies
+
+Did not have a Platonist ideology and understood individual differences
+
+
+**Invented ANOVA to support the experimental method:**
+
+- Randomly selected groups will differ by some amount due to individual differences among members of the group
+
+- However, experimental groups should be different beyond these random individual differences
+
+- He didn’t want to just assume the groups were different
+
+- He wanted to show the variance between groups was greater than the variance within groups
+
+
+### Fisher’s method
+
+Fisher’s used random assignment, not random sampling
+
+**Random Sampling:** any individual in the population has an equal chance of being in the sample
+
+Random Assignment:
+
+1. You randomly assign each subject to a treatment group or control group
+
+2. You create 2 or more groups that will be subjected to 2 or more different treatments
+
+3. This is important to show that differences between treatment groups is greater than chance
+
+Your sample might not be random, but your assignment to experimental groups should be random
+
+This procedure has nothing to do with representing the original population:
+
+- Just with how you randomly assign individuals into treatment groups from the basic sample you are working with
+
+- Each subject must have an equal chance to get into either of the treatment groups
+
+
+Using the central limit theorem, we know how the distribution of randomly selected group means will differ from the mean of the entire population
+
+If the treatment worked, the results should be greater than what would be expected by chance (meaning sampling of individuals)
+
+If treatment did not work, the results would not be greater than what is expected by chance (meaning sampling of individuals)
+
+This is what the F-ratio (for Fisher) is all about
+
+The numerator in the F-ratio represents the variance due to treatment effects
+
+The denominator is an independent estimate of the random sampling “error”
+
+All ANOVA assumes random assignment not necessarily random sampling
+
+This was designed for purely experimental purposes, not for naturally occurring phenomena, i.e., observational studies
+
+Should not use classical ANOVA for observational studies, only for pure controlled experiments
+
+For example, one should not use ANOVA to study naturally occurring races, sexes, etc., because of lack of random assignment to these groups
+
+For example, if you compare males with females, this is not a randomly assigned condition
+
+- researchers do this anyways...
+
+### ANOVA 
+
+How did Sir Ronald Fisher build the ANOVA model?
+
+He built it from the MRC model…
+
+
+**Total Deviation = Predicted Deviation + Error Deviation**
+
+
+### Multiple Regression/Correlation
+
+In MRC, the predicted y ( y^i
+ ) is the score predicted based on the regression line:
+
+- MRC is based on having individual scores as the criterion variable (y)
+
+- Individual continuous variables are also the predictors for y
+
+
+### Summed Linear Derivations (ANOVA)
+
+Sum of Linear Deviations:
+
+**Total Deviation = Predicted Deviation + Error Deviation**
+
+### Analysis of variance
+
+In ANOVA, you are dealing with groups:
+
+- Still trying to predict an individual’s score
+
+- But you aren’t basing your prediction on other individual scores
+
+- You are basing it on their group status
+
+What is the best prediction you can make about any individual in a group if you don’t know anything else about that individual?
+
+- Use the mean of the group to predict individual scores
+
+- Our predicted score ( y^i
+ ) now becomes our group mean ( y¯j)
+
+- So the group mean ( y¯j
+ ) now becomes the predicted y^i
+ 
+This is because my prediction for you (if I don’t know anything else about you) is based on your group’s mean
+
+- The grand mean is y¯G and the group mean is y¯j
+
+
+
+
+### Equivalences between MRC and ANOVA 
+
+ANOVA is just MRC where the predictors are categorical variables
+
+Predictions are based entirely on the group status of individuals
+
+The criterion variables are still continuous
+
+In a controlled experiment, these are orthogonal variables:
+
+- Conclusions may not be theoretically valid if you are using naturally occurring groups
+
+- But the math will still work
+
+The strength of ANOVA is based on proper experimental design
+
+
+### The logic of the F-ratio
+
+If we use random assignment, the means of the groups should only differ by random chance (individual differences) and nothing else
+
+However, if we introduce an effective treatment, then the means will differ by random chance plus the effects of the treatment
+
+But if the treatment didn’t work, then the means will only differ by random chance
+
+This is the denominator of the F-ratio!
+
+
+
+# The General Linear Model
+
+### Jacob Cohen 
+
+Statistician and Psychologist
+
+Best known for his work on statistical power and effect size
+
+Helped lay foundations for meta-analysis
+
+Gave his name to Cohen’s kappa and Cohen’s d
+
+Made a breakthrough in how to create the modern GLM:
+
+- Introduced Dummy Variable method of coding groups
+
+- Makes MRC do ANOVA!
+
+**Some articles:**
+
+- Cohen (1968) Multiple regression as a general data analytic system
+
+- Cohen (1969) Statistical Power Analysis for the Behavioral Sciences
+
+- Cohen & Cohen (1975) Applied Multiple Regression/Correlation Analysis for the Behavioral Sciences
+
+- Cohen (1990) Things I have learned (so far)
+
+- Cohen (1994) The earth is round (p<.05)
+
+### Dummy variables
+
+This was based upon the idea that category membership can be considered an individual characteristic
+
+Your category membership is part of who you are
+
+- You may have other individual differences in addition to your category membership
+
+- But membership is also an individual trait!
+
+This was Aristotelian/Nominalist, not Platonic/Essentialist typological thinking!
+
+Aristotle said that categories inhere in the individual and that the individual is the ultimate reality
+
+In a sense Cohen took an Aristotelian approach in order to include both MRC and ANOVA within one general linear model
+
+You score each person by a dummy variable to say whether they have a feature that defines their group membership or not
+
+Dummy variable coding is just binary coding of whether you have or do not have trait
+
+Dummy variable coding will make a regular regression equation do an ANOVA
+
+Multiple Regression As A General Data Analytic Method was the name of Cohen’s seminal article (Cohen, 1968)
+
+# The "GLM" Compromise 
+
+The way he told the story (in 1968), MRC had seemingly “eaten” ANOVA:
+
+- MRC included ANOVA
+
+- ANOVA was just a “special case” of MRC
+
+Mathematically correct, but upset the ANOVA guys
+
+They decided to call the whole superordinate category “GLM” to make everyone happy:
+
+- GLM w/ continuous predictors = MRC
+
+- GLM w/ categorical predictors = ANOVA
+
+If you have all of either one, you can call it classical ANOVA or classical MRC, if not, it’s a “Mixed GLM”
+
+How did Jacob Cohen accomplish this feat?
+
+- He didn’t actually cite Aristotle
+
+- He just did the math…
+
+
+# Dummy variables
+
+Each simple effect is an independent samples t-test
+
+The baseline is compared to the other two levels of the factor
+
+Notice that 6-cyl is not compared to 8-cyl
+
+We would have to change the baseline to make that comparison
+
+```{r}
+#| label: cyl-mtcars
+
+mtcars |>
+  lm(mpg ~ cyl, data = _) |> 
+  summary()
+
+mtcars |> 
+  group_by(cyl) |> 
+  summarize(avg = mean(mpg), sd = sd(mpg))
+
+```
+
+Now we have the 6-to-8 cyl comparison
+
+Notice how the slopes have changed
+
+```{r}
+#| label: summary-cyl-mtcars
+
+mtcars |>
+  mutate(cyl = as.factor(cyl),
+         cyl = fct_relevel(cyl, c('6', '4', '8'))) |>
+  lm(mpg ~ cyl, data = _) |> 
+  summary()
+
+```
+
+
+### Categorical and continuous predictors: Mixed GLMs
+
+
+One of the benefits of doing ANOVA with MRC is that you can include different types of predictors in your model, i.e., categorical and continuous.
+
+Neither classical ANOVA nor classical MRC can handle combinations of these two predictors
+
+This is possible because of dummy coding
+
+
+### Bivariate model 
+
+**partial slope for ages:** when we increase x we increase y by this amount (partial slope)
+
+### Additive model
+
+***vocab ~ age + reader***
+
+```{r}
+#| label: lm-vocab-sample
+
+#lm(formula = vocab ~ ages + reader_type, data = vocab_sample)
+
+```
+
+intercept is average amount of words that an average reader knows when they're zero
+
+
+### Categorical and continuous predictors - Mixed GLMs
+
+A mixed GLM can account for continuous and categorical predictors
+
+However, if the slope of two groups are different, then you must interact the categorical variable with the continuous one
+
+The interaction term constitutes a test for “homogeneity of slopes”
+
+These interaction terms accommodate the possible difference in slopes and therefore avoids a serious model misspecification
+
+Leaving them out would be omitting a relevant variable!
+
+What does it mean to have an interaction between a dummy variable and a continuous predictor?
+
+Remember that with a continuous variable we get an intercept and a slope, so if one is interacting with a categorical variable, it means that either the intercepts or the slopes of both might be different for each category
+
+“Homogeneity of slopes” assumes that your different groups have the same slope for the continuous variable
+
+The problem is that using either classical ANOVA or classical MRC (or even “ANCOVA”, which is a combination of both) does not permit you to handle interactions between these types of variables
+
+But using Dummy or Contrast Coding Does!
+
+By virtue of the numerical nature of these “coded vectors”, which can be accommodated by MRC
+
+### Multiplicative model
+
+***vocab ~ age + reader + age : reader***
+
+```{r}
+#| label: mult-mod-vocab
+
+#lm(formula = vocab ~ ages * reader_type, data = vocab_sample)
+
+```
+
+Example to interpret a simple model with 2 predictors:
+
+```{r}
+#| label: anova-mult-mod
+
+#anova(vocab_age_null, vocab_age_mod, vocab_additive_mod, vocab_int_mod)
+
+```
+
+The vocabulary data were analyzed using a general linear model. Estimated vocabulary size was the criterion with age and reader type (frequent/average) as predictors. The reader type factor was dummy coded with average readers set as the reference group. Main effects and the age by reader type interaction were assessed using nested model comparisons. Experiment-wise alpha was set at 0.05.
+
+There was a main effect of age (F(1) = 1649.49, p < 0.001), reader type (F(1) = 243.34; p < 0.001), as well as an age by reader type interaction (F(1) = 45.19; p < 0.001). The model containing the interaction provided the best fit of the data (R2 = 0.91). Overall, vocabulary size increased as a function of age. However, the size of the effect was modulated by reader type. Specifically, average readers showed an increase of approximately 1,111 words +/- 48.42 se (t = 22.94, p < 0.001) per year. Frequent readers showed an additional increase of 466 words +/- 69.28 se per year (1,577 words total, t = 6.72, p < 0.001).
+
+
+# We make lots of assumptions in stats
+
+- Every model has assumptions 
+
+- They need to be met for the model to work properly and be trustworthy
+
+- It's not standard practice to report whether all assumptions have been met when writing up results... but it should be!
+
+- We will make a habit of assessing models and incorporating the relevant info in prose
+
+
+Three types of assumptions:
+
+1. model specification 
+
+2. measurement error
+
+3. the error term
+
+# Specification error 
+
+There shouldn't be specification error. 
+
+- The relationship between xi and yi is linear
+
+- including irrelevant variables isn't a bad thing 
+
+- omitting relevant variables is BAD!
+
+
+Including an irrelevant variable:
+
+- will add to error of prediction 
+
+- similar to a Type I error 
+
+- doesn't bias the parameter estimates  
+
+- if a model includes multiple predictors, other estimates are not influenced by the irrelevant variable 
+
+- though the parameter estimates won't be biased, the standard error terms around each beta weight will increase (affects t-ratio and p-value)
+
+Excluding a relevant variable:
+
+- similar to type II error 
+
+- you don't know if you're overestimating or underestimating these other variables 
+
+- repeat the study or you're fucked :(
+
+# Measurement error 
+
+Measuring is hard. 
+
+- human error, specificity, etc. 
+
+- your models will estimate the parameters you specify
+
+- but you wont know if the estimates are reliable
+
+-  large degree of unquantifiable uncertainty 
+
+- cannot safely do NHST 
+
+- your search may be reproducible, but will probably not be replicable
+
+What to do?
+
+- the solution to this problem revolves around proper planning beforehand
+
+- operationally define every feasible aspect of *how* and *what* you will measure. 
+
+- use previous literature, pre-register decisions, repeated measures if possible, random 3rd party quality checks, measurement error models if possible
+
+
+# The error term
+
+The error term should meet the following characteristics...
+
+- mean = 0
+
+- homoskedasticity 
+
+- no autocorrelation 
+
+- predictor not correlated with error term 
+
+- error is normally distributed 
+
+
+
+Mean 
+
+- if it deviates far from 0, intercept can be biased; slope estimates won't be biased 
+
+- importance *low* unless you're interested in the intercept
+
+homoskedasticity 
+
+- variance around predicted values should be consistent 
+
+- common simple inspection is to look at scatter plot of fitted vs x-values (should look like an uninteresting blob)
+
+- importance medium/high
+
+
+No autocorrelation 
+
+- if the residuals are autocorrelated, it means that the prediction error of a given observation depends on that of the previous observation 
+
+- this shows up as a clear unexplained pattern in the y variable 
+
+- most common in repeated measures and longitudinal data 
+
+- will not bias parameter estimates 
+
+- will affect confidence intervals, t-ratios, p-values
+
+- increased chance of Type II error 
+
+- importance: high, but uncommon in standard regression
+
+Predictor(s) should not be correlated with error term 
+
+- typically the result of omitting a relevant variable (sin of omission)
+
+- will bias parameter estimates 
+
+- solution: include the missing variable 
+
+- high importance
+
+Error (residuals) should be normally distributed 
+
+- there is no a priori reason for error to be anything but normally distributed 
+
+- ...continued
+
+
+# Diagnostics 
+
+1. model assumptions 
+
+2. outliers 
+
+The relationship between xi and yi is linear 
+
+- just look at the plot 
+
+The mean of residuals is zero 
+
+1. fit model
+
+2. get residuals 
+
+3. test manually 
+
+```{r}
+#| label: residuals
+
+mod1 <- lm(y ~ x, data = assumptions_data)
+
+summary(mod1$residuals)
+
+
+mod2 <- lm(y_quad ~ x, data = assumptions_data)
+
+summary(mod2$residuals)
+
+```
+
+No autocorrelation of residuals 
+
+1. visual inspection 
+
+2. Durbin-Watson test "I have literally never done this"
+
+
+What do you do when you have repeat measures? 
+
+- 'lm()' doesn't work because of this 'no autocorrelation' thing 
+
+```{r}
+#| label: no_autocorrelation
+#| message: false
+
+
+autocor_data <- data.frame(
+  assumptions_data, 
+  resid_mod2 = mod2$residuals
+)
+
+autocor_data1 <- DataCombine::slide(
+  autocor_data, 
+  Var = "resid_mod2", 
+  NewVar = "lag1", 
+  slideBy = -1
+)
+autocor_data2 <- na.omit(autocor_data1)
+mod2_fix <- lm(y_quad ~ x + lag1, data = autocor_data2)
+
+```
+
+Predictors and residuals are uncorrelated
+
+- test for correlation 
+
+- think about your study 
+
+Normality of residuals 
+
+- qqplots! 
+
+- another visual check
+
+
+
+# Dealing with influential data points (AKA outliers)
+
+An influential data point is one that would significantly change the fit if removed from the data 
+
+- Cook's distance (measures leverage) is a commonly used influence measure 
+
+Leverage 
+
+- leverage of an observation measures its ability to move the regression line by simply moving up/down the y-axis 
+
+- the measurement represents the amount by which the predicted value would change if the observation was shifted one unit in the y-direction 
+
+- the leverage always takes values between 0 and 1
+
+- a point with 0 leverage doesn't affect the regression line 
+
+
+Or, you could just calculate mod with and without the influential data point and report that info. 
+
+Global test of model assumptions: 
+
+- its also possible to use the package 'gvlma' to test model assumptions 
+
+- it seems rather conservative, prof doesn't know too much about it
+
+
+## Interpretation 
+
+"One unit change in predictor will change outcome by..." 
+
+Statistical significance 
+
+- as long as the effect is not statistically equivalent to 0 it is called statistically significant 
+
+- it may be an effect of trivial magnitude 
+
+- basically it means "this prediction is better than nothing" 
+
+- doesn't really mean it is "significant" in the terms that we think of as significance 
+
+- it doesn't indicate importance!!!
+
+How do we know if the "significant" effect we found is actually important? 
+
+- the coefficient of determination (r-squared) tells you how much of the variance you have explained 
+
+- it tells us how big the effect is and not just that it is not equal to zero 
+
+- you want to know if your predictions are better than chance alone (F-ratio) but you also want to know how explanatory your predictions are (r-squared)
+
+F-ratio
+
+- if F-ratio is significant, at least one predictor or intercept is too
+
+- if F-ratio is not significant your experiment is over 
+
+***Download 'exercises' at the very bottom of slide 63!***
+
+# MRC walkthrough
+
+```{r}
+#| label: mrc-walkthru
+
+glimpse(language_diversity)
+head(language_diversity)
+
+language_diversity$Measurement |>
+  unique()
+
+
+
+ld <- language_diversity |> 
+  filter(Continent == "Africa") |> 
+  pivot_wider(
+    names_from = "Measurement", 
+    values_from = "Value"
+    )
+
+ld |> 
+ggplot() + 
+  aes(x = Population, y = Langs) +
+  geom_text(aes(color = Area, label = Country)) + 
+  geom_smooth(method = lm, formula = "y ~ x")
+
+
+my_mod <- lm(Langs ~ Area + Population, data = ld)
+
+summary(my_mod)
+
+
+```
+
+intercept here is when area and population are 0 (y-axis)
+
+interpretation of the partial slope of area: a 1-unit increase of area is associated w a decrease of ... in languages
+
+
+
+interpretation of population: when population increases by 1, language 
+increases by this number
+
+
+t-value is the estimate divided by standard error
+
+if the t-value is >2 then its statistically significant 
+
+
+
+
+multiple R squared is how much of the variance the model accounts for successfully
+
+adjusted R squared: adjusts the R-squared so it doesn't inflate when you add another variable 
+
+
+
+F-statistic:
+p-value: at least one of the parameters is statistically significant 
+
+
+```{r}
+#| label: diagnostics-plots
+
+plot(my_mod, which = 1:4)
+ds4ling::diagnosis(my_mod)
+# left plot shows homoskedasticity 
+
+ld <- ld |> 
+  mutate(
+    logPop = log(Population), 
+    logArea = log(Area)
+  )
+
+```
+
+```{r}
+#| label: histograms
+
+hist(ld$Population)
+hist(ld$logPop)
+hist(ld$Area)
+hist(ld$logArea)
+
+ld |> 
+ggplot() + 
+  aes(x = logPop, y = Langs) +
+  geom_text(aes(color = logArea, label = Country)) + 
+  geom_smooth(method = lm, formula = "y ~ x")
+
+```
+
+Fit an additive model (number of languages as a function of lopPop and 
+logArea)
+
+```{r}
+#| label: additive-mod
+
+add_mod <- lm(Langs ~ logArea + logPop, data = ld)
+
+summary(add_mod)
+diagnosis(add_mod)
+
+```
+
+Fit a multiplicative model (number of languages as a function of lopPop and 
+ logArea)
+
+ For fun
+
+```{r}
+#| label: mult-mod-plot3d
+
+x <- ld$logPop
+y <- ld$logArea
+z <- ld$Langs
+
+plot3D::scatter3D(x, y, z, 
+    pch = 21, cex = 1, expand = 0.75, colkey = F,
+    theta = 45, phi = 20, ticktype = "detailed",
+    xlab = "logPop", ylab = "Area", zlab = "Langs")
+
+```
+
+# GLM
+
+# Review 
+
+### What we know
+
+Distributions 
+
+- Normal distribution 
+
+- CLT 
+
+Hypothesis testing
+
+- z-tests 
+
+- t-tests 
+
+Bivariate correlation 
+
+The linear model 
+
+- Bivariate regression 
+
+- Multiple regression and correlation 
+
+The general linear model 
+
+- Continuous predictors 
+
+- Categorial predictors 
+
+### What they have in common 
+
+Criterion 
+
+- Continuous dependent variable 
+
+- Linear relationship with predictors 
+
+- Errors are normally distributed 
+
+
+# Preview 
+
+Sometimes we measure phenomena that are not continuous variables ranging from −∞:∞
+
+For example, we often analyze binary outcomes
+
+- Decisions
+
+- The presence/absence of a linguistic feature
+
+- Categorical perception
+
+Sometimes we count things
+
+- Number of languages in a given area
+
+- Number of code switches during a linguistic interview
+
+We can extend our model in order to account for these different types of dependent variables
+
+
+# The general**ized** linear model
+
+**History**
+
+Formulated by Nelder and Wedderburn (1972)
+
+The purpose was to unify (again) the different models being used at the time 
+
+**How?** 
+
+Recall that linear models contain a systematic component that specifies predictors (X1, X2 ... Xk), which, in turn, create our linear predictor (β0 + β1x1 ... βkxk). At a minimum, a GLM contains the following:
+
+1) A data distribution. This refers to the probability distribution of the response variable.
+
+2) A linking function that transforms the criterion used to model the data. It links the data distribution of the response variable to the systematic component of the model.
+
+
+3) An estimator, or method for obtaining parameter estimates
+
+You (the researcher) are responsible for selecting (1) and (2). (3) is always the same.
+
+
+
+### Distributions
+
+Meet the (exponential) family
+The exponential family is a series of probability distributions, each with its own properties.
+
+There are ±12, but we'll focus on 3:
+
+- Gaussian (normal distrubutions)
+
+- Binomial
+
+- Poisson
+
+**Linking functions**
+
+The linking function transforms the response variable in the manner most appropriate given the data distribution you have selected.
+
+- **Identity:** for gaussian response variable (normal distribution)
+
+- **Logit:** for binary response variable (binomial distribution)
+
+- **Log:** for count response variable (poisson distribution)
+
+**The estimator: Maximum Likelihood Estimate (MLE)**
+
+*Maximum likelihood estimation is the method that determines the values of the parameters of the model. The parameter estimates are obtained in a way that maximizes the likelihood that the process described by the model produced the data that were actually observed*
+
+
+
+
+Recall that classical linear regression uses ordinary least squares estimation to determine the line that minimizes the residual sum of squares.
+
+**Something old**
+
+It turns out we've spent the previous 11 weeks working with the gaussian distribution
+
+Gaussian is another way of saying normal
+
+This means we can think of standard linear regression in the general linear model as a special case of the generalized linear model
+
+- The errors are normally (gaussian) distributed
+
+- The criterion is associated with the linear predictors via an identity linking function
+
+- Instead of least squares estimation we use maximum likelihood estimation
+
+**Something new**
+
+"y as a function of x" 
+
+y ~ x
+
+y_i ~ Normal($\mu$, $\sigma$)
+
+u_i = $\alpha$ + $\beta$_1 x predictor_i
+
+$\sigma$ ~ Normal(0, $\sigma$^2)
+
+We can use different combinations of distributions and linking functions to model different outcome variables
+
+There are many options. Learning new modeling tools will open your mind to new experimental possibilities (if you only have a hammer, everything is a nail)
+
+We will focus on two types of regression that can be fit in the Generalized Linear Model framework:
+
+1. Logistic regression (outcome variable is binary)
+
+2. Poisson regression (outcome variable represents counts)
+
+### New assumptions for generalized linear models 
+
+Data are independently distributed (independence of scores) 
+
+- **Note:** this doesn't apply to multiple data points from one individual!
+
+Dependent variable follows a distribution from the exponential family
+
+Linear relationship between transformed response variable and predictors (linear relationship is result of linking function)
+
+Errors are independent (NOTE: they do not have to be normally distributed)
+
+
+### Doing it in R
+
+**The 'glm()' function**
+
+- Thus far we have used the lm() function to fit models
+
+- The glm() function works in the same way
+
+Steps
+- Specify the model formula: criterion ~ pred1 + pred2 + pred1:pred2
+
+- Select the dataframe: data = my_df
+
+- Select a distribution family and linking function: family = gaussian(link = "identity")
+
+**Note:** identity means no transformations
+
+```{r}
+#| label: glm_like_lm_ex
+#| message: false
+#| echo: true
+
+glm(
+  formula = mpg ~ drat, 
+  data = mtcars, 
+  family = gaussian(link = "identity")
+)
+```
+
+
+# Logistic regression 
+
+**Model setup**
+
+y ~ x
+
+The criterion is binary (0/1)
+
+The distribution for binary data is either the **bernoulli** or **binomial** distribution
+
+- y_i ~ Bernoulli(1, p_i)
+
+
+The linking function is the **logit**
+
+- logit(p)_i = $\alpha$ + β_1 x_i
+
+- The logit linking function transforms the criterion so it can be modeled by the linear predictor
+
+- In other words, the linking function transforms the dichotomous 0/1 outcomes to −∞:∞
+
+
+### What you need to know
+
+Logistic regression is the most appropriate way to model binary response variables (0/1)
+
+The model calculates the probability that y = 1, i.e., the probability of a "success", or presence of something
+
+Model output from logistic regression is similar to lm()
+
+Model interpretation "works" the same way, i.e., a 1-unit change in predictor is associated with a change of X in the criterion
+
+But... the parameter estimates represent changes in the log-odds of y = 1
+
+This is much less intuitive, much more difficult to understand without some math
+
+**Don't do standard linear progression with percentages!! Linguistics does this TOO MUCH apparently**
+
+### Ling example
+
+You are interested in understanding the perception of stop voicing in English bilabials
+
+You conducted an experiment in which participants heard a range of bilabial stops that differed in voice-onset time
+
+The stimuli ranged from -60 ms to 60 ms in 10 ms increments
+
+Participants were presented stimuli drawn at random from the continuum and identified the sounds as /b/'s or /p/'s
+
+A /p/ response is coded as a 1
+
+
+**???consider a model like this for final project???**
+
+```{r}
+#| label: vot_ex
+#| message: false
+
+
+mod_log <- glm(
+  resp ~ vot, 
+  data = vot_logistic_data, 
+  family = "binomial"
+)
+```
+
+**log-odds**
+
+values are technically anything, but these are how to interpret the R stats: ranges from -2 to 2
+
+- value of 0 corresponds to 50%. 
+- value of 2 corresponds to 99%
+
+We can convert the log-odds to probabilities by calculating the inverse logit
+
+Now the intercept is interpretable (note it is already centered)
+
+What does the parameter estimate
+for VOT mean?
+
+Can calculate how the probability differs from one specific point to another?
+
+- Calculate the inverse logit of the linear equation:
+
+α + β_{vot} * 10ms
+
+### Summary 
+
+Logistic regression is a powerful tool for modeling binary data
+
+The glm() function works similarly to the lm() function
+
+We test for main effects and interactions the same way too, i.e., using nested model comparisons with the anova() function
+
+The exponential family and corresponding linking function are
+family = binomial(link = "logit")
+
+Interpretation of logistic regression works the same way as classic linear regression
+
+Parameter estimates are evaluated in log odds (and require some work in order to accurately interpret them)
+
+**glm_logistics example walkthru**
+
+
+# Poisson regression 
+
+**Model setup**
+
+The criterion is a non-negative number (0, 1, 2...)
+
+The distribution for count data is typically the poisson distribution
+
+The linking function is log
+
+y_i ~ poisson($\lambda_i$)
+
+log($\lambda$)_i = $\alpha$ + β
+_1 x_i
+
+**How it works**
+
+The log linking function transforms the criterion so that it can be modeled by the linear predictor
+
+**What you need to know**
+
+Poisson regression is the most appropriate way to model count data (0, 1, 2...)
+
+Model output from poisson regression is similar to lm()
+
+Model interpretation "works" the same way, i.e., a 1-unit change in predictor is associated with a change of X in the criterion
+
+But... the parameter estimates represent changes in the criterion on a logarithmic scale
+
+The parameter estimates that can be interpreted as multiplicative effects
+
+This is not too difficult to understand
+
+```{r}
+#| label: ice_cream
+#| warning: false
+
+
+glm(
+  units ~ temp, 
+  data = ice_cream_poisson_data, 
+  family = poisson(link = "log")
+)
+
+```
+
+
+**INTERPRETATION:**
+
+- A 1 unit change in temperature is associated with a change of 0.04 log units in ice cream sold.
+
+- We can exponentiate 0.04 to make it more interpretable. exp(coef(mod_poisson)[2]) = 1.0400058
+
+- A 1 unit change in temperature gives a 4% positive
+increase in ice cream sold.
+
+
+**We can also add city**
+
+```{r}
+#| label: ice_cream_city
+#| warning: false
+
+
+glm(
+  units ~ temp + city, 
+  data = ice_cream_poisson_data, 
+  family = poisson(link = "log")
+)
+
+```
+
+**INTERPRETATION:**
+
+- A 1 unit change in temperature is associated with a positive difference of approx. 4% in ice cream sold
+in NYC.
+
+- When temp = 0, ice cream sold in Tucson is approx.
+42% less
+
+**Center it!** 
+
+- (the code chunk didn't work)
+
+
+**INTERPRETATION:**
+
+- A 1 unit change in temperature is associated with a positive difference of approx. 4% in ice cream sold
+in NYC.
+
+- At the average temperature (68.5), ice cream sold in Tucson is (still) approx. 42% less
+
+### Summary 
+
+Poisson regression is a powerful tool for modeling count data
+
+The glm() function works similarly to the lm() function
+
+We test for main effects and interactions the same way too, i.e., using nested model comparisons with the anova() function
+
+The exponential family and corresponding linking function are
+family = poisson(link = "log")
+
+Interpretation of poisson regression works the same way as classic linear regression
+
+Parameter estimates are evaluated on a log (multiplicative) scale and are not difficult to interpret
+
+
+# Poisson walkthrough
+
+```{r}
+#| label: poisson-walkthru
+
+#source(here::here("./glm_poisson", "scripts", "libs.R"))
+
+# 1. load data
+#dat <- read_csv("C:\users\court\OneDrive\Desktop\DS4Ling_Class_Files\glm_poisson\data\poisson_data.csv")
+
+
+# 2. check structure
+#summary(dat)
+#glimpse(dat)
+
+
+# Descriptive stats
+
+
+# log() and exp() change the values back and forth from log to not log
+#dat$units |> mean()
+#dat$temp |> mean() 
+
+
+#dat |> 
+#  group_by(city) |>
+#  summarize(
+#    avg_temp = mean(temp), 
+#    avg_units = mean(units)
+#  )
+
+
+# 3. fit inclusive and nested models
+#    test for interactions/main effects
+
+#mod_0 <- glm(
+#  formula = units ~ 1,
+#  data = dat,
+#  family = poisson(link = "log")
+#)
+
+#summary(mod_0)
+
+#mod_1 <- glm(
+#  formula = units ~ 1 + temp,
+#  data = dat,
+#  family = poisson(link = "log")
+#)
+
+#summary(mod_1)
+
+#exp(2.4836512 + (0.0391199 * 100)) # THE DECIMALS MATTER
+
+
+# 4. summary of best model
+
+
+
+
+# 5. write up of output
+
+
+
+# 6. generate and save plot
+
+#dat |>
+#  ggplot() + 
+#  aes(x = temp, y = units, color = city) +
+#  geom_point(alpha = 0.2) +
+#  geom_smooth(
+#    method = "glm", 
+#    method.args = list(family = "poisson"),
+#    fullrange = TRUE
+#  ) +
+#  scale_y_continuous(breaks = seq(0, 1200, 100)) # to change increments on y-axis
+
+```
+
+# March 10 2025
+
+## Multiple regression and correlation 
+
+We want to construct the equivalent of an OR statement or a logical disjunction
+
+- a sum is implicitly an OR statement
+
+- regression is a **weighted sum**
+
+### least squares estimation 
+
+- R will estimate the b-weights that minimize the sum of the squared errors 
+
+- ideally these are the b-weights that best represent how much each predictor is really contributing to the variance in the criterion variable (y)
+
+- we will use least squares estimation to achieve the best (optimal) regression weights
+
+
+Multiple predictors 
+
+- the multiple predictors represent different hypotheses regarding what might be affecting the criterion variable
+
+- in other words, multiple regression is just creating a sum of weighted predictors to explain the total variance in the criterion variable 
+
+- the way that the predictors function together is not necessarily the same as the way that they function alone 
+
+- bivariate regression is just a degenerate form ("special case") of multiple regression containing only one predictor 
+
+
+### semipartial betas
+
+intercept (a0): 
+
+- the value of the criterion variable when all predictors are equal to 0 (same as bivariate regression)
+
+slope (bk):
+
+- the change in the criterion associated with a 1-unit change in Xk... **with all other predictors held constant**
+
+
+squared partial correlation 
+
+- Y variance is not accounted for by X2 is the area of A + E (see the image on slide 19)
+
+- the area explained by X1 = A 
+
+
+### MRC
+
+Statistical control
+
+- Not the same as experimental control!!!
+
+- We are estimating the effect of one predictor while holding the other predictors constant 
+
+- This will only work if predictors are not correlated 
+- there **cannot** be multicollinearity
+
+Conceptual understanding 
+
+- if we consider a simple three variable model, we are fitting a hyperplane to a multidimensional space 
+
+- more variables = more complexity
+
+- good luck if you try to do more than 2 variables 
+
+- mpg ~ et & mpg ~ drat **!= MRC**
+
+- Doing this in R:
+
+```{r}
+#| label: mrc
+
+mod <- lm(mpg ~ wt + drat, data = mtcars)
+
+summary(mod)
+
+```
+
+### CIs and significance tests 
+
+- Same as bivariate case, but we adjust t-value for k (added estimated parameters)
+
+- statistical significance implies that the 95% CI doesn't contain 0
+
+- **Rule of thumb**: multiply SE of b-weight by 2 and add/subtract to/from b-weight
+
+- T-ratio: parameter estimate divided by SE
+
+Coefficient of muktiple determination: R squared
+
+- adding variables will always explain more variance 
+
+- not necessarily better 
+
+- there is an adjustment for exhausting degrees of freedom 
+
+Note:
+
+- r: pearson product moment correlation 
+
+- r squared: coefficient of determination; variance explained (bivariate case)
+
+- R squared: coefficient of multiple determination; variance explained (MRC)
+
+## Interactions 
+
+Assumptions of multiple regression 
+
+- additivity 
+
+- linearity 
+
+In Boolean Algebra, a sum (addition) represents a logical disjunction 
+
+- multiple regression "weighted sum" is a complex OR statement
+
+**Non-additivity**
+
+In Boolean Algebra, a product (multiplication) represents a logical conjunction:
+
+- interaction terms represent AND terms 
+
+- these are included within the overall OR statement 
+
+Including interactions in R:
+
+```{r}
+#| label: interactions1
+
+m1 <- lm(mpg ~ wt + drat + wt:drat, data = mtcars) 
+
+summary(m1)
+
+```
+
+Instead of doing '+' you can also use * for this:
+
+```{r}
+#| label: interactions2
+
+m2 <- lm(mpg ~ wt * drat, data = mtcars) 
+
+summary(m2)
+
+```
+
+Visualization
+
+- including an interaction affects the hyperplane fit to the data 
+
+
+# March 24 2025
+
+# Review ! 
+
+Multicollinearity "= BAD"
+
+- multicollinearity occurs when the predictors are correlated 
+
+Why are confounds a problem?
+
+- confounds produce ambiguity of causal inference 
+
+least squares estimation in linear model 
+
+- simultaneous estimation of additive effects of all model predictors 
+
+- does not adequately partition variance among correlated predictors 
+
+least squares estimation is not adequate for dealing with multicollinearity 
+
+- it works best when predictors are uncorrelated 
+
+
+# Old assumptions revisited 
+
+## Model specification errors 
+
+- use multiple working hypotheses. this is how you safeguard against leaving out a variable that you might need later 
+
+- don't include irrelevant variables though
+
+- ideally you want to use plausible rival hypotheses 
+
+- you need to have some theory behind your reasoning 
+
+- assuming you've done all this, we need to figure out which predictors are relevant and which are not relevant 
+
+- this is not nearly as big of a problem as having excluded a relevant variable 
+
+**"Is this experimental research or exploratory research?"**
+
+- Linguistics is usually observational exploratory research
+
+## How useful is the model output?
+
+Traditional t-tests to determine if the b = 0
+
+- take b-weight, compute standard error 
+
+- use SEb and the b-weight and construct a t-ratio 
+
+- theoretically, this informs us of whether b = 0 or not 
+
+**missed a few slides 46-27**
+
+# Hierarchical Partitioning of Variance 
+
+Nested model comparisons 
+
+- comparison of "hierarcically nested" multiple regression models 
+- requires theoretical specification and causal ordering of predictors 
+
+What is a nested model? 
+
+- *"A nested model is when one model is nested inside the other such that there is a more inclusive model that contains more parameters and a less inclusive model (restricted model) that contains just a subset of specific variables you would like to test"*
+
+- in nested model comparisons, you are testing whether those parameters not in the restricted model can be eliminated
+
+1. you want to see if those parameters not in the restricted models can be set to 0
+
+2. you want to see if these extra parameters are needed or if they can be taken out 
+
+Comparing nested models
+
+- You often cannot compare two different restricted models directly
+
+- If the models do not overlap they cannot be directly compared
+
+- You must construct an inclusive model such that both restricted models are nested within a common inclusive model
+
+- Then, to do the nested model comparisons you run the alternative restricted models and test each against the same inclusive model
+
+The semipartial R^2
+
+- The sr2 doesn’t tell you if the predictor in question is statistically significant, but rather how to estimate the unique contributions of each variable
+
+- We are attempting the elimination of irrelevant variables with this procedure:
+
+1. We cannot address omission of a relevant variable this way (or in any other mathematical way because you cannot do math on variables that you didn’t measure in first place️)
+
+2. This method corrects Type I Errors only
+
+## How do we test semipartials? 
+
+- We will use a modification of the F-ratio (systematic variance over the error variance)
+
+- F-ratio for sr2 = the F-ratio for the hierarchical partitioning of variance using nested model comparisons
+
+- The sr2 of the variable of interest goes in the numerator
+
+- The residual of the inclusive model goes in the denominator
+
+## The semipartial F-ratio
+
+This F-ratio is used like a “backward” traditional F-ratio:
+
+- It is a test of what you have eliminated to see if you can safely eliminate it
+
+- You only eliminate variables if doing so does not result in a significant loss of explanatory power
+
+It is not a test of whether what you have included is relevant:
+
+- It’s not what’s left in the model that is being tested
+
+- It’s what’s not in the restrictive model that is being tested
+
+
+Nested model calculation 
+
+- R2 = Squared multiple correlation
+
+- k = Model degrees of freedom (number of predictors)
+
+- n = Total sample size
+
+- I = Inclusive Model (Including All Predictors)
+
+- R = Restricted Model (Excluding Some Predictors)
+
+Results of hierarchical partitioning of variance and hierarchical tests of significance depend critically upon causal order specified among predictors:
+
+- There is no purely mathematical solution to this problem
+
+- Causal ordering of predictors must be specified by theory
+
+
+Comparisons of hierarchically nested models permit testing of alternative hypotheses generated by rival causal theories
+
+**A “confound” is just an alternative hypothesis towards which one has a negative attitude**
+
+### Genetics example revisited 
+
+You share 50% of genes with your Mom (M) and 50% with your Dad (D)
+but your parents don’t share that many genes
+
+M and D are generally not genetically correlated with each other, but you (the M*D interaction) are correlated with both M and D
+
+- So M and D are main (additive) effects and you are the M*D (multiplicative) interaction
+
+- You are now correlated with both main effects
+
+- This causes multicollinearity
+M and D may then argue over this shared variance
+
+You have become a confound
+
+
+### Dealing with multicollinearity
+
+To test for the statistical significance of the interaction effect we use hierarchically nested model comparisons:
+
+- This is a reasonable solution for the problem of multicollinearity
+
+- Interaction terms (nonadditivity) ALWAYS create multicollinearity
+
+If the main effects are already correlated, the multicollinearity is worse:
+
+- But you still get multicollinearity even if the component main effects are not correlated
+
+The purely additive model (main effects only) is simpler than the multiplicative model (including the interaction):
+
+- So if additive model is good enough then go with it (more parsimonious) 
+
+- Leave out (eliminate) interaction effects first because they might be too confusing
+
+### Example: a multiple regression with three predictors
+
+***y ~ a \* b \* c***
+
+Interactions:
+- Main effects: a, b, and c
+
+- 2-way interactions: a:b, a:c, and b:c
+
+- 3-way interactions: a:b:c
+
+Which terms get causal priority in the hierarchical partitioning of variance?
+
+Main effects, then 2-way interactions, then 3-way interactions, etc.
+
+**It is more parsimonious to use the main effects:**
+
+- Fewer dfs are used and it is a less complicated model
+
+- Using a linear additive model is generally the most parsimonious way to go
+
+- Common variance should be given first to the main effects because they are conceptually more parsimonious
+
+
+### Lack of parsimony
+If you use an interaction term (e.g., a*b), you are claiming that you need BOTH in order to have an effect
+
+- This is an extra substantive claim which needs to be supported
+
+- It’s an AND statement not an OR statement, so it’s a bit riskier
+
+Inclusive model contains all interactions that you wish to test:
+
+- Then you use restricted models to test each interaction separately
+
+You can generate a ridiculous amount of hypotheses with a small number of variables and this might really compromise your model parsimony:
+
+- You need a theoretical reason to include an interaction term
+
+### Summarizing 
+
+**Problem:** Multicollinearity
+
+**Solution:** Hierarchical partitioning of variance
+
+- Make an inclusive model and do hierarchical partitioning of variance
+
+- Determine which terms (lower order and higher order, additive and interactive), if any, can be eliminated
+
+# Nested model comparisons 
+
+### Causal priority 
+
+So which one gets causal priority?
+
+Main effects generally do:
+
+1. But now two-way interactions and squared terms are just as complicated
+
+2. So are three-way interactions and cubed terms, etc.
+
+There is no convention for deciding which comes first:
+
+- There is no mathematical solution to this problem
+
+- We need a theoretical solution
+
+Use principles of strong inference 
+
+- Only test plausible rival hypotheses
+
+- Be careful and selective!
+
+- Even with a small number of primitive component terms (main effects), once you examine all the possible interactions you will have a complex model
+
+- You will exhaust your statistical power very quickly
+
+*Setup stuff, just in case.*
+
+
+Fitting all relevant models in R...
+
+```{r}
+#| label: nested_model_comparisons
+
+mod_full <- lm(mpg ~ wt + drat + wt:drat, data = mtcars) # inclusive model
+mod_int  <- lm(mpg ~ wt + drat          , data = mtcars) # restricted model
+mod_drat <- lm(mpg ~ wt                 , data = mtcars) # restricted model
+mod_wt   <- lm(mpg ~ drat               , data = mtcars) # restricted model
+mod_null <- lm(mpg ~ 1                  , data = mtcars) # null model
+
+```
+
+Test higher order variables and main effects using nested model comparisons
+
+- In R we do this with the anova() function
+
+- It is not an anova (for that we use the aov() function)
+
+- We include the restricted model and the inclusive model to test if removing the variable from the inclusive model significantly changes the goodness of it
+
+- If it does, then we leave it in (it is important)
+
+- If it doesn’t, then we can take it out (it is not important)
+
+```{r}
+#| label: anova_fx
+
+anova(mod_int, mod_full) # Test interaction effect
+
+```
+
+- There is a wt x drat interaction (F(1) = 5.41, p < 0.03)
+
+## Capitalizing on Chance 
+
+Inflated R2
+
+- Least squares estimation capitalizes on chance associations
+
+- Including irrelevant variables increases R2 non-significantly
+Sample R2 is systematically overestimated, or inflated
+
+
+As k increases, there is more capitalization on chance
+
+- This is bad
+
+- Every variable you measure has some error in it, and some of this error can be capitalized on by least squared estimation and this will boost our observed R2
+
+- So sample R2 deviates more from the true population R2 as k increases
+
+As n increases, the overestimation of R^2 is less:
+
+- this is good!
+
+- the bigger the sample we have, the closer our observed R^2 will be to the real population R^2
+
+- when n equals infinity, then our sample R^2 would equal the real R^2
+
+### Alpha slippage
+
+Alpha is the probability of committing a Type I Error
+
+Experiment-Wise alpha is a function of the Test-Wise alpha and the total number of significance tests conducted:
+
+***αe=1−(1−αT)k***
+
+- αT =	Test-wise alpha
+- k =	Number of significance tests
+- αE =	Experiment-wise alpha
+
+### Taking repeated risks 
+
+- Every time you do a significance test (at .05) you take a risk of making a Type I Error every 1 in 20 times
+
+- If you do it once you have a 95% chance of being right
+
+- But if you do it multiple times your chances of eventually making a Type I Error greatly increases
+
+- If you have an issue of a journal with 20 articles in it (each using a .05 alpha), the chance of one of those articles reporting a Type I Error is pretty high
+
+## Empirical selection of variables 
+
+We should strive to create theoretically specified models that test a priori alternative hypotheses:
+
+- In these models (in a perfect world), all hypotheses are carefully selected, plausible rival hypotheses
+
+- Higher order variables are included when theoretically motivated
+
+We should be discouraged from testing atheoretical ones:
+
+- If you do all possible comparisons, you weaken your statistical power and you get alpha slippage
+
+- When you try to correct for the alpha slippage (by making a more stringent test-wise alpha) you run the risk of committing more Type II Errors
+
+There are other techniques in multiple regression that are completely different in basic objectives i.e., empirical selection or exploratory regression techniques
+
+There are two reasons why we would use exploratory regression techniques that are not based on theory:
+
+- **Reason 1:** Some people are interested in prediction and not causation, and predictions don’t require theory
+
+- **Reason 2:** There may be an honest lack of theory in the area you are investigating
+
+### How should we do it? 
+
+First, we must design the study:
+
+- We need to sample a broad set of variables, and think as creatively and diversely as you can about what to include
+
+- We need to go beyond the “usual suspects”
+
+Second, we need to specify the model:
+
+- How do we figure out which variables to include and which should be excluded without a theory?
+
+Two elementary methods:
+
+1. Backward Elimination
+
+2. Forward Selection
+
+
+Backward elimination 
+
+1. include all your variables into a single simultaneous regression model 
+
+2. try to eliminate any irrelevant variables 
+
+- You are focusing on variables with the smallest effect sizes and the “least significant” b-weights
+
+- Do this one step at time, because multicollinearity may be involved
+
+- Remember this is not theoretically-based and there are no a priori hypotheses
+
+3. Re-fit the model with the weakest variable eliminated
+
+4. Compare new model to the original one and see if its better:
+
+- Look at the new R2 and then compare the R2 of the model with that variable included with the model with that variable removed, and see if the new model is statistically acceptable
+
+5. If you could eliminate that variable, you now look at this model (not the original model) and see which is the next weakest variable
+
+- Try to eliminate this one, and do the same thing all over again
+
+Keep doing this until when everything left is significant
+
+- When removing something more results in a statistically significant sR2 F-ratio
+
+- Then you have to put that last variable back in, and that’s your final model
+
+*You are picking off the weakest variables until you can no longer validly eliminate anything else*
+
+### Backward elimination - Problems
+
+In true backward elimination, once you eliminate something you can’t go back on that decision
+
+Due to multicollinearity, one variable that was eliminated in an earlier step might now be significant in a new context, but you have no way to know this
+
+Remember significance is often context dependent
+
+Variable A might have not been significant in step 2, but now that variables B, C, and D have been removed it might be significant
+
+### Forward selection 
+
+Correlate all the predictors with the criterion variable (do bivariate correlations of all the predictors with the criterion):
+
+- Pick the one with the best bivariate correlation
+
+- Run the model with this correlation
+
+Now, you don’t want to include your next largest bivariate correlation from the original correlations that you found:
+
+- Instead, you partial out variable 1 from all remaining variables
+
+- Then you take the one with the biggest sR2 after variable 1 was removed and run the next regression
+
+To get variable 3, you partial out variable 1 and 2 and look at the variable with the next biggest sR2, and then you put that one in
+
+
+After each step, you take the difference in your R2 values and test it for significance to see if the newly added variable adds a significant amount of variance to the previous model:
+
+- If you have already added variables 1 and 2, and now you want to add variable 3 you need to compare the model with variables 1 and 2 with the model with variables 1, 2, and 3
+
+- So you subtract the R2 and do the semi-partial F-ratio
+
+- Just like an a priori hierarchical procedure!
+
+Do this until the most recently added variable no longer adds significance variance (sR2) to the model:
+
+- And then throw that variable back!
+
+Why not test the remaining ones?
+
+- Because you were testing the ones with the largest sR2, so any remaining variables will have lower sR2 and will therefore not add any more significant variance to the model than your last tested variable
+
+
+### Forward selection - Problems
+
+Similar to Backward Elimination:
+
+- As you put things in there is no way for you to go back and change variables that you already added
+
+- So there is no way of going back and rethinking what you have already done
+
+- Even though variable 1 may have been good in the original context, but now that other variables have been added, it might not make so much sense anymore
+
+- So you can end up in two completely different places using the same data when you use forward selection and backward elimination
+
+
+### Stepwise regression
+
+Stepwise Regression is the most popular procedure for exploratory regression:
+
+- It is a combination of forward selection and backward elimination
+
+- Not the same as hierarchical partitioning of variance!
+
+Basically, you take one step forward, one step back, one step forward, etc.:
+
+- Start with forward selection, then do backward elimination
+
+- Until both of the procedures fail and you can’t add anything profitably and you can’t lose anything profitably
+
+By combining the two procedures, you get to add something, but then you follow the addition immediately with a backward elimination to see if you can eliminate something else:
+
+- Which you couldn’t do previously with forward selection
+
+- The backward elimination looks at everything, so you can eliminate anything and anytime as long as you don’t lose a significant amount of variance
+
+- So you can eliminate variable 1 in step 8
+
+
+**Benefits of using exploratory regression techniques:**
+
+- You get to proceed in spite of lack of theoretical guidance
+
+- Produce hypotheses/theory building for future research
+
+
+**Major problems involved:**
+
+- No a priori theory involved, so the procedure is totally mindless
+
+- You are testing a very large number of variables and you are running a HUGE risk of committing Type I Errors due to massive capitalization on chance
+
+- In fact, you might end up with nothing but Type I Errors!
+
+# Reporting results 
+
+The main purpose is to explain what you did in a manner that is understandable and reproducible. You should report:
+
+**General description:**
+
+- model fit to the data 
+
+- variables included (criterion, predictors)
+
+- coding/transformations (less important rn)
+
+- model assumptions/diagnostics 
+
+- how you assessed main effects/interactions 
+
+- decision rules (e.g., alpha). in exploratory research, you're allowed to use a different alpha 
+
+**Results:**
+
+- model fit
+
+- main effects (usually NMC)
+
+- interactions (usually NMC)
+
+- interpretations: 
+
+1. directionality
+
+2. effect-size 
+
+3. uncertainty
+
+- *Beta, SE, CI, and p-val*
+
+Notes on examples:
+
+1. Causal priority = the first variable you put in the model
+
+
+# Notes from Bayesian analysis readings
+
+**The classic formula:**
+
+Posterior 𝛂 likelihood * prior
+
+p(hypothesis | data) 𝛂 p(data | hypothesis) p (hypothesis)
+
+Updated belief = current evidence * prior belief or evidence 
+
+**Some key distinctions**
+
+- Focus on distributions and uncertainty estimation instead of point estimates 
+
+- More natural interpretation of results 
+
+- Easy model criticism
+
+**Advantages**
+
+- Incorporation of prior information 
+
+- Many eays to explore the model easily 
+
+- Tools that can handle complex models without having to change the general approach 
+
+- Ability to handle small samples with appropriate guard against overfitting
+
+A more intuitive inferential framework 
+
+“You’ll never have so much fun finding out why your model sucks!”
+
+### Stan 
+
+Probabilistic programming language 
+
+HMC / NUTS 
+
+Compared to others:
+
+- Fast convergence
+
+- No conjugacy required 
+
+- Warm-up vs burn-in 
+
+- Less autocorrelation 
+
+- Faster for more complex models 
+
+Why use?
+
+- Fit very complex models 
+
+- Better approaches for model diagnostics 
+
+- Natural interval estimates for any statistic that comes out of a model 
+
+Code chunk ***fill in???***
+
+**Rstan** 
+
+Allows one to use stan within R 
+
+Driving force behind rstanarm and brms 
+
+Model can be:
+
+- A character string 
+
+- Separate file with model expressed in the Stan language 
+
+- Rstan runs the model and provides a lot of other tools to assess
+
+```{r}
+#| label: stan-fx
+
+#results = stan(model_code = my_model, data = my_data_list)
+
+```
+
+### Brms
+
+A framework for Bayesian regression models 
+
+Developed in collab with Stan team 
+
+Good for basic to complex models 
+
+Not precompiled 
+
+Extremely rapid feature integration 
+
+More packages to explore a Stan model’s results
+
+- Shinystan
+
+- Tidybayes
+
+- Various model-specific packages etc
+
+
+
+**Basic GLM**
+
+Attendance behavior of high school juniors at two schools
+
+Target: number of days of absence 
+
+Predictors:
+
+- Type of program in which the student is enrolled: General, vocational, academic
+
+- Standardized test in math
+
+- Gender 
+
+- Code chunk for this, using poisson regression 
+
+```{r}
+#| label: attendance-ex
+
+#attendance = haven::read_dta("https://stats.idre.ucla.edu/stat/stata/dae/nb_data.dta")
+#attendance <- attendance %>% 
+#  mutate(
+#    prog = factor(prog, levels = 1:3, labels = c("General", "Academic", "Vocational")),
+#    prog = fct_relevel(prog, c('Vocational', 'General', 'Academic')),
+#    gender = factor(gender, labels = c('Female', 'Male')),
+#    id = factor(id)
+#  )
+```
+
+```{r}
+#| label: attendance-glm-ex
+
+#attendance_glm <- glm(daysabs ~ math + gender + prog,
+#                      data = attendance, 
+#                      family = poisson)
+## summary(attendance_glm)
+
+```
+
+
+**Rstanarm: GLM**
+
+Rstanarm uses the same nomenclature and general approach as base R
+
+```{r}
+#| label: attendance-bglm-ex
+
+#attendance_bglm <- stan_glm(daysabs ~ math + gender + prog,
+#                            data = attendance, 
+#                            family = poisson)
+#summary(attendance_bglm, digits = 2, prob=c(.025, .5, .975))
+
+```
+
+
+**Summary info**
+
+The same as you see in every other regression model!
+
+- Mean: the point estimate for the parameter 
+
+- Sd: standard error for the point estimate 
+
+- Quantiles: are whatever you want, but here represent the median and 95% uncertainty interval
+
+- mean_PPD: mean of the posterior predictive distribution (hopefully on par with the mean of the target variable (daysabs))
+
+- log-posterior: similar to the log-likelihood from maximum likelihood, but for the Bayesian case
+
+**Diagnostics for quick eyeball inspection**
+
+- Monte Carlo Standard Error: The standard error of the mean of the posterior draws. Want mcse than 10% of the posterior standard deviation.
+
+- neff: is an estimate of the effective number of independent draws from the posterior distribution of the estimand of interest. Because the draws within a chain are not independent if there is autocorrelation, the effective sample size will be smaller than the total number of iterations. Should be greater than 10% of max.
+
+- R̂: measures the ratio of the average variance of samples within each chain to the variance of the pooled samples across chains; if all chains are at equilibrium, these will be the same and R̂ will be one. Desire less than 1.1.
+
+**How to add more options:**
+
+Typical configuration would involve setting priors, as well as MCMC options such as iterations, warm-up, etc.
+
+
+```{r}
+#| label: attendance-bglm-stan-ex
+
+#attendance_bglm <- stan_glm(daysabs ~ math + gender + prog,
+#                            data = attendance, 
+#                            family = poisson, 
+#                            prior = student_t(df = 7), 
+#                            prior_intercept = student_t(df = 7),
+#                            iter = 5000,
+#                            warmup = 2000,
+#                            thin = 10,
+#                            cores = 4, 
+#                            seed = 1234)
+
+```
+
+**Mixed model (stanarm)**
+
+Let’s look at a mixed model for another demonstration 
+
+The average reaction time per day for subjects in a sleep deprivation study
+
+On day 0 the subjects had their normal amount of sleep
+
+Subsequently restricted to 3 hours of sleep per night
+
+The observations represent the average reaction time on a series of tests
+
+We’ll have a random intercept and random coefficient for Days
+
+```{r}
+#| label: sleep-study-lmer
+
+#sleepstudy_lmer <- lmer(Reaction ~ Days + (1 + Days|Subject), 
+#                        data = sleepstudy)
+#summary(sleepstudy_lmer)
+
+```
+
+* For help interpreting the printed output see ?print.stanreg
+
+In the Bayesian model, the random effects are not BLUPS, but are parameters estimates in the model
+
+In this case, we see a little more shrinkage relative to the standard approach
+
+**Rstanarm: other models**
+
+- ANOVA
+
+- Beta regression
+
+- Conditional logistic
+
+- GLM including negative binomial models
+
+- Generalized additive models
+
+- Nonlinear and Generalized mixed models
+
+- ‘Joint’ models for longitudinal and time-to-event (e.g. survival)
+
+- Multivariate
+
+- Ordinal models
+
+- Default priors 
+
+- Depends on the model
+
+**For most models:**
+
+- intercepts are treated differently
+
+- regression coefficients have mean zero with some specific variance
+scale parameters (e.g. residual variance) will have appropriate priors
+
+
+**Getting priors:**
+
+```{r}
+#| label: getting-priors
+
+#prior_summary(attendance_bglm)
+
+```
+
+
+**Setting priors**
+
+One can set priors with the appropriate arguments to the model function
+
+- More info here about functions to set priors:
+https://m-clark.github.io/easy-bayes/setting-priors.html
+
+
+**Brms: mixed model extensions**
+
+Just with mixed models, we already start to see what brms brings to the table
+
+additional distributions: ordinal, zero-inflated, beta and many more
+
+Correlated residuals, Additive mixed models, non-linear with known form, heterogeneous variance components, correlated random effects across multivariate outcomes, and more
+
+```{r}
+#| label: sleep-study-brm-mods
+
+# auto regressive residual structure
+#model <- brm(Reaction ~ Days + (1 + Days|Subject), 
+#             data = sleepstudy, 
+#             correlation = cor_ar(~Days))
+
+# multi-membership models
+#model <- brm(DV ~ x + (1|mm(group_1, group_2)), 
+#             data = sleepstudy)
+
+# smooth terms
+#model <- brm(Reaction ~ s(Days) + (1 + Days|Subject), 
+#             data = sleepstudy)
+
+# use gaussian process instead
+#model <- brm(Reaction ~ gp(Days) + (1 + Days|Subject), 
+#             data = sleepstudy)
+
+# multivarate outcome; q is an arbitrarily named identifier connecting random
+# effects.
+#f1 = bf(DV_1 ~ x + 1|q|group)
+#f2 = bf(DV_2 ~ x + 1|q|group)
+#f = f1 + f2
+
+#model <- brm(f, data = mydata)
+
+```
+
+
+# 21 April 2025
+
+## What about repeated measures designs?
+
+Whenever we have more than one data point from the same participant we are dealing with a type of repeated measures design
+
+- between subjects factor
+
+- within subjects factor
+
+Everything we have done this semester has been under the assumption that we have one data point per participant (i.e., no within subjects factors)
+
+This is because one of the assumptions of our models was that there was no autocorrelation, i.e., that the data were independent
+
+Repeated measures designs introduce autocorrelation into the model. Why?
+
+
+## What's the big deal?
+
+Disregarding lack of independence = pseudo-replication
+
+In other words, replicating the data as though they were independent when they aren’t
+
+This will inflate your degrees of freedom, completely bias your parameter estimates and make your p-values meaningless
+
+- it might make everything significant even if they're not
+
+
+## What does a repeated measures design look like?
+
+- This dataset has the weight of 50 different chicks at 12 different time points
+
+- Notice that the first 12 rows come from the same chick (chick 1)
+
+- In other words, Time can be thought of as a continuous time series variable (within-subjects) that would violate our assumptions of independence
+
+- Diet, on the other hand, is a between-subjects factor (you can’t be on more than one diet at a time)
+
+- Notice that both Time and Diet appear in this dataset as numeric values.
+
+- You have to think about your data to make sure you understand what type of variables you have.
+
+
+### What can we do?
+
+Currently, the most popular solution is to use a multi-level or hierarchical model
+
+These models are commonly referred to as mixed effects models
+
+They include both “fixed” effects and “random” effects
+
+They provide a flexible framework that allows us to account for the hierarchical structure of our data (within-subjects variables, time-series data, etc.) and provide **partial pooling** estimates
+
+Building on our knowledge of the linear model, understanding the basic idea of mixed effects models is trivial
+
+
+### How does it work?
+
+**Standard linear model**
+
+Recall our formula for fitting a linear model
+
+We fit these models in R using lm() or glm():
+- lm(criterion ~ predictor, data = my_data)
+
+In a mixed effects model, what we know as predictors are called fixed effects
+
+The novel aspect of a mixed effects model is that it also includes random effects
+
+Random effects allow us to account for non-independence
+
+
+**Mixed effects model**
+
+A mixed effects model mixes both fixed effects and random effects
+
+$\^{y}$=α+βX+uZ+ϵ
+
+response=intercept+slope×FE+u×RE+error
+
+We fit these models in R using lmer() or glmer() from the lme4 package (there are other options as well)
+
+- lmer(criterion ~ fixed_effect + (1|random_effect), data = my_data)
+
+
+### What is a random effect? 
+
+This is actually a really nuanced question and nobody has a good answer
+
+Some people use descriptions like the following:
+
+
+**fixed**
+
+- repeatable 
+
+- systematic influence 
+
+- exhaust the pop
+
+- generally of interest 
+
+- continuous or categorial
+
+**random**
+
+- non repeatable 
+
+- random influence 
+
+- sample the pop
+
+- often not of interest 
+
+- have to be categorial 
+
+…but you will always find exceptions to this
+
+Most of the time you will see subjects and items as random effects (things that are repeated in the design)
+
+This typically implies that the model includes random intercepts, and/or random slopes
+
+Instead of trying to define random effects, let’s try to understand what they do (and come back to the idea later)
+
+**items = words (that speakers read aloud)**
+
+## Now let's add SUBJECTS as a random effect
+
+We will do this by giving subjects a random intercept
+
+In other words, we will allow the intercepts to vary for each participant (as opposed to modeling just 1 intercept)
+
+**lmer(response ~ time + (1|subjects), data = my_df)**
+
+What would this look like?
+
+**graphs on slides** 
+
+### What did we do?
+
+We are taking into account the idiosyncratic differences associated with each individual subject
+
+By giving each subject its own intercept we are informing the model that each individual has a different starting point in the time course (when time = 0)
+
+In general this makes sense because some people…
+
+- are faster/slower responders
+
+- speak faster/slower
+
+- have higher/lower pitched voices
+
+We can also take into account the fact that some people…
+
+- slow down during an experiment
+
+- respond more/less accurately over time
+
+- learn at different rates
+
+
+
+### what did we do?
+
+The model now allows the random intercepts to vary for each individual for the effect time
+
+This means we included a random slope for each participant
+
+By adding a random slope for the effect time we take into account the fact that response change for each individual at a different rate
+
+Under the hood, the model uses this information to calculate the best fit line for all of the data
+
+This method is called partial pooling and represents one of the most important (and least understood) aspects of mixed effects modeling
+
+
+**lmer(response ~ time + (1 + time|subjects), data = my_df)**
+
+
+Again, (1 + time|subjects) represents the random structure of the model
+
+Anything to the right of | is a random intercept
+
+Anything to the left of | is given a random slope for the effect specified to the right
+
+Thus, (1 + time|subjects) means random slopes for the effect time for each subject
+
+It is rarely a good idea to only use random intercepts
+
+
+### Great news!
+
+We have spent the entire semester building up our knowledge of the linear model so that we would be prepared to understand mixed effects models
+
+Why? They are the standard in speech sciences now
+
+Everything that you have learned in this class applies to a mixed effects model
+
+- model interpretation
+
+- nested model comparisons
+
+- treatment of categorical factors
+
+- centering, standardizing, and other transformations
+
+What about GLMs?
+
+- Them too!
+
+- You can fit mixed effects models for count data and binary outcomes using glmer()
+
+- All you have to do is specify the distribution and the linking function
+
+**Multilevel logistic regression model**
+
+**glmer(
+  formula = response ~ fixed_effect + 
+    (1 + fixed_effect | participant), 
+  family = binomial(link = "logit"), 
+  data = DATA
+)**
+
+**Multilevel poisson regression model**
+
+**glmer(
+  formula = counts   ~ fixed_effect + 
+    (1 + fixed_effect | participant), 
+  family = poisson(link = "log"), 
+  data = DATA
+)**
+
+
+## Understanding partial pooling 
+
+We can think of multilevel models as "models within models" 
+
+Generally 
+
+- one level estimates observed groups/items/individuals/etc.
+
+- another level estimates populations of groups/individuals
+
+For this reason, some reasercheres (myself included) prefer to refer to **grouping-level** effects and **population-level** effects, as opposed to *random* effects and *fixed* effects
+
+Under this view, *random* intercepts and *random* slopes are conceptualized and **varying** intercepts and **varying** slopes
+
+
+### So what is pooling all about?
+
+
+Some describe multilevel models as ‘models with memory’
+
+- The population-level model helps inform/learn about the grouping-level
+
+- They learn faster, better
+
+- They are robust to overfitting
+
+It has to do with how information is ‘pooled’
+
+1. Complete pooling
+
+2. No pooling
+
+3. Partial pooling
+
+
+***pooling is a guard against overfitting!***
+
+### sleepstudy dataset
+
+Part of lme4 package
+
+Criterion = reaction time (Reaction)
+
+Predictor = # of days of sleep deprivation (Days)
+
+10 observations per participant
+
+**+2 fake participants w/ incomplete data**
+
+
+### Can we improve estimates with partial pooling?
+
+Reaction ~ 1 + Days + (1 + Days | Subject)
+
+We allow the effect of Days to vary for each Subject
+
+By-subject random intercepts with random slope for Days
+
+```{r}
+
+#lmer(Reaction ~ 1 + Days + (1 + Days | Subject), data = df_sleep)
+
+```
+
+- Most of this will look familiar
+
+- Fixed effects estimates (and interpretations) work just like lm, glm, etc.
+
+- What’s new? The random effects estimates
+
+
+
+Multilevel models use the grouping variables to learn about the nested structure of the data
+
+The model can use this information to make educated guesses when there is incomplete information
+
+The model takes advantage of partial pooling, producing shrinkage
+
+This builds skepticism into the model with regard to extreme values
+

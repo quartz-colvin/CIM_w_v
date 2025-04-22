@@ -3,7 +3,7 @@
     "path": "~/GitHub/CIM_w_v/brainstorm.Rmd",
     "project_path": "brainstorm.Rmd",
     "type": "r_markdown",
-    "hash": "1721819759",
+    "hash": "3650455273",
     "contents": "",
     "dirty": false,
     "created": 1744674538966.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "202,3",
-        "scrollLine": "192"
+        "cursorPosition": "130,0",
+        "scrollLine": "121"
     },
     "folds": "",
-    "lastKnownWriteTime": 1745183165,
+    "lastKnownWriteTime": 1745270914,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1745183165978,
+    "last_content_update": 1745270914143,
     "read_only": false,
     "read_only_alternatives": []
 }
