@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>[v] across Cook Islands Māori</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Quartz Colvin" />
+    <meta name="date" content="2025-04-25" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/rutgers.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rutgers-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# [v] across Cook Islands Māori
+]
+.subtitle[
+## A statistical analysis
+]
+.author[
+### Quartz Colvin
+]
+.institute[
+### Rutgers University
+]
+.date[
+### 2025-04-25
+]
+
+---
+
+# Introduction
+
+- Kia orana kātoa! Ko 'ai Quartz tōku ingoa. 
+
+- Kā tuatua au nō te Māori Kūki 'āirani i tēia rā.
+
+- (I'm a beginner in the language, so this is about all I got, sorry hahaha)
+
+&lt;img src="./slides/index_files/colang-postcard.png" width="50%" /&gt;
+
+
+---
+
+# Research questions
+
+1. Are certain islands associated with more [v]-voicing than other islands? 
+
+2. How does intensity of [v] vary by island? 
+
+3. How does duration of [v] vary by island?
+
+## Why though?
+
+It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce [v] as [w], but it isn't clear to anyone who does this more and what conditions it!
+
+---
+# Cook Islands Māori (background)
+
+- I work as a contract transcriber on a project documenting CIM, so I got this data from my supervisors (Rolando ē Ake, meitaki!)
+
+- An Eastern Polynesian language, VSO is the unmarked word order
+
+- Closely related, but definitely different from Aotearoa Māori
+
+- Classified as Vulnerable
+
+&lt;img src="./slides/index_files/cook-islands-flag.png" width="60%" /&gt;
+
+---
+# Cook Islands Māori (background)
+
+&lt;div class="figure"&gt;
+&lt;img src="./slides/index_files/oceania-map.png" alt="Map of Oceania." width="75%" /&gt;
+&lt;p class="caption"&gt;Map of Oceania.&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Cook Islands Māori (background)
+
+&lt;div class="figure"&gt;
+&lt;img src="./slides/index_files/cook-islands-map.png" alt="Map of Cook Islands." width="50%" /&gt;
+&lt;p class="caption"&gt;Map of Cook Islands.&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+
+# Set-up
+
+- Load libraries and read the huge .csv file
+
+
+``` r
+library("tidyverse")
+library("tidyr")
+library("here")
+library("mgcv")
+
+source(here::here("scripts", "libs.R"))
+
+untidy_data &lt;- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
+```
+
+---
+## Preview data
+
+
+```
+## Rows: 2,513
+## Columns: 17
+## $ speaker            &lt;chr&gt; "AAN", "AAN", "AAN", "AAN", "AAN", "AAN", "AAN", "A…
+## $ island             &lt;chr&gt; "Rarotonga", "Rarotonga", "Rarotonga", "Rarotonga",…
+## $ Filename           &lt;chr&gt; "AAN-RRAAT8-018", "AAN-RRAAT8-018", "AAN-RRAAT8-018…
+## $ TextGridLabel      &lt;chr&gt; "a", "v", "e", "v", "a", "a", "v", "a", "v", "a", "…
+## $ Word               &lt;chr&gt; "rave", "rave", "rave", "vaꞌine", "vaꞌine", "rava",…
+## $ PreviousLabel      &lt;chr&gt; "r", "a", "v", NA, "v", "r", "a", "v", NA, "v", "r"…
+## $ FollowingLabel     &lt;chr&gt; "v", "e", NA, "a", "ꞌ", "v", "a", NA, "a", "ꞌ", "v"…
+## $ start              &lt;dbl&gt; 1.10, 1.13, 1.16, 1.73, 1.76, 0.75, 0.80, 0.87, 0.6…
+## $ end                &lt;dbl&gt; 1.13, 1.16, 1.19, 1.76, 1.79, 0.80, 0.87, 0.90, 0.6…
+## $ duration           &lt;dbl&gt; 0.03, 0.03, 0.03, 0.03, 0.03, 0.05, 0.07, 0.03, 0.0…
+## $ f0_20.point        &lt;dbl&gt; 144.0532, 141.7901, 143.1055, 263.7962, 265.8672, 2…
+## $ f0_50.point        &lt;dbl&gt; 143.0606, 142.2725, 142.6605, 269.8593, 261.0071, 2…
+## $ f0_80.point        &lt;dbl&gt; 141.8219, 143.3506, 142.2108, 270.8541, 263.7023, 2…
+## $ F1_midpoint        &lt;dbl&gt; 356.4547, 335.4101, 341.6010, 537.7380, 584.4075, 6…
+## $ F2_midpoint        &lt;dbl&gt; 1755.6225, 1999.8371, 2362.3051, 1040.5499, 1419.93…
+## $ F3_midpoint        &lt;dbl&gt; 2797.351, 3192.717, 3280.530, 2898.961, 2876.166, 2…
+## $ intensity_midpoint &lt;dbl&gt; 40.29265, 39.22013, 40.47651, 52.75762, 55.72719, 5…
+```
+
+
+**Omg.... I can fix her!**
+
+---
+## Tidy (1)
+
+
+``` r
+dat &lt;- untidy_data |&gt;
+  drop_na() |&gt;   # remove rows that have NA values
+  filter(TextGridLabel == "v") |&gt;   # filter by 'v' for analysis
+  pivot_longer(      # deal with all the f0 columns
+    cols = c("f0_20.point", 
+             "f0_50.point", 
+             "f0_80.point"),
+    names_to = "percent",    # names to 'percent' column
+    values_to = "hz"      # values to one column called 'hz'
+  ) |&gt;
+  arrange(island, Word) |&gt;   # group by 'island', then 'word'
+  select(island,      # pick which columns I want and rename some
+         word = Word, 
+         percent, hz, f2 = F2_midpoint, duration, 
+         intensity = intensity_midpoint) |&gt;
+  write_csv("tidy_cim.csv")    # put tidy data in new .csv 
+```
+
+---
+## Tidy (2)
+
+We need to fix the names that we've converted to values under **'percent'**
+
+
+``` r
+# fixing the original column names to only be the percent
+# since they are all values for f0
+
+dat$percent[dat$percent == 'f0_20.point'] &lt;- "20"
+
+dat$percent[dat$percent == 'f0_50.point'] &lt;- "50"
+
+dat$percent[dat$percent == 'f0_80.point'] &lt;- "80"
+```
+
+---
+# Tidy data 
+
+
+|island |word |percent |       hz|       f2| duration| intensity|
+|:------|:----|:-------|--------:|--------:|--------:|---------:|
+|Atiu   |ava  |20      | 128.5916| 964.3925|     0.08|  54.08202|
+|Atiu   |ava  |50      | 127.0908| 964.3925|     0.08|  54.08202|
+|Atiu   |ava  |80      | 127.4540| 964.3925|     0.08|  54.08202|
+|Atiu   |ava  |20      | 160.6464| 950.2333|     0.07|  58.06061|
+|Atiu   |ava  |50      | 157.4397| 950.2333|     0.07|  58.06061|
+|Atiu   |ava  |80      | 158.2820| 950.2333|     0.07|  58.06061|
+
+- **Finally,** it doesn't hurt to look at and it only contains the data we need!
+
+- **Percent:** the 20% 50% and 80% marks of the phoneme's total duration
+
+- **Hz:** f0 measured in Hz at that percent of the phoneme's duration
+
+- **f2:** f2 measured in Hz at the midpoint of the phoneme's duration
+
+- **Duration:** total duration of the phoneme
+
+- **Intensity:** intensity midpoint of the phoneme
+
+---
+# Duration by island
+
+### Code chunk
+
+
+``` r
+mod1 &lt;- lm(formula = duration ~ island, data = dat) |&gt;
+  ggplot() +
+  aes(x = island, y = duration, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] duration by island",
+    x = "Island",
+    y = "Duration"
+  )
+```
+
+---
+## Boxplot for durations
+
+&lt;img src="index_files/figure-html/print-mod1-1.png" height="75%" /&gt;
+
+---
+# Intensity by island
+
+### Code chunk
+
+
+``` r
+mod2 &lt;- lm(formula = intensity ~ island, data = dat) |&gt;
+  ggplot() +
+  aes(x = island, y = intensity, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] intensity by island",
+    x = "Island",
+    y = "Intensity"
+  )
+```
+
+---
+## Boxplot for intensities
+
+&lt;img src="index_files/figure-html/print-mod2-1.png" height="75%" /&gt;
+
+---
+# Voicing by island
+
+### Useful info
+
+**F0**
+
+- [w] is voiceless, so F0 is super low or absent (below than 80 Hz = voiceless)
+
+- [v] is voiced, so F0 is definitely there, and may be higher than for [w]
+
+**F2**
+
+- [w] usually has a lower F2 than [v]
+
+---
+# Voicing by island 
+
+### What I'm doing
+
+**F0**
+
+- We use f0 values for the target phoneme to see how voicing for w~v differs across the four islands in this data set. 
+
+- F0 values were extracted at the 20%, 50% and 80% points of the duration of the target phoneme. 
+
+**F2**
+
+- F2 values were only extracted at the midpoint of the phoneme.
+
+---
+# Voicing by island (f0)
+
+
+``` r
+mod_f0 &lt;- lm(formula = duration ~ hz + island, data = dat) |&gt;
+  ggplot() + 
+  aes(x = duration, y = hz, color = island) +
+  geom_point() +
+  geom_smooth(
+    method="glm",
+    method.args = list(family = "poisson")
+  ) +
+  facet_wrap(~island) +
+  labs(
+    title = "F0 values by duration across the Cook Islands", 
+    x = "Duration", 
+    y = "F0 (Hz)"
+  ) 
+```
+
+---
+# Voicing by island (f0)
+
+&lt;img src="index_files/figure-html/print-modf0-1.png" width="65%" /&gt;
+
+---
+# Voicing by island (f2)
+
+
+``` r
+mod_f2 &lt;- lm(formula = f2 ~ island, data = dat) |&gt;
+  ggplot() +
+  aes(x = island, y = f2, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare f2 by island",
+    x = "Island",
+    y = "f2 (Hz)"
+  )
+```
+
+---
+# Voicing by island (f2)
+
+&lt;img src="index_files/figure-html/print-mod-f2-1.png" width="70%" /&gt;
+
+---
+# Results 
+
+**Duration**
+
+- Penrhyn has the longest average w~v durations and Rarotonga has the shortest
+
+- Penrhyn has the largest range in durations
+
+- Atiu and Mauke have pretty similar w~v durations
+
+**Intensity**
+
+- Penrhyn has the lowest average intensity midpoints (its entire range is lowest)
+
+- Mauke and Rarotonga have pretty high ranges, but for Rarotonga the values are more concentrated around the mean (the box itself is smaller)
+
+- Atiu has the smallest range for intensity and the values are concentrated around the mean 
+
+---
+# Formant results 
+
+### Great, so what does this all mean?
+
+**F0**
+
+- Mauke is the only one that seems to *regularly* have voiceless [w] in place of 'v', but it also has the biggest overall range for f0 Hz
+
+- the other 3 islands typically have f0 \&gt; 100 Hz, so these tokens are voiced
+
+- **SO,** we would expect f2 values to also say that Mauke has more [w] than [v] surfacing
+
+
+
+
+
+
+---
+# Formant results 
+
+### The voicing question
+
+- Based on the f2 boxplot, the lowest mean f2 is Atiu, then Penrhyn, Mauke, then Rarotonga
+
+- a lower f2 indicates [w], so Atiu should, on average, have more [w]-surfacing and Rarotonga should have the least occurrances of [w]-surfacing (more [v])
+
+- **So, it seems that f0 was not a good predictor for the [w] vs. [v] question, but it did reveal that Mauke has a higher rate of voiceless [w], when [w] is realized**
+
+---
+# Formant results
+
+### The w~v question 
+
+- a 'low f2' that indicates [w] is \&lt;850 Hz
+
+- **all** of these 4 islands have instances of [w], and their means are all slightly (or much) higher than this cut-off, so they all averagely surface as [v]
+
+- based on the boxplots for f2, all of the islands except Penrhyn have a lot of tokens where 'v' surfaces as [w]
+
+
+---
+
+# I haven't done the formal stats results yet :')
+
+# Meitaki!
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
