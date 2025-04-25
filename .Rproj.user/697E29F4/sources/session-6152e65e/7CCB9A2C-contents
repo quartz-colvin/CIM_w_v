@@ -1,0 +1,334 @@
+---
+title             : "Variation of [v] in Cook Islands Māori"
+shorttitle        : "Cook Islands Māori"
+
+author: 
+  - name          : "Quartz Colvin"
+    affiliation   : "Rutgers University"
+    corresponding : no    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "quartz.colvin@rutgers.edu"
+
+affiliation:
+  - id            : "1"
+    institution   : "Rutgers University"
+
+#author_note: >
+#  Complete departmental affiliations for each author (note the indentation, if you start a new paragraph).
+
+#  Enter author note here.
+
+#abstract: >
+#  FILL-IN???.
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib"]
+
+figsintext        : no
+figurelist        : yes
+tablelist         : yes
+footnotelist      : no
+lineno            : yes
+
+class             : "man"
+output            : papaja::apa6_word
+---
+
+```{r include = FALSE}
+#| label: setup-libs
+
+library("tidyverse")
+library("tidyr")
+library("here")
+library("papaja")
+library("lmerTest")
+
+source(here::here("scripts", "libs.R"))
+
+untidy_data <- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
+
+```
+
+```{r, 'source-libs', echo=FALSE}
+source("../scripts/libs.R")
+```
+
+
+
+
+
+
+
+
+# Introduction
+
+In this paper, we will do a statistical analysis of [v] across a sample of islands in Cook Islands Māori. It's known that in many dialects and other varieties of Māori, this phoneme can be realized as [w] or [v]. This paper aims to take a statistical approach to this generalization. 
+
+This paper has three main questions to investigate. First, are [w]-realizing dialects associated with more voicing than [v]-realizing dialects? Second, how does intensity of [v/w] vary by island? Lastly, how does duration of the target phoneme vary by island?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Methods
+
+Participants/material/procedure **???**
+
+The data set this study uses was acquired by **???**
+
+
+
+
+
+
+# Data
+
+
+```{r}
+#| label: glimpse-cim
+#| message: false
+#| echo: false
+#| warning: false
+#| include: false
+
+knitr::kable(head(untidy_data))
+
+```
+
+This data set contains a lot of information, so we will need to tidy it and only keep the relevant data for the analysis. The following code chunk shows how the data was tidied and what was kept from the untidy data set. I don't show a preview of the untidy data set here because it had 17 columns and most of the columns will be taken out. In addition, it includes some metadata that I did not ask permission to share. 
+
+
+```{r}
+#| label: tidy-cim
+#| message: false
+#| warning: false
+
+dat <- untidy_data |>
+  drop_na() |>   # remove rows that have NA values
+  filter(TextGridLabel == "v") |>   # filter by 'v' for analysis
+  pivot_longer(      # deal with all the f0 columns
+    cols = c("f0_20.point", 
+             "f0_50.point", 
+             "f0_80.point"),
+    names_to = "percent",    # names to 'percent' column
+    values_to = "hz"      # values to one column called 'hz'
+  ) |>
+  arrange(island, Word) |>   # group by 'island', then 'word'
+  select(island,      # pick which columns I want and rename some
+         word = Word, 
+         percent, hz, duration, 
+         intensity = intensity_midpoint) |>
+  write_csv("tidy_cim.csv")    # put tidy data in new .csv 
+
+```
+
+In the new data set, we need to fix the names that we've converted to values under 'percent'. This is shown in the following code chunk. 
+
+```{r}
+#| label: change-percents
+#| warning: false
+#| message: false
+
+# fixing the original column names to only be the percent
+# since they are all values for f0
+
+dat$percent[dat$percent == 'f0_20.point'] <- "20"
+
+dat$percent[dat$percent == 'f0_50.point'] <- "50"
+
+dat$percent[dat$percent == 'f0_80.point'] <- "80"
+
+```
+
+Now that we have tidied this data set, here is a preview showing what it looks like.
+
+
+```{r}
+#| label: show-tidy-data
+#| warning: false
+#| message: false
+#| echo: false
+
+knitr::kable(head(dat))
+
+```
+
+There are many more rows than this, but if all rows were included, it would be too long of a table to show here. 
+
+# Analysis
+
+This section readdresses the three questions. First, are [w]-realizing dialects associated with more voicing than [v]-realizing dialects? Second, how does intensity of [v/w] vary by island? Lastly, how does duration of the target phoneme vary by island?
+
+
+
+
+
+
+
+## Duration by island 
+
+Next, we can compare the duration of [v] across the four islands. The following table shows a boxplot of the durations by island.
+
+**model-assumptions-and-diagnostics???**
+
+**how-you-assessed-main-effects-and-interactions???**
+
+**decision-rules-aka-alpha???**
+
+```{r}
+#| label: duration-by-island
+#| warning: false
+#| message: false
+#| echo: false
+#| out-width: "100%"
+
+mod1 <- lm(formula = duration ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = duration, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] duration by island",
+    x = "Island",
+    y = "Duration"
+  )
+
+print(mod1)
+
+```
+
+
+A few things are visually clear from this comparative boxplot. Most obviously, Penrhyn had the largest range of [v] durations and Rarotonga had the smallest range. Rarotonga also had the lowest average (=mean) duration for [v] and Penrhyn had the highest average duration. Interestingly, Mauke and Rarotonga didn't seem to have outliers in [v] durations, but Atiu and Penrhyn had a few outlier data points. 
+
+
+## Intensity by island
+
+Next, in the same fashion we did to compare duration of [v] tokens, we can compare the intensity midpoints for the tokens across the islands.
+
+**model-assumptions-and-diagnostics???**
+
+**how-you-assessed-main-effects-and-interactions???**
+
+**decision-rules-aka-alpha???**
+
+```{r}
+#| label: intensity-by-island
+#| warning: false
+#| message: false
+#| echo: false
+#| out-width: "100%"
+
+mod2 <- lm(formula = intensity ~ island, data = dat) |>
+  ggplot() +
+  aes(x = island, y = intensity, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] intensity by island",
+    x = "Island",
+    y = "Intensity"
+  )
+
+print(mod2)
+
+```
+
+
+Looking at the comparative boxplot, we can see how intensity midpoints vary across these four islands. The average intensity values were similar for all four, but Penrhyn had the lowest mean. These averages varied by less than 10, so they are quite similar. Mauke had the highest range for intensity midpoints, while Atiu had the smallest. Rarotonga had the most outliers and the other three islands had basically no outliers.  
+
+
+## Voicing by island 
+
+First we use f0 values for the target phoneme to see how voicing differs across the four islands in this data set. F0 values were extracted at the 20%, 50% and 80% points of the duration of the target phoneme. 
+
+The following plots show how F0 (measured in Hz) changes over the duration of the [v] phoneme. Each facet shows this for each island so that the reader can compare the islands visually. 
+
+**model-assumptions-and-diagnostics???**
+
+**how-you-assessed-main-effects-and-interactions???**
+
+**decision-rules-aka-alpha???**
+
+```{r}
+#| label: f0-traj-mod
+#| warning: false
+#| message: false
+#| echo: false
+#| out-width: "100%"
+
+mod_f0 <- lm(formula = duration ~ hz + island, data = dat) |>
+  ggplot() + 
+  aes(x = duration, y = hz, color = island) +
+  geom_point() +
+  geom_smooth(
+    method="glm",
+    method.args = list(family = "poisson")
+  ) +
+  facet_wrap(~island) +
+  labs(
+    title = "F0 values by duration across the Cook Islands", 
+    x = "Duration", 
+    y = "F0 (Hz)"
+  ) 
+
+print(mod_f0)
+
+```
+
+
+As noted earlier, duration clearly differs between these four islands. The slopes for Atiu and Penrhyn show that over the duration of the phoneme, f0 decreases. This slope isn't steep, but it is present. Mauke and Rarotonga have upwards slopes, showing that over the duration of [v], the f0 tends to increase. Rarotongan Māori has the sharpest increase in Hz over the duration of the phoneme. 
+
+
+# Formal results
+
+**report-descriptive-stats???**
+
+```{r}
+#| label: descriptive-stats
+#| warning: false
+#| message: false
+#| echo: false
+#| include: false
+
+summary(mod_f0)
+
+summary(mod1)
+
+summary(mod2)
+
+
+```
+
+**model fit, main effects (usually NMC), interactions (usually, NMC), interpretations (directionality, effect size, uncertainty)**
+
+**beta, SE, CI, p-val**
+
+
+
+### Data analysis
+
+We used `r cite_r("r-references.bib")` for all our analyses.
+
+
+
+# Discussion
+
+**fill-in???**
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
