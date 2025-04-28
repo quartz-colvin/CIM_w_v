@@ -1,7 +1,7 @@
 build-last-errors="[]"
 build-last-errors-base-dir=""
 build-last-outputs="[]"
-compile_pdf_state="{\"tab_visible\":true,\"running\":false,\"target_file\":\"~/GitHub/CIM_w_v/manuscript/cim_w_v_manuscript.tex\",\"output\":\"Unabled to find specified LaTeX program 'pdfLaTeX' on the system path\\n\",\"errors\":[]}"
+compile_pdf_state="{\"tab_visible\":false,\"running\":false,\"target_file\":\"\",\"output\":\"\",\"errors\":[]}"
 files.monitored-path=""
 find-in-files-state="{\"handle\":\"\",\"input\":\"\",\"path\":\"\",\"regex\":false,\"ignoreCase\":false,\"results\":{\"file\":[],\"line\":[],\"lineValue\":[],\"matchOn\":[],\"matchOff\":[],\"replaceMatchOn\":[],\"replaceMatchOff\":[]},\"running\":false,\"replace\":false,\"preview\":false,\"gitFlag\":false,\"replacePattern\":\"\"}"
 imageDirtyState="1"

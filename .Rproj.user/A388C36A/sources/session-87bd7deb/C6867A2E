@@ -1,26 +1,26 @@
 {
-    "id": "F7D0174F",
-    "path": "~/GitHub/DS4Ling_Class_Files/index.Rmd",
+    "id": "C6867A2E",
+    "path": "~/GitHub/DS4Ling_Class_Files/ggplot_tidy/ggplot_tidy.Rmd",
     "project_path": null,
     "type": "r_markdown",
-    "hash": "1643221126",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1745265036609.0,
+    "created": 1745796142844.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 3,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "559,61",
-        "scrollLine": "556"
+        "cursorPosition": "124,33",
+        "scrollLine": "121"
     },
     "folds": "",
-    "lastKnownWriteTime": 1745261430,
+    "lastKnownWriteTime": 1745178426,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1745261430,
+    "last_content_update": 1745178426,
     "read_only": false,
     "read_only_alternatives": []
 }

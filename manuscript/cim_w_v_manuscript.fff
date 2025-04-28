@@ -1,0 +1,20 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\includegraphics[height=0.75\textheight]{cim_w_v_manuscript_files/figure-latex/print-mod1-1} \caption{ }\label{fig:print-mod1}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\includegraphics[height=0.75\textheight]{cim_w_v_manuscript_files/figure-latex/print-mod2-1} \caption{ }\label{fig:print-mod2}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\includegraphics[width=0.65\linewidth]{cim_w_v_manuscript_files/figure-latex/print-modf0-1} \caption{ }\label{fig:print-modf0}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\includegraphics[width=0.7\linewidth]{cim_w_v_manuscript_files/figure-latex/print-mod-f2-1} \caption{ }\label{fig:print-mod-f2}
+\end{figure*}
