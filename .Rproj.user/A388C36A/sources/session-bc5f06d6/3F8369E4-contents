@@ -1,0 +1,420 @@
+---
+title             : "Variation of [v] in Cook Islands Māori"
+shorttitle        : "Cook Islands Māori"
+
+author: 
+  - name          : "Quartz Colvin"
+    affiliation   : "Rutgers University"
+    corresponding : no    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "quartz.colvin@rutgers.edu"
+
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib"]
+
+figsintext        : yes
+figurelist        : yes
+tablelist         : yes
+footnotelist      : no
+lineno            : no
+
+class             : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r include = FALSE}
+#| label: setup-libs
+
+library("tidyverse")
+library("tidyr")
+library("here")
+library("papaja")
+library("lmerTest")
+library("ds4ling")
+library("broom")
+
+source(here::here("scripts", "libs.R"))
+
+untidy_data <- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
+
+```
+
+
+
+
+
+
+
+# 1.0 Introduction
+
+In this paper, we will do a statistical analysis of [v] across a sample of islands in Cook Islands Māori (CIM). It's known that in many dialects and other varieties of Māori, this phoneme can be realized as [w] or [v]. This paper aims to take a statistical approach to this generalization. 
+
+This paper has four sub-questions to investigate. First, how does w~v duration vary by island and second, how does intensity for these phonemes vary by island. The other two questions are about identifying information about the surface forms of w~v by island. Specifically, we will model f0 and f2 to determine whether certain islands have a voiced phoneme realized. Finally, the f2 model will help us determine which islands have higher rates of [w]s surfacing and which have more [v]s surfacing.
+
+## 1.1 Background (CIM)
+
+Cook Islands Māori is an Eastern Polynesian language classified as *Endangered*. It is very closely related to Aotearoa Māori, but is definitely different from it. 
+
+It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce [v] as [w], but it isn't clear to anyone who does this more and what conditions it.
+
+**???fill in**
+
+
+# 2.0 Methods
+
+**???fill in**
+
+
+
+
+# 3.0 Data
+
+```{r}
+#| label: glimpse-cim
+#| message: false
+#| echo: false
+#| warning: false
+#| include: false
+
+knitr::kable(head(untidy_data))
+
+```
+
+**???fill in**
+
+# 4.0 Analysis
+
+This section readdresses the main questions about the w~v alternation. First, how does duration differ by island and second, how does intensity vary by island? Finally, do any islands have regular occurrence of [w] instead of [v] surfacing. For this final question, we will compare f0 and f2 separately. 
+
+Note that in all of my models, I did not control for where w~v occurs in the word, since I am looking at general frequency information and not doing a phonological analysis of specific environments in which [w] or [v] occurs more.
+
+
+
+???discuss autocorrelation issue
+
+
+
+
+
+
+
+
+
+
+
+
+## 4.1 Duration by island 
+
+**???fill in**
+
+```{r}
+#| label: tidy-duration
+#| echo: false
+#| message: false
+#| warning: false
+
+tidy_dur <- untidy_data |>
+  filter(TextGridLabel == "v") |>  
+  arrange(island, Word) |>  
+  select(speaker, island, word = Word, duration) |>
+  write_csv(here("tidy_data", "tidy_dur.csv"))
+
+```
+
+```{r}
+#| label: glimpse-duration
+#| echo: false
+#| warning: false
+#| message: false
+
+knitr::kable(head(tidy_dur))
+
+```
+
+```{r}
+#| label: duration-plot
+#| warning: false
+#| message: false
+#| echo: false
+#| out-width: "100%"
+
+plot_dur <- tidy_dur |>
+  ggplot() +
+  aes(x = island, y = duration, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] duration by island",
+    x = "Island",
+    y = "Duration"
+  )
+
+```
+
+```{r}
+#| label: print-duration-plot
+#| echo: false
+#| warning: false
+#| message: false
+#| out-width: "75%"
+
+print(plot_dur)
+
+```
+
+```{r}
+#| label: mod-duration
+#| echo: false
+#| message: false
+#| warning: false
+
+mod_dur <- lm(formula = duration ~ island, data = tidy_dur)
+
+dur_summary <- tidy(mod_dur)
+
+knitr::kable(dur_summary)
+
+```
+
+
+
+
+
+## 4.2 Intensity by island
+
+**???fill in**
+
+```{r}
+#| label: tidy-intensity
+#| echo: false
+#| warning: false
+#| message: false
+
+tidy_intense <- untidy_data |>
+  filter(TextGridLabel == "v") |>  
+  arrange(island, Word) |>  
+  select(speaker, island, word = Word, intensity = intensity_midpoint) |>
+  write_csv(here("tidy_data", "tidy_intense.csv"))
+
+```
+
+```{r}
+#| label: glimpse-intense
+#| echo: false
+#| message: false
+#| warning: false
+
+knitr::kable(head(tidy_intense))
+
+```
+
+```{r}
+#| label: intensity-by-island
+#| warning: false
+#| message: false
+#| echo: false
+
+plot_intense <- tidy_intense |>
+  ggplot() +
+  aes(x = island, y = intensity, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] intensity by island",
+    x = "Island",
+    y = "Intensity"
+  )
+
+```
+
+```{r}
+#| label: print-intensity-plot
+#| echo: false
+#| message: false
+#| warning: false
+#| out-width: "75%"
+
+print(plot_intense)
+
+```
+
+```{r}
+#| label: mod-intensity
+#| echo: false
+#| message: false
+#| warning: false
+
+mod_intense <- lm(formula = intensity ~ island, data = tidy_intense)
+
+intense_summary <- tidy(mod_intense)
+
+knitr::kable(intense_summary)
+
+```
+
+
+## 4.3 Voicing by island 
+
+**???fill in**
+
+```{r}
+#| label: tidy-f0
+#| echo: false
+#| message: false
+#| warning: false
+
+tidy_f0 <- untidy_data |>
+  filter(TextGridLabel == "v") |>
+  pivot_longer(
+    cols = c("f0_20.point", 
+             "f0_50.point", 
+             "f0_80.point"),
+    names_to = "percent",
+    values_to = "f0"
+  ) |>
+  arrange(island, Word) |>  
+  select(speaker, island, word = Word, f0, duration) |>
+  write_csv(here("tidy_data", "tidy_f0.csv"))
+
+```
+
+
+
+```{r}
+#| label: glimpse-f0
+#| echo: false
+#| message: false
+#| warning: false
+
+knitr::kable(head(tidy_f0))
+
+```
+
+
+```{r}
+#| label: plot-f0
+#| echo: false
+#| message: false
+#| warning: false
+#| out-width: "75%"
+
+f0_plot <- tidy_f0 |>
+  ggplot() + 
+  aes(x = duration, y = f0, color = speaker) +
+  geom_point() +
+  geom_smooth(
+    method="glm",
+    color="black",
+    method.args = list(family = "poisson")
+  ) +
+  scale_x_continuous(breaks = seq(0, 0.3, 0.1)) +
+  facet_wrap(~island) +
+  labs(
+    title = "F0 values by duration across the Cook Islands", 
+    x = "Duration", 
+    y = "F0 (Hz)"
+  ) 
+
+print(f0_plot)
+
+```
+
+
+
+```{r}
+#| label: mod-f0
+#| echo: false
+#| message: false
+#| warning: false
+
+mod_f0 <- lm(formula = f0 ~ island, data = tidy_f0)
+
+f0_summary <- tidy(mod_f0)
+
+knitr::kable(f0_summary)
+
+```
+
+## 4.4 w~v distribution by island
+
+**???fill in**
+
+```{r}
+#| label: tidy-f2
+#| echo: false
+#| message: false
+#| warning: false
+
+tidy_f2 <- untidy_data |>
+  filter(TextGridLabel == "v") |>
+  arrange(island, Word) |>  
+  select(speaker, island, word = Word, f2 = F2_midpoint) |>
+  write_csv(here("tidy_data", "tidy_f2.csv"))
+
+```
+
+
+
+```{r}
+#| label: glimpse-f2
+#| echo: false
+#| message: false
+#| warning: false
+
+knitr::kable(head(tidy_f2))
+
+```
+
+```{r}
+#| label: plot-f2
+#| echo: false
+#| message: false
+#| warning: false
+#| out-width: "75%"
+
+f2_plot <- tidy_f2 |>
+  ggplot() +
+  aes(x = island, y = f2, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] F2 by island",
+    x = "Island",
+    y = "F2 (Hz)"
+  )
+
+print(f2_plot)
+
+```
+
+
+```{r}
+#| label: mod-f2
+#| echo: false
+#| message: false
+#| warning: false
+
+mod_f2 <- lm(formula = f2 ~ island, data = tidy_f2)
+
+f2_summary <- tidy(mod_f2)
+
+knitr::kable(f2_summary)
+
+```
+
+
+## 5.1 Data analysis
+
+I used `r cite_r("r-references.bib")` for all my analyses.
+
+
+# 6.0 Conclusion
+
+???fill in
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}

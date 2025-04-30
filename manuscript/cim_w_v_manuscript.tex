@@ -294,8 +294,8 @@ This data set contains a lot of information, so we will need to tidy it and only
     \AttributeTok{names\_to =} \StringTok{"percent"}\NormalTok{,    }\CommentTok{\# names to \textquotesingle{}percent\textquotesingle{} column}
     \AttributeTok{values\_to =} \StringTok{"hz"}      \CommentTok{\# values to one column called \textquotesingle{}hz\textquotesingle{}}
 \NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{arrange}\NormalTok{(island, Word) }\SpecialCharTok{|\textgreater{}}   \CommentTok{\# group by \textquotesingle{}island\textquotesingle{}, then \textquotesingle{}word\textquotesingle{}}
-  \FunctionTok{select}\NormalTok{(island,      }\CommentTok{\# pick which columns I want and rename some}
+  \FunctionTok{arrange}\NormalTok{(island, Word) }\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{select}\NormalTok{(speaker, island,   }\CommentTok{\# group by \textquotesingle{}island\textquotesingle{}, then \textquotesingle{}word\textquotesingle{}    \# pick which columns I want and rename some}
          \AttributeTok{word =}\NormalTok{ Word, }
 \NormalTok{         percent, hz, }\AttributeTok{f2 =}\NormalTok{ F2\_midpoint, duration, }
          \AttributeTok{intensity =}\NormalTok{ intensity\_midpoint) }\SpecialCharTok{|\textgreater{}}
@@ -320,21 +320,21 @@ In the new data set, we need to fix the names that we've converted to values und
 
 Now that we have tidied this data set, here is a preview showing what it looks like.
 
-\begin{tabular}{l|l|l|r|r|r|r}
+\begin{tabular}{l|l|l|l|r|r|r|r}
 \hline
-island & word & percent & hz & f2 & duration & intensity\\
+speaker & island & word & percent & hz & f2 & duration & intensity\\
 \hline
-Atiu & ava & 20 & 128.5916 & 964.3925 & 0.08 & 54.08202\\
+TA & Atiu & ava & 20 & 128.5916 & 964.3925 & 0.08 & 54.08202\\
 \hline
-Atiu & ava & 50 & 127.0908 & 964.3925 & 0.08 & 54.08202\\
+TA & Atiu & ava & 50 & 127.0908 & 964.3925 & 0.08 & 54.08202\\
 \hline
-Atiu & ava & 80 & 127.4540 & 964.3925 & 0.08 & 54.08202\\
+TA & Atiu & ava & 80 & 127.4540 & 964.3925 & 0.08 & 54.08202\\
 \hline
-Atiu & ava & 20 & 160.6464 & 950.2333 & 0.07 & 58.06061\\
+TA & Atiu & ava & 20 & 160.6464 & 950.2333 & 0.07 & 58.06061\\
 \hline
-Atiu & ava & 50 & 157.4397 & 950.2333 & 0.07 & 58.06061\\
+TA & Atiu & ava & 50 & 157.4397 & 950.2333 & 0.07 & 58.06061\\
 \hline
-Atiu & ava & 80 & 158.2820 & 950.2333 & 0.07 & 58.06061\\
+TA & Atiu & ava & 80 & 158.2820 & 950.2333 & 0.07 & 58.06061\\
 \hline
 \end{tabular}
 
