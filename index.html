@@ -4,19 +4,7 @@
     <title>[v] across Cook Islands Māori (CIM)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Quartz Colvin" />
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    <meta name="date" content="2025-04-30" />
-=======
     <meta name="date" content="2025-05-01" />
->>>>>>> Stashed changes
-=======
-    <meta name="date" content="2025-05-01" />
->>>>>>> Stashed changes
-=======
-    <meta name="date" content="2025-05-01" />
->>>>>>> Stashed changes
     <script src="libs/header-attrs-2.29/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/rutgers.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/rutgers-fonts.css" rel="stylesheet" />
@@ -38,19 +26,7 @@ class: center, middle, inverse, title-slide
 ### Rutgers University
 ]
 .date[
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-### 2025-04-30
-=======
 ### 2025-05-01
->>>>>>> Stashed changes
-=======
-### 2025-05-01
->>>>>>> Stashed changes
-=======
-### 2025-05-01
->>>>>>> Stashed changes
 ]
 
 ---
@@ -65,7 +41,11 @@ class: center, middle, inverse, title-slide
 
 - (I'm a beginner in the language, so this is about all I got, sorry hahaha)
 
-&lt;img src="./slides/index_files/colang-postcard.png" width="70%" style="display: block; margin: auto;" /&gt;
+--
+
+- I got recruited into this project at CoLang 2024 in Phoenix, AZ
+
+&lt;img src="./slides/index_files/colang-postcard.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -82,18 +62,24 @@ class: center, middle, inverse, title-slide
 
 --
 
-## Why though?
+**...we will have to fit 4 models to investigate these!**
+
+--
+
+## Why do this?
 
 It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce [v] as [w], but it isn't clear to anyone who does this more and what conditions it!
 
 ---
 # Cook Islands Māori (background)
 
-- Eastern Polynesian language, VSO is the unmarked word order
+- **Eastern Polynesian** language, VSO is the unmarked word order
 
-- Closely related, but definitely different from Aotearoa Māori
+- Closely related to, but definitely different from Aotearoa Māori
 
-- Classified as Endangered and there is little intergenerational transmission :(
+--
+
+- Classified as **Endangered** and there is little intergenerational transmission :(
 
 --
 
@@ -102,18 +88,18 @@ It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly
 &lt;img src="./slides/index_files/cook-islands-flag.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
-# Cook Islands Māori (background)
+# Cook Islands Māori (WHERE?)
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="./slides/index_files/oceania-map.png" alt="Map of Oceania." width="90%" /&gt;
+&lt;img src="./slides/index_files/oceania-map.png" alt="Map of Oceania." width="75%" /&gt;
 &lt;p class="caption"&gt;Map of Oceania.&lt;/p&gt;
 &lt;/div&gt;
 
 ---
-# Cook Islands Māori (background)
+# Cook Islands Māori (HERE!)
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="./slides/index_files/cook-islands-map.png" alt="Map of Cook Islands." width="55%" /&gt;
+&lt;img src="./slides/index_files/cook-islands-map.png" alt="Map of Cook Islands." width="50%" /&gt;
 &lt;p class="caption"&gt;Map of Cook Islands.&lt;/p&gt;
 &lt;/div&gt;
 
@@ -146,7 +132,7 @@ It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly
 ```
 
 
-**Omg.... I can fix her!**
+**Omg....**
 
 ---
 ## Data overload
@@ -157,19 +143,40 @@ It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly
 
 - **Filename:** refers to the audio file this was extracted from
 
+--
+
 - **PreviousLabel**/**FollowingLabel:** phoneme that precedes/follows
 
 - **Start**/**End:** the start and end times for that phoneme
 
 - **Duration:** *total* duration of the phoneme
 
-- **Percent:** the 20% 50% and 80% marks of the phoneme's total duration
+--
 
 - **F0.point:** f0 measured in Hz at that percent of the phoneme's duration
 
 - **F2_midpoint:** f2 measured in Hz at the midpoint of the phoneme
 
 - **Intensity_midpoint:** intensity midpoint of the phoneme
+
+
+---
+## Data overload: **focus on these ones!**
+
+- **Speaker:** just their initials (no 'id' column)
+
+- **Island:**  either Atiu, Mauke, Penrhyn, or Rarotonga
+
+- **Duration:** *total* duration of the phoneme
+
+--
+
+- **F0.point:** f0 measured in Hz at that percent of the phoneme's duration
+
+- **F2_midpoint:** f2 measured in Hz at the midpoint of the phoneme
+
+- **Intensity_midpoint:** intensity midpoint of the phoneme
+
 
 ---
 # Duration by island
@@ -200,9 +207,9 @@ tidy_dur &lt;- untidy_data |&gt;
 ---
 # Duration by island 
 
+.pull-left[
 ## Plot!
 
-.pull-left[
 
 ``` r
 plot_dur &lt;- tidy_dur |&gt;
@@ -240,6 +247,9 @@ mod_dur &lt;- lm(formula = duration ~ island, data = tidy_dur)
 |islandPenrhyn   |  0.0179242| 0.0044121|  4.0624899| 0.0000528|
 |islandRarotonga | -0.0208246| 0.0044925| -4.6354104| 0.0000041|
 
+--
+
+**fill in???**
 
 ---
 # Intensity by island 
@@ -271,8 +281,8 @@ tidy_intense &lt;- untidy_data |&gt;
 ---
 # Intensity by island 
 
-## Plot
 .pull-left[
+## Plot
 
 ``` r
 plot_intense &lt;- tidy_intense |&gt;
@@ -308,7 +318,9 @@ mod_intense &lt;- lm(formula = intensity ~ island, data = tidy_intense)
 |islandMauke     |  2.2841738| 0.9458247|  2.4150075| 0.0159356|
 |islandPenrhyn   | -6.9840858| 1.0957577| -6.3737500| 0.0000000|
 |islandRarotonga |  0.0787305| 1.1157213|  0.0705647| 0.9437601|
+--
 
+**fill in???**
 
 
 
@@ -335,33 +347,124 @@ mod_intense &lt;- lm(formula = intensity ~ island, data = tidy_intense)
 
 
 
-
-
-
-
-
 ---
-# Voicing by island
 
-### Useful info
-
-**F0**
-
-- [w] can be voiceless, so its F0 is either super low or absent (below than 80 Hz = voiceless)
-
-- [v] is voiced, so F0 is always there, and is a higher F0 than for [w]
+# Formant models....
 
 --
 
-### What I'm doing
+## **F0** and **F2**
 
-- We use f0 values for the target phoneme to see how voicing for w~v differs across the four islands in this data set. 
 
-- F0 values were extracted at the 20%, 50% and 80% points of the duration of the target phoneme. 
+
+
+
+
+
+
+- [w] can be voiceless, so its **F0** is either super low or absent (below than 80 Hz = voiceless)
+
+- [v] is voiced, so **F0** is always there, and is higher than for [w]
+
+--
+
+- [w] has a lower **F2** than [v]
+
+
+--
+
+### Goals for these two models...
+
+- Compare **f0** values to see how voicing for w~v differs across the four islands
+
+- Compare **f2** values to see if [w] or [v] is the surface form of w~v
 
 ---
 # F0 by island 
 
+## Tidy!
+
+
+``` r
+tidy_f0 &lt;- untidy_data |&gt;
+  filter(TextGridLabel == "v") |&gt;
+  pivot_longer(
+    cols = c("f0_20.point", 
+             "f0_50.point", 
+             "f0_80.point"),
+    names_to = "percent",
+    values_to = "f0"
+  ) |&gt;
+  arrange(island, Word) |&gt;  
+  select(speaker, island, word = Word, f0, duration) |&gt;
+  write_csv(here("tidy_data", "tidy_f0.csv"))
+```
+
+---
+# F0 by island 
+
+## Glimpse!
+
+
+|speaker |island |word |       f0| duration|
+|:-------|:------|:----|--------:|--------:|
+|TA      |Atiu   |ava  | 128.5916|     0.08|
+|TA      |Atiu   |ava  | 127.0908|     0.08|
+|TA      |Atiu   |ava  | 127.4540|     0.08|
+|TA      |Atiu   |ava  | 160.6464|     0.07|
+|TA      |Atiu   |ava  | 157.4397|     0.07|
+|TA      |Atiu   |ava  | 158.2820|     0.07|
+
+---
+# F0 by island 
+
+.pull-left[
+## Plot!!
+
+
+``` r
+f0_plot &lt;- tidy_f0 |&gt;
+  ggplot() + 
+  aes(x = duration, y = f0, color = speaker) +
+  geom_point() +
+  geom_smooth(
+    method="glm",
+    color="black",
+    method.args = list(family = "poisson")
+  ) +
+  facet_wrap(~island) +
+  labs(
+    title = "F0 values by duration across the Cook Islands", 
+    x = "Duration", 
+    y = "F0 (Hz)"
+  ) 
+```
+]
+
+--
+
+.pull-right[
+![](index_files/figure-html/print-f0-plot-1.png)&lt;!-- --&gt;
+]
+
+---
+# F0 by island 
+
+## Model
+
+
+
+``` r
+mod_f0 &lt;- lm(formula = f0 ~ island, data = tidy_f0)
+```
+
+
+|term            |   estimate| std.error|  statistic|   p.value|
+|:---------------|----------:|---------:|----------:|---------:|
+|(Intercept)     | 143.226548|  1.779445| 80.4894349| 0.0000000|
+|islandMauke     |  29.922893|  2.005496| 14.9204478| 0.0000000|
+|islandPenrhyn   |  -1.840639|  2.304081| -0.7988602| 0.4244468|
+|islandRarotonga |  40.179828|  2.400413| 16.7387166| 0.0000000|
 
 **fill in???**
 
@@ -378,17 +481,6 @@ mod_intense &lt;- lm(formula = intensity ~ island, data = tidy_intense)
 
 
 
-
----
-# F2 by island
-
-**Why F2?**
-
-- [w] has a lower F2 than [v]
-
-**Note:**
-
-- F2 values were only extracted at the midpoint of the phoneme.
 
 ---
 #F2 by island
@@ -420,9 +512,10 @@ tidy_f2 &lt;- untidy_data |&gt;
 ---
 # F2 by island 
 
+.pull-left[
 ## Plot!
 
-.pull-left[
+
 
 ``` r
 f2_plot &lt;- tidy_f2 |&gt;
@@ -461,7 +554,9 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = tidy_f2)
 |islandPenrhyn   |  373.9431|  51.79373|  7.219853|       0|
 |islandRarotonga |  360.9223|  52.73736|  6.843768|       0|
 
+--
 
+**fill in???**
 
 
 
@@ -478,23 +573,12 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = tidy_f2)
 
 **F0**
 
-- Mauke is the only one that seems to *regularly* have voiceless [w] in place of 'v', but it also has the biggest overall range for f0 Hz
+- **So, it seems that Mauke has a higher rate of voiceless [w], when [w] is realized**
 
 - the other 3 islands typically have f0 \&gt; 100 Hz, so these tokens are voiced
 
-- **SO,** we would expect f2 values to also say that Mauke has more [w] than [v] surfacing
+- **SO,** we also expect f2 values to also say that Mauke has more [w] than [v] surfacing
 
-
----
-# Formant results 
-
-### The voicing question
-
-- Based on the f2 boxplot, the lowest mean f2 is Atiu, then Penrhyn, Mauke, then Rarotonga
-
-- a lower f2 indicates [w], so Atiu should, on average, have more [w]-surfacing and Rarotonga should have the least occurrances of [w]-surfacing (more [v])
-
-- **So, it seems that f0 was not a good predictor for the [w] vs. [v] question, but it did reveal that Mauke has a higher rate of voiceless [w], when [w] is realized**
 
 ---
 # Formant results
@@ -505,10 +589,14 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = tidy_f2)
 
 - **all** of these 4 islands have instances of [w], and their means are all slightly (or much) higher than this cut-off, so they all averagely surface as [v]
 
+- Atiu on average has more [w]-surfacing and Rarotonga has the least occurrences of [w]-surfacing (more [v])
+
 - based on the boxplots for f2, all of the islands except Penrhyn have a lot of tokens where 'v' surfaces as [w]
 
 
 ---
+
+
 .center[
 # Meitaki!
 
@@ -522,7 +610,6 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = tidy_f2)
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-  "ratio": "16:9",
   "highlightStyle": "github",
   "highlightLines": true,
   "countIncrementalSlides": false
