@@ -3,7 +3,7 @@
     "path": "C:/Users/court/OneDrive/Desktop/CIM/CIM_w_v_analysis/index.Rmd",
     "project_path": "index.Rmd",
     "type": "r_markdown",
-    "hash": "3326056258",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1745603618433.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "234,33",
-        "scrollLine": "218"
+        "cursorPosition": "28,0",
+        "scrollLine": "14"
     },
     "folds": "",
-    "lastKnownWriteTime": 1745603708,
+    "lastKnownWriteTime": 1746121325,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1745603708755,
+    "last_content_update": 1746121325733,
     "read_only": false,
     "read_only_alternatives": []
 }
