@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>[v] across Cook Islands Māori</title>
+    <title>[v] across Cook Islands Māori (CIM)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Quartz Colvin" />
     <meta name="date" content="2025-04-30" />
@@ -14,7 +14,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# [v] across Cook Islands Māori
+# [v] across Cook Islands Māori (CIM)
 ]
 .subtitle[
 ## A statistical analysis
@@ -33,24 +33,30 @@ class: center, middle, inverse, title-slide
 
 # Introduction
 
-- Kia orana kātoa! Ko 'ai Quartz tōku ingoa. 
+- Kia orana kātoa! Ko Quartz tōku ingoa. 
 
 - Kā tuatua au nō te Māori Kūki 'āirani i tēia rā.
 
+--
+
 - (I'm a beginner in the language, so this is about all I got, sorry hahaha)
 
-&lt;img src="./slides/index_files/colang-postcard.png" width="50%" /&gt;
+&lt;img src="./slides/index_files/colang-postcard.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
 # Research questions
 
-1. Are certain islands associated with more [v]-voicing than other islands? 
+1. How does duration of w~v vary by island?
 
-2. How does intensity of [v] vary by island? 
+2. How does intensity of w~v vary by island? 
 
-3. How does duration of [v] vary by island?
+3. Does voicing of w~v vary by island? 
+
+4. Which island(s) have more or less [w] tokens surfacing instead of [v]s? 
+
+--
 
 ## Why though?
 
@@ -59,53 +65,38 @@ It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly
 ---
 # Cook Islands Māori (background)
 
-- I work as a contract transcriber on a project documenting CIM, so I got this data from my supervisors (Ake ē Rolando, meitaki!)
-
-- An Eastern Polynesian language, VSO is the unmarked word order
+- Eastern Polynesian language, VSO is the unmarked word order
 
 - Closely related, but definitely different from Aotearoa Māori
 
-- Classified as Vulnerable
+- Classified as Endangered and there is little intergenerational transmission :(
 
-&lt;img src="./slides/index_files/cook-islands-flag.png" width="60%" /&gt;
+--
+
+- I work as a contract transcriber on a project documenting CIM, so I got this data from my supervisors (**Ake ē Rolando, meitaki!**)
+
+&lt;img src="./slides/index_files/cook-islands-flag.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Cook Islands Māori (background)
 
-&lt;div class="figure"&gt;
-&lt;img src="./slides/index_files/oceania-map.png" alt="Map of Oceania." width="75%" /&gt;
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="./slides/index_files/oceania-map.png" alt="Map of Oceania." width="90%" /&gt;
 &lt;p class="caption"&gt;Map of Oceania.&lt;/p&gt;
 &lt;/div&gt;
 
 ---
 # Cook Islands Māori (background)
 
-&lt;div class="figure"&gt;
-&lt;img src="./slides/index_files/cook-islands-map.png" alt="Map of Cook Islands." width="50%" /&gt;
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="./slides/index_files/cook-islands-map.png" alt="Map of Cook Islands." width="55%" /&gt;
 &lt;p class="caption"&gt;Map of Cook Islands.&lt;/p&gt;
 &lt;/div&gt;
 
 
----
-
-# Set-up
-
-- Load libraries and read the huge .csv file
-
-
-``` r
-library("tidyverse")
-library("tidyr")
-library("here")
-library("mgcv")
-
-source(here::here("scripts", "libs.R"))
-
-untidy_data &lt;- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
-```
 
 ---
-## Preview data
+## Data overload
 
 
 ```
@@ -134,78 +125,63 @@ untidy_data &lt;- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
 **Omg.... I can fix her!**
 
 ---
-## Tidy (1)
+## Data overload
 
+- **Speaker:** just their initials (no 'id' column)
 
-``` r
-dat &lt;- untidy_data |&gt;
-  drop_na() |&gt;   # remove rows that have NA values
-  filter(TextGridLabel == "v") |&gt;   # filter by 'v' for analysis
-  pivot_longer(      # deal with all the f0 columns
-    cols = c("f0_20.point", 
-             "f0_50.point", 
-             "f0_80.point"),
-    names_to = "percent",    # names to 'percent' column
-    values_to = "hz"      # values to one column called 'hz'
-  ) |&gt;
-  arrange(island, Word) |&gt;   # group by 'island', then 'word'
-  select(island,      # pick which columns I want and rename some
-         word = Word, 
-         percent, hz, f2 = F2_midpoint, duration, 
-         intensity = intensity_midpoint) |&gt;
-  write_csv("tidy_cim.csv")    # put tidy data in new .csv 
-```
+- **Island:**  either Atiu, Mauke, Penrhyn, or Rarotonga
 
----
-## Tidy (2)
+- **Filename:** refers to the audio file this was extracted from
 
-We need to fix the names that we've converted to values under **'percent'**
+- **PreviousLabel**/**FollowingLabel:** phoneme that precedes/follows
 
+- **Start**/**End:** the start and end times for that phoneme
 
-``` r
-# fixing the original column names to only be the percent
-# since they are all values for f0
-
-dat$percent[dat$percent == 'f0_20.point'] &lt;- "20"
-
-dat$percent[dat$percent == 'f0_50.point'] &lt;- "50"
-
-dat$percent[dat$percent == 'f0_80.point'] &lt;- "80"
-```
-
----
-# Tidy data 
-
-
-|island |word |percent |       hz|       f2| duration| intensity|
-|:------|:----|:-------|--------:|--------:|--------:|---------:|
-|Atiu   |ava  |20      | 128.5916| 964.3925|     0.08|  54.08202|
-|Atiu   |ava  |50      | 127.0908| 964.3925|     0.08|  54.08202|
-|Atiu   |ava  |80      | 127.4540| 964.3925|     0.08|  54.08202|
-|Atiu   |ava  |20      | 160.6464| 950.2333|     0.07|  58.06061|
-|Atiu   |ava  |50      | 157.4397| 950.2333|     0.07|  58.06061|
-|Atiu   |ava  |80      | 158.2820| 950.2333|     0.07|  58.06061|
-
-- **Finally,** it doesn't hurt to look at and it only contains the data we need!
+- **Duration:** *total* duration of the phoneme
 
 - **Percent:** the 20% 50% and 80% marks of the phoneme's total duration
 
-- **Hz:** f0 measured in Hz at that percent of the phoneme's duration
+- **F0.point:** f0 measured in Hz at that percent of the phoneme's duration
 
-- **f2:** f2 measured in Hz at the midpoint of the phoneme's duration
+- **F2_midpoint:** f2 measured in Hz at the midpoint of the phoneme
 
-- **Duration:** total duration of the phoneme
-
-- **Intensity:** intensity midpoint of the phoneme
+- **Intensity_midpoint:** intensity midpoint of the phoneme
 
 ---
 # Duration by island
 
-### Code chunk
+## Tidy!
 
 
 ``` r
-mod1 &lt;- lm(formula = duration ~ island, data = dat) |&gt;
+tidy_dur &lt;- untidy_data |&gt;
+  filter(TextGridLabel == "v") |&gt;  
+  arrange(island, Word) |&gt;  
+  select(speaker, island, word = Word, duration) |&gt;
+  write_csv(here("tidy_data", "tidy_dur.csv"))
+```
+
+--
+
+
+|speaker |island |word | duration|
+|:-------|:------|:----|--------:|
+|TA      |Atiu   |ava  |     0.08|
+|TA      |Atiu   |ava  |     0.07|
+|TA      |Atiu   |ava  |     0.14|
+|TA      |Atiu   |ava  |     0.11|
+|TA      |Atiu   |ava  |     0.05|
+|TA      |Atiu   |ava  |     0.13|
+
+---
+# Duration by island 
+
+## Plot!
+
+.pull-left[
+
+``` r
+plot_dur &lt;- tidy_dur |&gt;
   ggplot() +
   aes(x = island, y = duration, color = island) +
   geom_boxplot() +
@@ -213,22 +189,69 @@ mod1 &lt;- lm(formula = duration ~ island, data = dat) |&gt;
     title = "Compare [v] duration by island",
     x = "Island",
     y = "Duration"
-  )
+  ) 
 ```
+]
 
+--
+
+.pull-right[
+![](index_files/figure-html/print-dur-1.png)&lt;!-- --&gt;
+]
 ---
-## Boxplot for durations
+# Duration by island
 
-&lt;img src="index_files/figure-html/print-mod1-1.png" height="75%" /&gt;
-
----
-# Intensity by island
-
-### Code chunk
+## Model
 
 
 ``` r
-mod2 &lt;- lm(formula = intensity ~ island, data = dat) |&gt;
+mod_dur &lt;- lm(formula = duration ~ island, data = tidy_dur)
+```
+
+
+|term            |   estimate| std.error|  statistic|   p.value|
+|:---------------|----------:|---------:|----------:|---------:|
+|(Intercept)     |  0.0660169| 0.0033898| 19.4750727| 0.0000000|
+|islandMauke     | -0.0003532| 0.0038067| -0.0927931| 0.9260887|
+|islandPenrhyn   |  0.0179242| 0.0044121|  4.0624899| 0.0000528|
+|islandRarotonga | -0.0208246| 0.0044925| -4.6354104| 0.0000041|
+
+
+---
+# Intensity by island 
+
+## Tidy!
+
+
+
+``` r
+tidy_intense &lt;- untidy_data |&gt;
+  filter(TextGridLabel == "v") |&gt;  
+  arrange(island, Word) |&gt;  
+  select(speaker, island, word = Word, intensity = intensity_midpoint) |&gt;
+  write_csv(here("tidy_data", "tidy_intense.csv"))
+```
+
+--
+
+
+|speaker |island |word | intensity|
+|:-------|:------|:----|---------:|
+|TA      |Atiu   |ava  |  54.08202|
+|TA      |Atiu   |ava  |  58.06061|
+|TA      |Atiu   |ava  |  48.40481|
+|TA      |Atiu   |ava  |  54.18315|
+|TA      |Atiu   |ava  |  49.59224|
+|TA      |Atiu   |ava  |  53.07335|
+
+---
+# Intensity by island 
+
+## Plot
+.pull-left[
+
+``` r
+plot_intense &lt;- tidy_intense |&gt;
   ggplot() +
   aes(x = island, y = intensity, color = island) +
   geom_boxplot() +
@@ -236,90 +259,34 @@ mod2 &lt;- lm(formula = intensity ~ island, data = dat) |&gt;
     title = "Compare [v] intensity by island",
     x = "Island",
     y = "Intensity"
-  )
-```
-
----
-## Boxplot for intensities
-
-&lt;img src="index_files/figure-html/print-mod2-1.png" height="75%" /&gt;
-
----
-# Voicing by island
-
-### Useful info
-
-**F0**
-
-- [w] is voiceless, so F0 is super low or absent (below than 80 Hz = voiceless)
-
-- [v] is voiced, so F0 is definitely there, and may be higher than for [w]
-
-**F2**
-
-- [w] usually has a lower F2 than [v]
-
----
-# Voicing by island 
-
-### What I'm doing
-
-**F0**
-
-- We use f0 values for the target phoneme to see how voicing for w~v differs across the four islands in this data set. 
-
-- F0 values were extracted at the 20%, 50% and 80% points of the duration of the target phoneme. 
-
-**F2**
-
-- F2 values were only extracted at the midpoint of the phoneme.
-
----
-# Voicing by island (f0)
-
-
-``` r
-mod_f0 &lt;- lm(formula = duration ~ hz + island, data = dat) |&gt;
-  ggplot() + 
-  aes(x = duration, y = hz, color = island) +
-  geom_point() +
-  geom_smooth(
-    method="glm",
-    method.args = list(family = "poisson")
-  ) +
-  facet_wrap(~island) +
-  labs(
-    title = "F0 values by duration across the Cook Islands", 
-    x = "Duration", 
-    y = "F0 (Hz)"
   ) 
 ```
+]
+--
+.pull-right[
+![](index_files/figure-html/print-intensity-plot-1.png)&lt;!-- --&gt;
+]
 
 ---
-# Voicing by island (f0)
+# Intensity by island 
 
-&lt;img src="index_files/figure-html/print-modf0-1.png" width="65%" /&gt;
-
----
-# Voicing by island (f2)
+## Model
 
 
 ``` r
-mod_f2 &lt;- lm(formula = f2 ~ island, data = dat) |&gt;
-  ggplot() +
-  aes(x = island, y = f2, color = island) +
-  geom_boxplot() +
-  labs(
-    title = "Compare f2 by island",
-    x = "Island",
-    y = "f2 (Hz)"
-  )
+mod_intense &lt;- lm(formula = intensity ~ island, data = tidy_intense)
 ```
 
----
-# Voicing by island (f2)
 
-&lt;img src="index_files/figure-html/print-mod-f2-1.png" width="70%" /&gt;
+|term            |   estimate| std.error|  statistic|   p.value|
+|:---------------|----------:|---------:|----------:|---------:|
+|(Intercept)     | 57.4682172| 0.8418656| 68.2629370| 0.0000000|
+|islandMauke     |  2.2841738| 0.9458247|  2.4150075| 0.0159356|
+|islandPenrhyn   | -6.9840858| 1.0957577| -6.3737500| 0.0000000|
+|islandRarotonga |  0.0787305| 1.1157213|  0.0705647| 0.9437601|
+
+
+
 
 ---
 # Results 
@@ -332,6 +299,8 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = dat) |&gt;
 
 - Atiu and Mauke have pretty similar w~v durations
 
+--
+
 **Intensity**
 
 - Penrhyn has the lowest average intensity midpoints (its entire range is lowest)
@@ -339,6 +308,144 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = dat) |&gt;
 - Mauke and Rarotonga have pretty high ranges, but for Rarotonga the values are more concentrated around the mean (the box itself is smaller)
 
 - Atiu has the smallest range for intensity and the values are concentrated around the mean 
+
+
+
+
+
+
+
+
+---
+# Voicing by island
+
+### Useful info
+
+**F0**
+
+- [w] can be voiceless, so its F0 is either super low or absent (below than 80 Hz = voiceless)
+
+- [v] is voiced, so F0 is always there, and is a higher F0 than for [w]
+
+--
+
+### What I'm doing
+
+- We use f0 values for the target phoneme to see how voicing for w~v differs across the four islands in this data set. 
+
+- F0 values were extracted at the 20%, 50% and 80% points of the duration of the target phoneme. 
+
+---
+# F0 by island 
+
+
+**fill in???**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# F2 by island
+
+**Why F2?**
+
+- [w] has a lower F2 than [v]
+
+**Note:**
+
+- F2 values were only extracted at the midpoint of the phoneme.
+
+---
+#F2 by island
+
+## Tidy!
+
+
+
+``` r
+tidy_f2 &lt;- untidy_data |&gt;
+  filter(TextGridLabel == "v") |&gt;
+  arrange(island, Word) |&gt;  
+  select(speaker, island, word = Word, f2 = F2_midpoint) |&gt;
+  write_csv(here("tidy_data", "tidy_f2.csv"))
+```
+
+--
+
+
+|speaker |island |word |        f2|
+|:-------|:------|:----|---------:|
+|TA      |Atiu   |ava  |  964.3925|
+|TA      |Atiu   |ava  |  950.2333|
+|TA      |Atiu   |ava  | 2575.9621|
+|TA      |Atiu   |ava  |  961.5736|
+|TA      |Atiu   |ava  |  984.4541|
+|TA      |Atiu   |ava  |  896.0441|
+
+---
+# F2 by island 
+
+## Plot!
+
+.pull-left[
+
+``` r
+f2_plot &lt;- tidy_f2 |&gt;
+  ggplot() +
+  aes(x = island, y = f2, color = island) +
+  geom_boxplot() +
+  labs(
+    title = "Compare [v] F2 by island",
+    x = "Island",
+    y = "F2 (Hz)"
+  )
+```
+]
+
+--
+
+.pull-right[
+![](index_files/figure-html/print-f2-plot-1.png)&lt;!-- --&gt;
+]
+
+---
+# F2 by island 
+
+## Model 
+
+
+``` r
+mod_f2 &lt;- lm(formula = f2 ~ island, data = tidy_f2)
+```
+
+
+|term            |  estimate| std.error| statistic| p.value|
+|:---------------|---------:|---------:|---------:|-------:|
+|(Intercept)     | 1090.9432|  39.79288| 27.415534|       0|
+|islandMauke     |  308.5190|  44.70677|  6.900944|       0|
+|islandPenrhyn   |  373.9431|  51.79373|  7.219853|       0|
+|islandRarotonga |  360.9223|  52.73736|  6.843768|       0|
+
+
+
+
+
+
+
+
+
+
 
 ---
 # Formant results 
@@ -352,10 +459,6 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = dat) |&gt;
 - the other 3 islands typically have f0 \&gt; 100 Hz, so these tokens are voiced
 
 - **SO,** we would expect f2 values to also say that Mauke has more [w] than [v] surfacing
-
-
-
-
 
 
 ---
@@ -382,11 +485,13 @@ mod_f2 &lt;- lm(formula = f2 ~ island, data = dat) |&gt;
 
 
 ---
-
-# I haven't done the formal stats results yet :')
-
+.center[
 # Meitaki!
 
+# Thank you! 
+
+# ¡Gracias!
+]
 
 
     </textarea>
