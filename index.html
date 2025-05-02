@@ -4,7 +4,7 @@
     <title>[v] across Cook Islands Māori (CIM)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Quartz Colvin" />
-    <meta name="date" content="2025-05-01" />
+    <meta name="date" content="2025-05-02" />
     <script src="libs/header-attrs-2.29/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/rutgers.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/rutgers-fonts.css" rel="stylesheet" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Rutgers University
 ]
 .date[
-### 2025-05-01
+### 2025-05-02
 ]
 
 ---
@@ -227,7 +227,7 @@ plot_dur &lt;- tidy_dur |&gt;
 --
 
 .pull-right[
-![](index_files/figure-html/print-dur-1.png)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/print-dur-1.png" width="648" /&gt;
 ]
 ---
 # Duration by island
@@ -298,7 +298,7 @@ plot_intense &lt;- tidy_intense |&gt;
 ]
 --
 .pull-right[
-![](index_files/figure-html/print-intensity-plot-1.png)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/print-intensity-plot-1.png" width="648" /&gt;
 ]
 
 ---
@@ -389,9 +389,7 @@ mod_intense &lt;- lm(formula = intensity ~ island, data = tidy_intense)
 tidy_f0 &lt;- untidy_data |&gt;
   filter(TextGridLabel == "v") |&gt;
   pivot_longer(
-    cols = c("f0_20.point", 
-             "f0_50.point", 
-             "f0_80.point"),
+    cols = c("f0_50.point"), 
     names_to = "percent",
     values_to = "f0"
   ) |&gt;
@@ -408,12 +406,14 @@ tidy_f0 &lt;- untidy_data |&gt;
 
 |speaker |island |word |       f0| duration|
 |:-------|:------|:----|--------:|--------:|
-|TA      |Atiu   |ava  | 128.5916|     0.08|
 |TA      |Atiu   |ava  | 127.0908|     0.08|
-|TA      |Atiu   |ava  | 127.4540|     0.08|
-|TA      |Atiu   |ava  | 160.6464|     0.07|
 |TA      |Atiu   |ava  | 157.4397|     0.07|
-|TA      |Atiu   |ava  | 158.2820|     0.07|
+|TA      |Atiu   |ava  | 134.1155|     0.14|
+|TA      |Atiu   |ava  | 141.8125|     0.11|
+|TA      |Atiu   |ava  | 118.2318|     0.05|
+|TA      |Atiu   |ava  | 142.7506|     0.13|
+
+I limited F0 to *F0 at 50%* to limit **autocorrelation.**
 
 ---
 # F0 by island 
@@ -434,7 +434,7 @@ f0_plot &lt;- tidy_f0 |&gt;
   ) +
   facet_wrap(~island) +
   labs(
-    title = "F0 values by duration across the Cook Islands", 
+    title = "Compare F0 across islands", 
     x = "Duration", 
     y = "F0 (Hz)"
   ) 
@@ -444,7 +444,7 @@ f0_plot &lt;- tidy_f0 |&gt;
 --
 
 .pull-right[
-![](index_files/figure-html/print-f0-plot-1.png)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/print-f0-plot-1.png" width="648" /&gt;
 ]
 
 ---
@@ -461,10 +461,12 @@ mod_f0 &lt;- lm(formula = f0 ~ island, data = tidy_f0)
 
 |term            |   estimate| std.error|  statistic|   p.value|
 |:---------------|----------:|---------:|----------:|---------:|
-|(Intercept)     | 143.226548|  1.779445| 80.4894349| 0.0000000|
-|islandMauke     |  29.922893|  2.005496| 14.9204478| 0.0000000|
-|islandPenrhyn   |  -1.840639|  2.304081| -0.7988602| 0.4244468|
-|islandRarotonga |  40.179828|  2.400413| 16.7387166| 0.0000000|
+|(Intercept)     | 142.918645|  3.035068| 47.0891047| 0.0000000|
+|islandMauke     |  28.459157|  3.424019|  8.3116241| 0.0000000|
+|islandPenrhyn   |  -2.622361|  3.932225| -0.6668898| 0.5050263|
+|islandRarotonga |  39.161194|  4.081586|  9.5946014| 0.0000000|
+
+--
 
 **fill in???**
 
@@ -533,7 +535,7 @@ f2_plot &lt;- tidy_f2 |&gt;
 --
 
 .pull-right[
-![](index_files/figure-html/print-f2-plot-1.png)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/print-f2-plot-1.png" width="648" /&gt;
 ]
 
 ---
