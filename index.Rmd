@@ -17,7 +17,7 @@ output:
 
 - Kia orana kātoa! Ko Quartz tōku ingoa. 
 
-- Kā tuatua au nō te Māori Kūki 'āirani i tēia rā.
+- Kā tuatua au nō te Māori Kūki 'Āirani i tēia rā.
 
 --
 
