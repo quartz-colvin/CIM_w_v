@@ -1,0 +1,336 @@
+---
+title: "Data Science Midterm (pa5)"
+subtitle: "⚔<br/>with xaringan"
+author: "Quartz & Ying"
+institute: "RStudio, PBC"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["rutgers", "rutgers-fonts"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+# Set up stuff
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+library("tidyverse")
+library("tidyr")
+library("ds4ling")
+library("here")
+library("lme4")
+library("broom")
+
+
+raw_dat <- read_csv(here("data_raw", "ratings_data.csv"))
+
+head(raw_dat)
+
+```
+
+---
+# Two Questions
+
+**Q2:** Difficulty as a function of time
+
+***Hypothesis:*** difficulty ratings increase as time increases
+
+
+**Q3:** The relationship between enjoyment and difficulty 
+
+***Hypothesis:*** enjoyment ratings decrease as difficulty ratings increase
+
+---
+# Q2: difficulty and time
+
+## Tidy 
+
+```{r}
+#| label: tidy-q2
+#| echo: true
+
+q2_tidy <- raw_dat |>
+  separate(
+    col = date,
+    into = c("year", "month", "day"),
+    sep = "-",
+    remove = TRUE
+  ) |>
+  select(id, week, year, difficulty) |>
+  group_by(year)
+
+```
+
+---
+# Q2: difficulty and time
+
+## Table 
+
+The difficulty rating from the same participant generally increases when the week 'increases'. 
+```{r}
+#| label: print-table
+#| echo: true
+
+knitr::kable(head(q2_tidy))
+```
+
+---
+# Q2: difficulty and time
+
+## Nested model comparison
+
+```{r}
+#| label: q2-plot
+#| echo: true
+
+q2_int_mod <- q2_tidy |>
+  lm(formula = difficulty ~ week + year) 
+
+null_q2 <- lm(formula = difficulty ~ 1, data = q2_tidy)
+
+mod_week <- lm(formula = difficulty ~ week, data = q2_tidy)
+  
+mod_year <- lm(formula = difficulty ~ year, data = q2_tidy)
+
+mod_full <- lm(formula = difficulty ~ week + year + week:year, data = q2_tidy)
+
+```
+
+---
+# Q2: difficulty and time
+
+## Nested model comparison
+
+```{r}
+#| label: anova-q2
+#| echo: true
+
+knitr::kable(anova(q2_int_mod, mod_full))
+
+```
+
+**Interpretation:** there is an interaction between week and year (F(1)=6.37 and p=0.0123 which is < 0.05). 
+
+---
+
+# Q2: difficulty and time
+
+## Plot code chunk
+
+```{r}
+#| label: plot-q2
+#| echo: true 
+#| message: false
+#| warning: false
+
+q2_plot <- mod_full |>
+  ggplot() +
+  aes(x = week, y = difficulty, color = year) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+---
+# Q2: difficulty and time
+
+## Plot!
+
+```{r}
+#| label: print-plot-q2
+#| echo: false
+#| message: false
+#| warning: false
+#| out-height: "75%"
+
+print(q2_plot)
+
+```
+
+---
+# Q2: difficulty and time
+
+## Model summary
+
+```{r}
+#| label: q2-summary
+#| echo: false
+
+q2_summary <- tidy(mod_full)
+
+knitr::kable(q2_summary)
+
+```
+
+---
+
+# Q2: difficulty and time
+
+## Describe plot 
+
+The difficulty rating increases when week increases within the two year-groups. The 2023 group has a steeper slope than the 2025 group, showing that a unit increase in week in 2023 group is associated with a greater increase in the difficulty rating than the 2025 group.
+
+
+---
+
+# Q2: difficulty and time
+
+## Results
+
+The data is analyzed using a generalized linear model with the difficulty rating as the dependent variable and the time as the predictor.
+
+However, there might be random effect from the participants which is not taken into account that will affect the power of the model.
+
+---
+
+# Q3: enjoyment and difficulty
+
+## Tidy raw data
+
+
+```{r}
+#| label: tidy-q3
+#| echo: true
+#| message: false
+#| warning: false
+
+tidy_q3 <- raw_dat |> 
+   separate(
+    col = date,
+    into = c("year", "month", "day"),
+    sep = "-",
+    remove = TRUE
+  ) |>
+  select(id, week, year, enjoyment = enjoy, difficulty) |>
+  group_by(year)
+
+```
+
+---
+# Q3: enjoyment and difficulty
+
+## Print table
+
+
+```{r}
+#| label: print-q3-table
+#| echo: true
+#| warning: false
+#| message: false
+
+knitr::kable(head(tidy_q3))
+
+```
+
+---
+# Q3: enjoyment and difficulty
+
+## Nested model
+
+```{r}
+#| label: q3-mods
+#| echo: true
+
+q3_int_mod <- lm(formula = enjoyment ~ difficulty + year, data = tidy_q3) 
+
+null_q3 <- lm(formula = enjoyment ~ 1, data = tidy_q3)
+
+mod_difficult <- lm(formula = enjoyment ~ difficulty, data = tidy_q3)
+
+q3_int_mod <- lm(formula = enjoyment ~ difficulty + year, data = tidy_q3) 
+
+mod_full_q3 <- lm(formula = enjoyment ~ difficulty + year + difficulty:year, data = tidy_q3)
+
+```
+
+---
+# Q3: enjoyment and difficulty
+
+## Nested model comparison
+
+```{r}
+#| label: anova-q3
+#| echo: true
+
+knitr::kable(anova(q3_int_mod, mod_full_q3))
+
+```
+
+**Interpretation:** there is ***not*** an interaction between week and year (F(1)=0.202 and p=0.653 which is > 0.05). 
+
+---
+
+# Q3: enjoyment and difficulty
+
+## Plot code chunk
+
+```{r}
+#| label: plot-q3
+#| echo: true 
+#| message: false
+#| warning: false
+
+q3_plot <- mod_full_q3 |>
+  ggplot() +
+  aes(x = enjoyment, y = difficulty, color = year) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+---
+# Q3: enjoyment and difficulty
+
+## Plot!
+
+```{r}
+#| label: print-plot-q3
+#| echo: false
+#| message: false
+#| warning: false
+#| out-height: "75%"
+
+print(q3_plot)
+
+```
+
+---
+
+# Q3: enjoyment and difficulty
+
+## Describe plot 
+
+**???FILL IN**
+
+
+---
+# Q3: enjoyment and difficulty
+
+## Model summary
+
+```{r}
+#| label: q3-summary
+#| echo: false
+
+q3_summary <- tidy(mod_full_q3)
+
+knitr::kable(q3_summary)
+
+```
+
+
+---
+# my honest reaction
+
+```{r, echo=FALSE, out.width="50%", res="300"}
+knitr::include_graphics("./images/ilived.jpg")
+```
+
+
