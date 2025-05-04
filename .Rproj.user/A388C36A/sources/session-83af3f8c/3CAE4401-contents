@@ -17,13 +17,17 @@ output:
 
 - Kia orana kātoa! Ko Quartz tōku ingoa. 
 
-- Kā tuatua au nō te Māori Kūki 'āirani i tēia rā.
+- Kā tuatua au nō te Māori Kūki 'Āirani i tēia rā.
 
 --
 
 - (I'm a beginner in the language, so this is about all I got, sorry hahaha)
 
-```{r, fig.align = "center", echo=FALSE, out.width="70%"}
+--
+
+- I got recruited into this project at CoLang 2024 in Phoenix, AZ
+
+```{r, fig.align = "center", echo=FALSE, out.width="60%"}
 knitr::include_graphics("./slides/index_files/colang-postcard.png")
 ```
 
@@ -42,18 +46,28 @@ knitr::include_graphics("./slides/index_files/colang-postcard.png")
 
 --
 
-## Why though?
+**...we will have to fit 4 models to investigate these!**
+
+--
+
+**Intensity:** a measure of the sound's power per unit area (basically loudness)
+
+--
+
+## Why do this?
 
 It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce [v] as [w], but it isn't clear to anyone who does this more and what conditions it!
 
 ---
 # Cook Islands Māori (background)
 
-- Eastern Polynesian language, VSO is the unmarked word order
+- **Eastern Polynesian** language, VSO is the unmarked word order
 
-- Closely related, but definitely different from Aotearoa Māori
+- Closely related to, but definitely different from Aotearoa Māori
 
-- Classified as Endangered and there is little intergenerational transmission :(
+--
+
+- Classified as **Endangered** and there is little intergenerational transmission :(
 
 --
 
@@ -64,16 +78,16 @@ knitr::include_graphics("./slides/index_files/cook-islands-flag.png")
 ```
 
 ---
-# Cook Islands Māori (background)
+# Cook Islands Māori (WHERE?)
 
-```{r, fig.align = "center", echo=FALSE, out.width="90%", fig.cap="Map of Oceania."}
+```{r, fig.align = "center", echo=FALSE, out.width="75%", fig.cap="Map of Oceania."}
 knitr::include_graphics("./slides/index_files/oceania-map.png")
 ```
 
 ---
-# Cook Islands Māori (background)
+# Cook Islands Māori (HERE!)
 
-```{r, fig.align = "center", echo=FALSE, out.width="55%", fig.cap="Map of Cook Islands."}
+```{r, fig.align = "center", echo=FALSE, out.width="50%", fig.cap="Map of Cook Islands."}
 knitr::include_graphics("./slides/index_files/cook-islands-map.png")
 ```
 
@@ -88,6 +102,13 @@ library("tidyr")
 library("here")
 library("mgcv")
 library("broom")
+library("ggplot2")
+theme_update(# axis labels
+             axis.title = element_text(size = 30),
+             # tick labels
+             axis.text = element_text(size = 26),
+             # title 
+             title = element_text(size = 30))
 
 source(here::here("scripts", "libs.R"))
 
@@ -109,7 +130,7 @@ glimpse(untidy_data)
 ```
 
 
-**Omg.... I can fix her!**
+**Omg....**
 
 ---
 ## Data overload
@@ -120,19 +141,40 @@ glimpse(untidy_data)
 
 - **Filename:** refers to the audio file this was extracted from
 
+--
+
 - **PreviousLabel**/**FollowingLabel:** phoneme that precedes/follows
 
 - **Start**/**End:** the start and end times for that phoneme
 
 - **Duration:** *total* duration of the phoneme
 
-- **Percent:** the 20% 50% and 80% marks of the phoneme's total duration
+--
 
 - **F0.point:** f0 measured in Hz at that percent of the phoneme's duration
 
 - **F2_midpoint:** f2 measured in Hz at the midpoint of the phoneme
 
 - **Intensity_midpoint:** intensity midpoint of the phoneme
+
+
+---
+## Data overload: **focus on these ones!**
+
+- **Speaker:** just their initials (no 'id' column)
+
+- **Island:**  either Atiu, Mauke, Penrhyn, or Rarotonga
+
+- **Duration:** *total* duration of the phoneme
+
+--
+
+- **F0.point:** f0 measured in Hz at that percent of the phoneme's duration
+
+- **F2_midpoint:** f2 measured in Hz at the midpoint of the phoneme
+
+- **Intensity_midpoint:** intensity midpoint of the phoneme
+
 
 ---
 # Duration by island
@@ -168,9 +210,9 @@ knitr::kable(head(tidy_dur))
 ---
 # Duration by island 
 
+.pull-left[
 ## Plot!
 
-.pull-left[
 ```{r}
 #| label: duration-plot
 #| warning: false
@@ -192,7 +234,7 @@ plot_dur <- tidy_dur |>
 --
 
 .pull-right[
-```{r}
+```{r, fig.height=10, fig.width=9, fig.retina=3}
 #| label: print-dur
 #| echo: false
 #| message: false
@@ -213,6 +255,7 @@ print(plot_dur)
 #| warning: false
 
 mod_dur <- lm(formula = duration ~ island, data = tidy_dur)
+
 ```
 
 ```{r}
@@ -225,8 +268,14 @@ dur_summary <- tidy(mod_dur)
 
 knitr::kable(dur_summary)
 
+
 ```
 
+**P-value** > 0.05 only for Mauke. 
+
+--
+
+- I don't remember how to change (Intercept) back to the correct island (Atiu)...
 
 ---
 # Intensity by island 
@@ -263,8 +312,8 @@ knitr::kable(head(tidy_intense))
 ---
 # Intensity by island 
 
-## Plot
 .pull-left[
+## Plot
 ```{r}
 #| label: intensity-by-island
 #| warning: false
@@ -286,7 +335,7 @@ plot_intense <- tidy_intense |>
 ]
 --
 .pull-right[
-```{r}
+```{r, fig.height=10, fig.width=9, fig.retina=3}
 #| label: print-intensity-plot
 #| echo: false
 #| warning: false
@@ -323,87 +372,204 @@ intense_summary <- tidy(mod_intense)
 knitr::kable(intense_summary)
 
 ```
+--
 
-
+**P-value** > 0.05 for Rarotonga. Also, it's basically 0 for both Atiu and Penrhyn. 
 
 
 ---
-# Results 
+# Results
+
+--
+
+**...mostly based on boxplots**
+
+--
 
 **Duration**
 
-- Penrhyn has the longest average w~v durations and Rarotonga has the shortest
+- Penrhyn has the longest **average** w~v durations and Rarotonga has the shortest
 
-- Penrhyn has the largest range in durations
+- Penrhyn also has the largest **range** of durations
 
-- Atiu and Mauke have pretty similar w~v durations
+- Atiu and Mauke have pretty similar **average** w~v durations
 
---
+---
+# Results
 
 **Intensity**
 
-- Penrhyn has the lowest average intensity midpoints (its entire range is lowest)
-
-- Mauke and Rarotonga have pretty high ranges, but for Rarotonga the values are more concentrated around the mean (the box itself is smaller)
-
-- Atiu has the smallest range for intensity and the values are concentrated around the mean 
-
-
-
-
-
-
-
-
----
-# Voicing by island
-
-### Useful info
-
-**F0**
-
-- [w] can be voiceless, so its F0 is either super low or absent (below than 80 Hz = voiceless)
-
-- [v] is voiced, so F0 is always there, and is a higher F0 than for [w]
+- Penrhyn has the **lowest average** intensity midpoint (its entire range is lowest)
 
 --
 
-### What I'm doing
+- Mauke and Rarotonga have pretty **large ranges**, but for Rarotonga the values are more concentrated around the mean (the box itself is smaller)
 
-- We use f0 values for the target phoneme to see how voicing for w~v differs across the four islands in this data set. 
+- Atiu has the **smallest range** for intensity and the values are concentrated around the mean 
 
-- F0 values were extracted at the 20%, 50% and 80% points of the duration of the target phoneme. 
+--
+
+...Maybe Atiu doesn't vary as much because only one speaker contributed data for the Atiu portion? 
+
+
+---
+
+# Formant models....
+
+--
+
+## **F0** and **F2**
+
+--
+
+- **[w]** *can* be voiceless and its **F0** is either super low or absent (less than 80 Hz = voiceless?)
+
+- **[v]** is voiced, so **F0** is always there and is higher than for [w]
+
+--
+
+- **[w]** has a **lower F2** than [v]
+
+
+--
+
+### Goals for these two models...
+
+- Compare **f0** values to see how **voicing** for w~v differs across the four islands
+
+- Compare **f2** values to see if **[w] or [v]** is the surface form of w~v
 
 ---
 # F0 by island 
 
+## Tidy!
 
-**fill in???**
+```{r}
+#| label: tidy-f0
+#| echo: true
+#| message: false
+#| warning: false
 
+tidy_f0 <- untidy_data |>
+  filter(TextGridLabel == "v") |>
+  pivot_longer(
+    cols = c("f0_50.point"), 
+    names_to = "percent",
+    values_to = "f0"
+  ) |>
+  arrange(island, Word) |>  
+  select(speaker, island, word = Word, f0, duration) |>
+  write_csv(here("tidy_data", "tidy_f0.csv"))
 
+```
 
+- I limited F0 to *F0 at 50%* to limit **autocorrelation.**
 
+---
+# F0 by island 
 
+## Glimpse!
 
+```{r}
+#| label: glimpse-f0
+#| echo: false
+#| message: false
+#| warning: false
 
+knitr::kable(head(tidy_f0))
 
-
-
-
-
-
+```
 
 
 ---
-# F2 by island
+# F0 by island 
 
-**Why F2?**
+.pull-left[
+## Plot!!
 
-- [w] has a lower F2 than [v]
+```{r}
+#| label: plot-f0
+#| echo: true
+#| message: false
+#| warning: false
 
-**Note:**
+f0_plot <- tidy_f0 |>
+  ggplot() + 
+  aes(x = duration, y = f0, color = speaker) +
+  geom_point() +
+  geom_smooth(
+    method="glm",
+    color="black",
+    method.args = list(family = "poisson")
+  ) +
+  facet_wrap(~island) +
+  labs(
+    title = "Compare F0 across islands", 
+    x = "Duration", 
+    y = "F0 (Hz)"
+  ) 
+```
+]
 
-- F2 values were only extracted at the midpoint of the phoneme.
+--
+
+.pull-right[
+```{r, fig.height=10, fig.width=9, fig.retina=3}
+#| label: print-f0-plot
+#| echo: false
+#| message: false
+#| warning: false
+
+print(f0_plot)
+
+```
+]
+
+---
+# F0 by island 
+
+## Model
+
+
+```{r}
+#| label: mod-f0
+#| echo: true
+#| message: false
+#| warning: false
+
+mod_f0 <- lm(formula = f0 ~ island, data = tidy_f0)
+```
+
+```{r}
+#| label: summarize-f0
+#| echo: false
+#| message: false
+#| warning: false
+
+f0_summary <- tidy(mod_f0)
+
+knitr::kable(f0_summary)
+
+```
+
+--
+
+**WHY IS P = 0 FOR ALL ISLANDS EXCEPT PENRHYN?** 
+
+--
+
+**help...**
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 #F2 by island
@@ -440,9 +606,10 @@ knitr::kable(head(tidy_f2))
 ---
 # F2 by island 
 
+.pull-left[
 ## Plot!
 
-.pull-left[
+
 ```{r}
 #| label: plot-f2
 #| echo: true
@@ -464,7 +631,7 @@ f2_plot <- tidy_f2 |>
 --
 
 .pull-right[
-```{r}
+```{r, fig.height=10, fig.width=9, fig.retina=3}
 #| label: print-f2-plot
 #| echo: false
 #| warning: false
@@ -502,7 +669,9 @@ knitr::kable(f2_summary)
 
 ```
 
+--
 
+**again, WHY IS P=0 FOR ALL OF THEM??**
 
 
 
@@ -519,37 +688,51 @@ knitr::kable(f2_summary)
 
 **F0**
 
-- Mauke is the only one that seems to *regularly* have voiceless [w] in place of 'v', but it also has the biggest overall range for f0 Hz
+- **it seems that Mauke has the highest number of voiceless [w]s, when [w] is realized**
 
-- the other 3 islands typically have f0 \> 100 Hz, so these tokens are voiced
+- the other 3 islands typically have f0 > 100 Hz, so these tokens are voiced
 
-- **SO,** we would expect f2 values to also say that Mauke has more [w] than [v] surfacing
+--
 
+- **i predict** that f2 values will say that Mauke also has the most [w]s surfacing
 
----
-# Formant results 
-
-### The voicing question
-
-- Based on the f2 boxplot, the lowest mean f2 is Atiu, then Penrhyn, Mauke, then Rarotonga
-
-- a lower f2 indicates [w], so Atiu should, on average, have more [w]-surfacing and Rarotonga should have the least occurrances of [w]-surfacing (more [v])
-
-- **So, it seems that f0 was not a good predictor for the [w] vs. [v] question, but it did reveal that Mauke has a higher rate of voiceless [w], when [w] is realized**
 
 ---
 # Formant results
 
 ### The w~v question 
 
-- a 'low f2' that indicates [w] is \<850 Hz
+- **Recall** that a 'low f2' indicating [w] is <850 Hz
 
-- **all** of these 4 islands have instances of [w], and their means are all slightly (or much) higher than this cut-off, so they all averagely surface as [v]
+--
 
-- based on the boxplots for f2, all of the islands except Penrhyn have a lot of tokens where 'v' surfaces as [w]
+- **all** of these 4 islands have *some* instances of [w]
+
+- their means are all higher than this cut-off, so they all *averagely* surface as [v]
+
+--
+
+- Atiu on average has the most amount of [w]s surfacing (Atiu's mean is lowest)
+
+---
+# Help?
+
+I still feel confused about the formant models. 
+
+--
+
+1. Should I have done nested models? 
+
+2. Are they actually confusing, or am **I** just confused? 
+
+--
+
+3. Comments? Suggestions? Questions? 
 
 
 ---
+
+
 .center[
 # Meitaki!
 
