@@ -50,6 +50,10 @@ knitr::include_graphics("./slides/index_files/colang-postcard.png")
 
 --
 
+**Intensity:** a measure of the sound's power per unit area (basically loudness)
+
+--
+
 ## Why do this?
 
 It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce [v] as [w], but it isn't clear to anyone who does this more and what conditions it!
@@ -96,9 +100,11 @@ knitr::include_graphics("./slides/index_files/cook-islands-map.png")
 library("tidyverse")
 library("tidyr")
 library("here")
+library("lme4")
 library("mgcv")
 library("broom")
 library("ggplot2")
+library(lmerTest)
 theme_update(# axis labels
              axis.title = element_text(size = 30),
              # tick labels
@@ -250,7 +256,7 @@ print(plot_dur)
 #| message: false
 #| warning: false
 
-mod_dur <- lm(formula = duration ~ island, data = tidy_dur)
+mod_dur <- lmer(duration ~ island + (1|speaker) + (1|word), data = tidy_dur)
 
 ```
 
@@ -260,9 +266,9 @@ mod_dur <- lm(formula = duration ~ island, data = tidy_dur)
 #| message: false
 #| warning: false
 
-dur_summary <- tidy(mod_dur)
+dur_summary <- summary(mod_dur)
 
-knitr::kable(dur_summary)
+print(dur_summary)
 
 
 ```
@@ -353,7 +359,7 @@ print(plot_intense)
 #| message: false
 #| warning: false
 
-mod_intense <- lm(formula = intensity ~ island, data = tidy_intense)
+mod_intense <- lmer(intensity ~ island + (1|speaker) + (1|word), data = tidy_intense)
 
 ```
 
@@ -363,9 +369,9 @@ mod_intense <- lm(formula = intensity ~ island, data = tidy_intense)
 #| warning: false
 #| message: false
 
-intense_summary <- tidy(mod_intense)
+intense_summary <- summary(mod_intense)
 
-knitr::kable(intense_summary)
+print(intense_summary)
 
 ```
 --
@@ -480,7 +486,6 @@ knitr::kable(head(tidy_f0))
 ---
 # F0 by island 
 
-.pull-left[
 ## Plot!!
 
 ```{r}
@@ -498,18 +503,20 @@ f0_plot <- tidy_f0 |>
     color="black",
     method.args = list(family = "poisson")
   ) +
-  facet_wrap(~island) +
+  facet_grid(.~island,
+             scales = "free_x") +
   labs(
     title = "Compare F0 across islands", 
     x = "Duration", 
     y = "F0 (Hz)"
   ) 
 ```
-]
 
---
 
-.pull-right[
+---
+# F0 plot
+
+
 ```{r, fig.height=10, fig.width=9, fig.retina=3}
 #| label: print-f0-plot
 #| echo: false
@@ -519,7 +526,7 @@ f0_plot <- tidy_f0 |>
 print(f0_plot)
 
 ```
-]
+
 
 ---
 # F0 by island 
@@ -533,7 +540,8 @@ print(f0_plot)
 #| message: false
 #| warning: false
 
-mod_f0 <- lm(formula = f0 ~ island, data = tidy_f0)
+mod_f0 <- lmer(f0 ~ island + (1|speaker) + (1|word), data = tidy_f0)
+
 ```
 
 ```{r}
@@ -542,9 +550,9 @@ mod_f0 <- lm(formula = f0 ~ island, data = tidy_f0)
 #| message: false
 #| warning: false
 
-f0_summary <- tidy(mod_f0)
+f0_summary <- summary(mod_f0) 
 
-knitr::kable(f0_summary)
+print(f0_summary)
 
 ```
 
@@ -621,6 +629,7 @@ f2_plot <- tidy_f2 |>
     x = "Island",
     y = "F2 (Hz)"
   )
+
 ```
 ]
 
@@ -649,7 +658,7 @@ print(f2_plot)
 #| message: false
 #| warning: false
 
-mod_f2 <- lm(formula = f2 ~ island, data = tidy_f2)
+mod_f2 <- lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2)
 
 ```
 
@@ -659,9 +668,9 @@ mod_f2 <- lm(formula = f2 ~ island, data = tidy_f2)
 #| echo: false
 #| warning: false
 
-f2_summary <- tidy(mod_f2)
+f2_summary <- summary(mod_f2)
 
-knitr::kable(f2_summary)
+print(f2_summary)
 
 ```
 
@@ -690,7 +699,7 @@ knitr::kable(f2_summary)
 
 --
 
-- **I predict** that f2 values will say that Mauke also has the most [w]s surfacing
+- **i predict** that f2 values will say that Mauke also has the most [w]s surfacing
 
 
 ---
@@ -708,11 +717,22 @@ knitr::kable(f2_summary)
 
 --
 
-- Atiu on average has the most [w]s surfacing
+- Atiu on average has the most amount of [w]s surfacing (Atiu's mean is lowest)
 
-- Rarotonga has the least occurrences of [w]-surfacing (more [v])
+---
+# Help?
 
-- based on the boxplots for f2, all of the islands except Penrhyn have a lot of tokens where 'v' surfaces as [w]
+I still feel confused about the formant models. 
+
+--
+
+1. Should I have done nested models? 
+
+2. Are they actually confusing, or am **I** just confused? 
+
+--
+
+3. Comments? Suggestions? Questions? 
 
 
 ---

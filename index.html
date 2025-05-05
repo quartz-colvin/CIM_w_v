@@ -4,7 +4,7 @@
     <title>[v] across Cook Islands Māori (CIM)</title>
     <meta charset="utf-8" />
     <meta name="author" content="Quartz Colvin" />
-    <meta name="date" content="2025-05-04" />
+    <meta name="date" content="2025-05-05" />
     <script src="libs/header-attrs-2.29/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/rutgers.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/rutgers-fonts.css" rel="stylesheet" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Rutgers University
 ]
 .date[
-### 2025-05-04
+### 2025-05-05
 ]
 
 ---
@@ -240,16 +240,44 @@ plot_dur &lt;- tidy_dur |&gt;
 
 
 ``` r
-mod_dur &lt;- lm(formula = duration ~ island, data = tidy_dur)
+mod_dur &lt;- lmer(duration ~ island + (1|speaker) + (1|word), data = tidy_dur)
 ```
 
 
-|term            |   estimate| std.error|  statistic|   p.value|
-|:---------------|----------:|---------:|----------:|---------:|
-|(Intercept)     |  0.0660169| 0.0033898| 19.4750727| 0.0000000|
-|islandMauke     | -0.0003532| 0.0038067| -0.0927931| 0.9260887|
-|islandPenrhyn   |  0.0179242| 0.0044121|  4.0624899| 0.0000528|
-|islandRarotonga | -0.0208246| 0.0044925| -4.6354104| 0.0000041|
+```
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: duration ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_dur
+## 
+## REML criterion at convergence: -3416.3
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.8215 -0.5539 -0.0851  0.4095  7.5763 
+## 
+## Random effects:
+##  Groups   Name        Variance  Std.Dev.
+##  word     (Intercept) 0.0007328 0.02707 
+##  speaker  (Intercept) 0.0001517 0.01231 
+##  Residual             0.0010189 0.03192 
+## Number of obs: 896, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                  Estimate Std. Error        df t value Pr(&gt;|t|)   
+## (Intercept)      0.064761   0.013130  6.339137   4.932  0.00225 **
+## islandMauke     -0.001702   0.014390  5.858906  -0.118  0.90982   
+## islandPenrhyn    0.019477   0.018068  5.690570   1.078  0.32459   
+## islandRarotonga -0.018439   0.014557  6.292463  -1.267  0.25014   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.876              
+## islndPnrhyn -0.698  0.637       
+## islandRrtng -0.869  0.793  0.632
+```
 
 **P-value** &gt; 0.05 only for Mauke. 
 
@@ -314,16 +342,44 @@ plot_intense &lt;- tidy_intense |&gt;
 
 
 ``` r
-mod_intense &lt;- lm(formula = intensity ~ island, data = tidy_intense)
+mod_intense &lt;- lmer(intensity ~ island + (1|speaker) + (1|word), data = tidy_intense)
 ```
 
 
-|term            |   estimate| std.error|  statistic|   p.value|
-|:---------------|----------:|---------:|----------:|---------:|
-|(Intercept)     | 57.4682172| 0.8418656| 68.2629370| 0.0000000|
-|islandMauke     |  2.2841738| 0.9458247|  2.4150075| 0.0159356|
-|islandPenrhyn   | -6.9840858| 1.0957577| -6.3737500| 0.0000000|
-|islandRarotonga |  0.0787305| 1.1157213|  0.0705647| 0.9437601|
+```
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: intensity ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_intense
+## 
+## REML criterion at convergence: 5865.9
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.2068 -0.5148  0.1031  0.5991  2.5860 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept)  19.16    4.377  
+##  speaker  (Intercept) 117.38   10.834  
+##  Residual              34.24    5.851  
+## Number of obs: 894, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error     df t value Pr(&gt;|t|)   
+## (Intercept)       57.919     10.864  6.184   5.331  0.00161 **
+## islandMauke        2.534     12.137  6.165   0.209  0.84133   
+## islandPenrhyn     -7.853     15.347  6.156  -0.512  0.62670   
+## islandRarotonga    2.095     11.947  6.261   0.175  0.86632   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.894              
+## islndPnrhyn -0.707  0.633       
+## islandRrtng -0.908  0.813  0.643
+```
 --
 
 **P-value** &gt; 0.05 for Rarotonga. Also, it's basically 0 for both Atiu and Penrhyn. 
@@ -431,7 +487,6 @@ tidy_f0 &lt;- untidy_data |&gt;
 ---
 # F0 by island 
 
-.pull-left[
 ## Plot!!
 
 
@@ -445,20 +500,22 @@ f0_plot &lt;- tidy_f0 |&gt;
     color="black",
     method.args = list(family = "poisson")
   ) +
-  facet_wrap(~island) +
+  facet_grid(.~island,
+             scales = "free_x") +
   labs(
     title = "Compare F0 across islands", 
     x = "Duration", 
     y = "F0 (Hz)"
   ) 
 ```
-]
 
---
 
-.pull-right[
+---
+# F0 plot
+
+
 &lt;img src="index_files/figure-html/print-f0-plot-1.png" width="648" /&gt;
-]
+
 
 ---
 # F0 by island 
@@ -468,16 +525,44 @@ f0_plot &lt;- tidy_f0 |&gt;
 
 
 ``` r
-mod_f0 &lt;- lm(formula = f0 ~ island, data = tidy_f0)
+mod_f0 &lt;- lmer(f0 ~ island + (1|speaker) + (1|word), data = tidy_f0)
 ```
 
 
-|term            |   estimate| std.error|  statistic|   p.value|
-|:---------------|----------:|---------:|----------:|---------:|
-|(Intercept)     | 142.918645|  3.035068| 47.0891047| 0.0000000|
-|islandMauke     |  28.459157|  3.424019|  8.3116241| 0.0000000|
-|islandPenrhyn   |  -2.622361|  3.932225| -0.6668898| 0.5050263|
-|islandRarotonga |  39.161194|  4.081586|  9.5946014| 0.0000000|
+```
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: f0 ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_f0
+## 
+## REML criterion at convergence: 8097.3
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.8763 -0.6582 -0.1477  0.5171  5.0606 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept) 130.1    11.41   
+##  speaker  (Intercept) 592.5    24.34   
+##  Residual             822.2    28.67   
+## Number of obs: 841, groups:  word, 134; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error      df t value Pr(&gt;|t|)   
+## (Intercept)      140.935     24.584   3.466   5.733  0.00702 **
+## islandMauke       24.229     27.450   3.448   0.883  0.43464   
+## islandPenrhyn     -3.145     34.660   3.423  -0.091  0.93276   
+## islandRarotonga   49.950     27.269   3.564   1.832  0.14965   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.893              
+## islndPnrhyn -0.707  0.633       
+## islandRrtng -0.899  0.805  0.638
+```
 
 --
 
@@ -559,16 +644,44 @@ f2_plot &lt;- tidy_f2 |&gt;
 
 
 ``` r
-mod_f2 &lt;- lm(formula = f2 ~ island, data = tidy_f2)
+mod_f2 &lt;- lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2)
 ```
 
 
-|term            |  estimate| std.error| statistic| p.value|
-|:---------------|---------:|---------:|---------:|-------:|
-|(Intercept)     | 1090.9432|  39.79288| 27.415534|       0|
-|islandMauke     |  308.5190|  44.70677|  6.900944|       0|
-|islandPenrhyn   |  373.9431|  51.79373|  7.219853|       0|
-|islandRarotonga |  360.9223|  52.73736|  6.843768|       0|
+```
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: f2 ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_f2
+## 
+## REML criterion at convergence: 13277
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.1832 -0.6452 -0.1646  0.5206  4.0860 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept)  37558   193.80  
+##  speaker  (Intercept)   4625    68.01  
+##  Residual             155390   394.20  
+## Number of obs: 894, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error       df t value Pr(&gt;|t|)    
+## (Intercept)     1142.411     83.412    5.643  13.696 1.52e-05 ***
+## islandMauke      297.881     90.354    4.946   3.297  0.02190 *  
+## islandPenrhyn    384.930    111.231    4.466   3.461  0.02162 *  
+## islandRarotonga  389.099     94.770    6.027   4.106  0.00626 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.862              
+## islndPnrhyn -0.703  0.648       
+## islandRrtng -0.829  0.769  0.626
+```
 
 --
 
