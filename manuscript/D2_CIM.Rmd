@@ -111,7 +111,7 @@ Note that in all of my models, I did not control for where w~v occurs in the wor
 
 ```{r}
 #| label: tidy-duration
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
 
@@ -140,6 +140,12 @@ knitr::kable(head(tidy_dur))
 #| echo: false
 #| out-width: "100%"
 
+```{r}
+#| label: duration-plot
+#| warning: false
+#| message: false
+#| echo: true
+
 plot_dur <- tidy_dur |>
   ggplot() +
   aes(x = island, y = duration, color = island) +
@@ -151,6 +157,7 @@ plot_dur <- tidy_dur |>
   )
 
 ```
+
 
 ```{r}
 #| label: print-duration-plot
@@ -165,15 +172,15 @@ print(plot_dur)
 
 ```{r}
 #| label: mod-duration
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
 
-mod_dur <- lm(formula = duration ~ island, data = tidy_dur)
+mod_dur <- lmer(duration ~ island + (1|speaker) + (1|word), data = tidy_dur)
 
-dur_summary <- tidy(mod_dur)
+dur_summary <- summary(mod_dur)
 
-knitr::kable(dur_summary)
+print(dur_summary)
 
 ```
 
@@ -187,7 +194,7 @@ knitr::kable(dur_summary)
 
 ```{r}
 #| label: tidy-intensity
-#| echo: false
+#| echo: true
 #| warning: false
 #| message: false
 
@@ -223,16 +230,15 @@ plot_intense <- tidy_intense |>
     title = "Compare [v] intensity by island",
     x = "Island",
     y = "Intensity"
-  )
+  ) 
 
 ```
 
-```{r}
+```{r, fig.height=10, fig.width=9, fig.retina=3}
 #| label: print-intensity-plot
 #| echo: false
-#| message: false
 #| warning: false
-#| out-width: "75%"
+#| message: false
 
 print(plot_intense)
 
@@ -240,15 +246,16 @@ print(plot_intense)
 
 ```{r}
 #| label: mod-intensity
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
 
-mod_intense <- lm(formula = intensity ~ island, data = tidy_intense)
+mod_intense <- lmer(intensity ~ island + (1|speaker) + (1|word), data = tidy_intense)
 
-intense_summary <- tidy(mod_intense)
+intense_summary <- summary(mod_intense)
 
-knitr::kable(intense_summary)
+print(intense_summary)
+
 
 ```
 
@@ -259,16 +266,14 @@ knitr::kable(intense_summary)
 
 ```{r}
 #| label: tidy-f0
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
 
 tidy_f0 <- untidy_data |>
   filter(TextGridLabel == "v") |>
   pivot_longer(
-    cols = c("f0_20.point", 
-             "f0_50.point", 
-             "f0_80.point"),
+    cols = c("f0_50.point"), 
     names_to = "percent",
     values_to = "f0"
   ) |>
@@ -293,7 +298,7 @@ knitr::kable(head(tidy_f0))
 
 ```{r}
 #| label: plot-f0
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
 #| out-width: "75%"
@@ -307,13 +312,21 @@ f0_plot <- tidy_f0 |>
     color="black",
     method.args = list(family = "poisson")
   ) +
-  scale_x_continuous(breaks = seq(0, 0.3, 0.1)) +
-  facet_wrap(~island) +
+  facet_grid(.~island,
+             scales = "free_x") +
   labs(
-    title = "F0 values by duration across the Cook Islands", 
+    title = "Compare F0 across islands", 
     x = "Duration", 
     y = "F0 (Hz)"
   ) 
+```
+
+
+```{r}
+#| label: print-f0-plot
+#| echo: false
+#| message: false
+#| warning: false
 
 print(f0_plot)
 
@@ -323,15 +336,15 @@ print(f0_plot)
 
 ```{r}
 #| label: mod-f0
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
 
-mod_f0 <- lm(formula = f0 ~ island, data = tidy_f0)
+mod_f0 <- lmer(f0 ~ island + (1|speaker) + (1|word), data = tidy_f0)
 
-f0_summary <- tidy(mod_f0)
+f0_summary <- summary(mod_f0) 
 
-knitr::kable(f0_summary)
+print(f0_summary)
 
 ```
 
@@ -341,7 +354,7 @@ knitr::kable(f0_summary)
 
 ```{r}
 #| label: tidy-f2
-#| echo: false
+#| echo: true
 #| message: false
 #| warning: false
 
@@ -382,6 +395,14 @@ f2_plot <- tidy_f2 |>
     y = "F2 (Hz)"
   )
 
+```
+
+```{r, fig.height=10, fig.width=9, fig.retina=3}
+#| label: print-f2-plot
+#| echo: false
+#| warning: false
+#| message: false
+
 print(f2_plot)
 
 ```
@@ -393,14 +414,22 @@ print(f2_plot)
 #| message: false
 #| warning: false
 
-mod_f2 <- lm(formula = f2 ~ island, data = tidy_f2)
-
-f2_summary <- tidy(mod_f2)
-
-knitr::kable(f2_summary)
+mod_f2 <- lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2)
 
 ```
 
+
+```{r}
+#| label: summary-f2
+#| message: false
+#| echo: false
+#| warning: false
+
+f2_summary <- summary(mod_f2)
+
+print(f2_summary)
+
+```
 
 ## 5.1 Data analysis
 

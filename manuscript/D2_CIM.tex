@@ -36,6 +36,46 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -258,6 +298,16 @@ Note that in all of my models, I did not control for where w\textasciitilde v oc
 
 \textbf{???fill in}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tidy\_dur }\OtherTok{\textless{}{-}}\NormalTok{ untidy\_data }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(TextGridLabel }\SpecialCharTok{==} \StringTok{"v"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{arrange}\NormalTok{(island, Word) }\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{select}\NormalTok{(speaker, island, }\AttributeTok{word =}\NormalTok{ Word, duration) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_dur.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
 \begin{tabular}{l|l|l|r}
 \hline
 speaker & island & word & duration\\
@@ -276,27 +326,82 @@ TA & Atiu & ava & 0.13\\
 \hline
 \end{tabular}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot\_dur }\OtherTok{\textless{}{-}}\NormalTok{ tidy\_dur }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ island, }\AttributeTok{y =}\NormalTok{ duration, }\AttributeTok{color =}\NormalTok{ island) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Compare [v] duration by island"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Island"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Duration"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
 \begin{figure}
 \includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/print-duration-plot-1} \caption{ }\label{fig:print-duration-plot}
 \end{figure}
 
-\begin{tabular}{l|r|r|r|r}
-\hline
-term & estimate & std.error & statistic & p.value\\
-\hline
-(Intercept) & 0.0660169 & 0.0033898 & 19.4750727 & 0.0000000\\
-\hline
-islandMauke & -0.0003532 & 0.0038067 & -0.0927931 & 0.9260887\\
-\hline
-islandPenrhyn & 0.0179242 & 0.0044121 & 4.0624899 & 0.0000528\\
-\hline
-islandRarotonga & -0.0208246 & 0.0044925 & -4.6354104 & 0.0000041\\
-\hline
-\end{tabular}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod\_dur }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(duration }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_dur)}
+
+\NormalTok{dur\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod\_dur)}
+
+\FunctionTok{print}\NormalTok{(dur\_summary)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: duration ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_dur
+## 
+## REML criterion at convergence: -3416.3
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.8215 -0.5539 -0.0851  0.4095  7.5763 
+## 
+## Random effects:
+##  Groups   Name        Variance  Std.Dev.
+##  word     (Intercept) 0.0007328 0.02707 
+##  speaker  (Intercept) 0.0001517 0.01231 
+##  Residual             0.0010189 0.03192 
+## Number of obs: 896, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                  Estimate Std. Error        df t value Pr(>|t|)   
+## (Intercept)      0.064761   0.013130  6.339137   4.932  0.00225 **
+## islandMauke     -0.001702   0.014390  5.858906  -0.118  0.90982   
+## islandPenrhyn    0.019477   0.018068  5.690570   1.078  0.32459   
+## islandRarotonga -0.018439   0.014557  6.292463  -1.267  0.25014   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.876              
+## islndPnrhyn -0.698  0.637       
+## islandRrtng -0.869  0.793  0.632
+\end{verbatim}
 
 \subsection{4.2 Intensity by island}\label{intensity-by-island}
 
 \textbf{???fill in}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tidy\_intense }\OtherTok{\textless{}{-}}\NormalTok{ untidy\_data }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(TextGridLabel }\SpecialCharTok{==} \StringTok{"v"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{arrange}\NormalTok{(island, Word) }\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{select}\NormalTok{(speaker, island, }\AttributeTok{word =}\NormalTok{ Word, }\AttributeTok{intensity =}\NormalTok{ intensity\_midpoint) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_intense.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{tabular}{l|l|l|r}
 \hline
@@ -317,66 +422,172 @@ TA & Atiu & ava & 53.07335\\
 \end{tabular}
 
 \begin{figure}
-\includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/print-intensity-plot-1} \caption{ }\label{fig:print-intensity-plot}
+\includegraphics[width=2700px]{D2_CIM_files/figure-latex/print-intensity-plot-1} \caption{ }\label{fig:print-intensity-plot}
 \end{figure}
 
-\begin{tabular}{l|r|r|r|r}
-\hline
-term & estimate & std.error & statistic & p.value\\
-\hline
-(Intercept) & 57.4682172 & 0.8418656 & 68.2629370 & 0.0000000\\
-\hline
-islandMauke & 2.2841738 & 0.9458247 & 2.4150075 & 0.0159356\\
-\hline
-islandPenrhyn & -6.9840858 & 1.0957577 & -6.3737500 & 0.0000000\\
-\hline
-islandRarotonga & 0.0787305 & 1.1157213 & 0.0705647 & 0.9437601\\
-\hline
-\end{tabular}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod\_intense }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(intensity }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_intense)}
+
+\NormalTok{intense\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod\_intense)}
+
+\FunctionTok{print}\NormalTok{(intense\_summary)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: intensity ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_intense
+## 
+## REML criterion at convergence: 5865.9
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.2068 -0.5148  0.1031  0.5991  2.5860 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept)  19.16    4.377  
+##  speaker  (Intercept) 117.38   10.834  
+##  Residual              34.24    5.851  
+## Number of obs: 894, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error     df t value Pr(>|t|)   
+## (Intercept)       57.919     10.864  6.184   5.331  0.00161 **
+## islandMauke        2.534     12.137  6.165   0.209  0.84133   
+## islandPenrhyn     -7.853     15.347  6.156  -0.512  0.62670   
+## islandRarotonga    2.095     11.947  6.261   0.175  0.86632   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.894              
+## islndPnrhyn -0.707  0.633       
+## islandRrtng -0.908  0.813  0.643
+\end{verbatim}
 
 \subsection{4.3 Voicing by island}\label{voicing-by-island}
 
 \textbf{???fill in}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tidy\_f0 }\OtherTok{\textless{}{-}}\NormalTok{ untidy\_data }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(TextGridLabel }\SpecialCharTok{==} \StringTok{"v"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{pivot\_longer}\NormalTok{(}
+    \AttributeTok{cols =} \FunctionTok{c}\NormalTok{(}\StringTok{"f0\_50.point"}\NormalTok{), }
+    \AttributeTok{names\_to =} \StringTok{"percent"}\NormalTok{,}
+    \AttributeTok{values\_to =} \StringTok{"f0"}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{arrange}\NormalTok{(island, Word) }\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{select}\NormalTok{(speaker, island, }\AttributeTok{word =}\NormalTok{ Word, f0, duration) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_f0.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
 \begin{tabular}{l|l|l|r|r}
 \hline
 speaker & island & word & f0 & duration\\
 \hline
-TA & Atiu & ava & 128.5916 & 0.08\\
-\hline
 TA & Atiu & ava & 127.0908 & 0.08\\
-\hline
-TA & Atiu & ava & 127.4540 & 0.08\\
-\hline
-TA & Atiu & ava & 160.6464 & 0.07\\
 \hline
 TA & Atiu & ava & 157.4397 & 0.07\\
 \hline
-TA & Atiu & ava & 158.2820 & 0.07\\
+TA & Atiu & ava & 134.1155 & 0.14\\
+\hline
+TA & Atiu & ava & 141.8125 & 0.11\\
+\hline
+TA & Atiu & ava & 118.2318 & 0.05\\
+\hline
+TA & Atiu & ava & 142.7506 & 0.13\\
 \hline
 \end{tabular}
 
-\begin{figure}
-\includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/plot-f0-1} \caption{ }\label{fig:plot-f0}
-\end{figure}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{f0\_plot }\OtherTok{\textless{}{-}}\NormalTok{ tidy\_f0 }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ duration, }\AttributeTok{y =}\NormalTok{ f0, }\AttributeTok{color =}\NormalTok{ speaker) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}
+    \AttributeTok{method=}\StringTok{"glm"}\NormalTok{,}
+    \AttributeTok{color=}\StringTok{"black"}\NormalTok{,}
+    \AttributeTok{method.args =} \FunctionTok{list}\NormalTok{(}\AttributeTok{family =} \StringTok{"poisson"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_grid}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{island,}
+             \AttributeTok{scales =} \StringTok{"free\_x"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Compare F0 across islands"}\NormalTok{, }
+    \AttributeTok{x =} \StringTok{"Duration"}\NormalTok{, }
+    \AttributeTok{y =} \StringTok{"F0 (Hz)"}
+\NormalTok{  ) }
+\end{Highlighting}
+\end{Shaded}
 
-\begin{tabular}{l|r|r|r|r}
-\hline
-term & estimate & std.error & statistic & p.value\\
-\hline
-(Intercept) & 143.226548 & 1.779445 & 80.4894349 & 0.0000000\\
-\hline
-islandMauke & 29.922893 & 2.005496 & 14.9204478 & 0.0000000\\
-\hline
-islandPenrhyn & -1.840639 & 2.304081 & -0.7988602 & 0.4244468\\
-\hline
-islandRarotonga & 40.179828 & 2.400413 & 16.7387166 & 0.0000000\\
-\hline
-\end{tabular}
+\includegraphics{D2_CIM_files/figure-latex/print-f0-plot-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod\_f0 }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(f0 }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_f0)}
+
+\NormalTok{f0\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod\_f0) }
+
+\FunctionTok{print}\NormalTok{(f0\_summary)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: f0 ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_f0
+## 
+## REML criterion at convergence: 8097.3
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.8763 -0.6582 -0.1477  0.5171  5.0606 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept) 130.1    11.41   
+##  speaker  (Intercept) 592.5    24.34   
+##  Residual             822.2    28.67   
+## Number of obs: 841, groups:  word, 134; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error      df t value Pr(>|t|)   
+## (Intercept)      140.935     24.584   3.466   5.733  0.00702 **
+## islandMauke       24.229     27.450   3.448   0.883  0.43464   
+## islandPenrhyn     -3.145     34.660   3.423  -0.091  0.93276   
+## islandRarotonga   49.950     27.269   3.564   1.832  0.14965   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.893              
+## islndPnrhyn -0.707  0.633       
+## islandRrtng -0.899  0.805  0.638
+\end{verbatim}
 
 \subsection{4.4 w\textasciitilde v distribution by island}\label{wv-distribution-by-island}
 
 \textbf{???fill in}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tidy\_f2 }\OtherTok{\textless{}{-}}\NormalTok{ untidy\_data }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(TextGridLabel }\SpecialCharTok{==} \StringTok{"v"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{arrange}\NormalTok{(island, Word) }\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{select}\NormalTok{(speaker, island, }\AttributeTok{word =}\NormalTok{ Word, }\AttributeTok{f2 =}\NormalTok{ F2\_midpoint) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_f2.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{tabular}{l|l|l|r}
 \hline
@@ -397,26 +608,47 @@ TA & Atiu & ava & 896.0441\\
 \end{tabular}
 
 \begin{figure}
-\includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/plot-f2-1} \caption{ }\label{fig:plot-f2}
+\includegraphics[width=2700px]{D2_CIM_files/figure-latex/print-f2-plot-1} \caption{ }\label{fig:print-f2-plot}
 \end{figure}
 
-\begin{tabular}{l|r|r|r|r}
-\hline
-term & estimate & std.error & statistic & p.value\\
-\hline
-(Intercept) & 1090.9432 & 39.79288 & 27.415534 & 0\\
-\hline
-islandMauke & 308.5190 & 44.70677 & 6.900944 & 0\\
-\hline
-islandPenrhyn & 373.9431 & 51.79373 & 7.219853 & 0\\
-\hline
-islandRarotonga & 360.9223 & 52.73736 & 6.843768 & 0\\
-\hline
-\end{tabular}
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: f2 ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_f2
+## 
+## REML criterion at convergence: 13277
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.1832 -0.6452 -0.1646  0.5206  4.0860 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept)  37558   193.80  
+##  speaker  (Intercept)   4625    68.01  
+##  Residual             155390   394.20  
+## Number of obs: 894, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error       df t value Pr(>|t|)    
+## (Intercept)     1142.411     83.412    5.643  13.696 1.52e-05 ***
+## islandMauke      297.881     90.354    4.946   3.297  0.02190 *  
+## islandPenrhyn    384.930    111.231    4.466   3.461  0.02162 *  
+## islandRarotonga  389.099     94.770    6.027   4.106  0.00626 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.862              
+## islndPnrhyn -0.703  0.648       
+## islandRrtng -0.829  0.769  0.626
+\end{verbatim}
 
 \subsection{5.1 Data analysis}\label{data-analysis}
 
-I used R (Version 4.5.0; R Core Team, 2024) and the R-packages \emph{broom} (Version 1.0.8; Robinson, Hayes, \& Couch, 2025), \emph{dplyr} (Version 1.1.4; Wickham, François, Henry, Müller, \& Vaughan, 2023), \emph{ds4ling} (Version 1.0; Casillas, 2025), \emph{forcats} (Version 1.0.0; Wickham, 2023a), \emph{ggplot2} (Version 3.5.2; Wickham, 2016), \emph{ggpubr} (Version 0.6.0; Kassambara, 2023), \emph{here} (Version 1.0.1; Müller, 2020), \emph{lme4} (Version 1.1.37; Bates, Mächler, Bolker, \& Walker, 2015), \emph{lmerTest} (Version 3.1.3; Kuznetsova, Brockhoff, \& Christensen, 2017), \emph{lubridate} (Version 1.9.4; Grolemund \& Wickham, 2011), \emph{Matrix} (Version 1.7.3; Bates, Maechler, \& Jagan, 2025), \emph{papaja} (Version 0.1.3; Aust \& Barth, 2024), \emph{purrr} (Version 1.0.4; Wickham \& Henry, 2025), \emph{readr} (Version 2.1.5; Wickham, Hester, \& Bryan, 2024), \emph{stringr} (Version 1.5.1; Wickham, 2023b), \emph{tibble} (Version 3.2.1; Müller \& Wickham, 2023), \emph{tidyr} (Version 1.3.1; Wickham, Vaughan, \& Girlich, 2024), \emph{tidyverse} (Version 2.0.0; Wickham et al., 2019) and \emph{tinylabels} (Version 0.2.5; Barth, 2023) for all my analyses.
+I used R (Version 4.5.0; R Core Team, 2024) and the R-packages \emph{broom} (Version 1.0.8; Robinson, Hayes, \& Couch, 2025), \emph{dplyr} (Version 1.1.4; Wickham, François, Henry, Müller, \& Vaughan, 2023), \emph{ds4ling} (Version 1.0; Casillas, 2025), \emph{forcats} (Version 1.0.0; Wickham, 2023a), \emph{ggplot2} (Version 3.5.2; Wickham, 2016), \emph{ggpubr} (Kassambara, 2023), \emph{here} (Version 1.0.1; Müller, 2020), \emph{lme4} (Version 1.1.37; Bates, Mächler, Bolker, \& Walker, 2015), \emph{lmerTest} (Version 3.1.3; Kuznetsova, Brockhoff, \& Christensen, 2017), \emph{lubridate} (Version 1.9.4; Grolemund \& Wickham, 2011), \emph{Matrix} (Version 1.7.3; Bates, Maechler, \& Jagan, 2025), \emph{papaja} (Version 0.1.3; Aust \& Barth, 2024), \emph{purrr} (Version 1.0.4; Wickham \& Henry, 2025), \emph{readr} (Version 2.1.5; Wickham, Hester, \& Bryan, 2024), \emph{stringr} (Version 1.5.1; Wickham, 2023b), \emph{tibble} (Version 3.2.1; Müller \& Wickham, 2023), \emph{tidyr} (Version 1.3.1; Wickham, Vaughan, \& Girlich, 2024), \emph{tidyverse} (Version 2.0.0; Wickham et al., 2019) and \emph{tinylabels} (Version 0.2.5; Barth, 2023) for all my analyses.
 
 \section{6.0 Conclusion}\label{conclusion}
 
