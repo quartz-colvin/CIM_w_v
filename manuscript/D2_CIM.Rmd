@@ -76,7 +76,7 @@ In hopes of answering this question, I will compare various aspects of w~v phone
 
 ```{r, fig.align = "center", echo=FALSE, out.width="75%", fig.cap="Map of Cook Islands."}
 
-#knitr::include_graphics("./figs/cook-islands-map.png")
+knitr::include_graphics("./figs/cook-islands-map.png")
 
 ```
 
