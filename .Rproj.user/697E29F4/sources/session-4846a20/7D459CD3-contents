@@ -253,20 +253,17 @@ It is known across both Aotearoa (NZ) Māori and CIM that some speakers regularl
 
 The following large data set has many columns. Here I show a preview of the data set and then discuss which columns will be relevant to the analysis later in the paper.
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\linewidth]{./figs/raw_data} 
-
-}
-
-\caption{ }\label{fig:unnamed-chunk-1}
-\end{figure}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#knitr::kable(head(untidy\_data))}
+\end{Highlighting}
+\end{Shaded}
 
 First, note that there is no `id' column but there is a column for the speaker's initials. I will use speaker in place of `id' because that is what was in this original data set. The `island' column states what island that speaker is from. This data only contains data from the four islands Atiu, Mauke, Penrhyn and Rarotonga. Duration corresponds to the total duration of the phoneme, and intensity is measured at the midpoint of the phoneme.
 
 F0 values were taken at 20\%, 50\% and 80\% of each phoneme's total duration. Later, we will opt to use only the F0 values at 50\%, but that will be discussed more later. Finally, F2\_midpoint is f2 measured in Hz at the midpoint of that phoneme.
 
-All of the other columns are either straight-forward information or will be irrelevant for this paper.
+All of the other columns are either straight forward information or will be irrelevant for this paper.
 
 \section{4.0 Analysis}\label{analysis}
 
@@ -321,21 +318,14 @@ For a visual comparison, we will look at boxplots comparing duration across thes
   \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ island, }\AttributeTok{y =}\NormalTok{ duration, }\AttributeTok{color =}\NormalTok{ island) }\SpecialCharTok{+}
   \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}
-    \AttributeTok{title =} \StringTok{"Duration by island"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Compare [v] duration by island"}\NormalTok{,}
     \AttributeTok{x =} \StringTok{"Island"}\NormalTok{,}
     \AttributeTok{y =} \StringTok{"Duration"}
 \NormalTok{  )}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/print-duration-plot-1} 
-
-}
-
-\caption{ }\label{fig:print-duration-plot}
-\end{figure}
+\includegraphics{D2_CIM_files/figure-latex/print-duration-plot-1.pdf}
 
 The boxplot shows that average (mean) durations were pretty similar across these three islands. But for some reason, Penrhyn had a much larger range of durations than the other islands.
 
@@ -346,6 +336,41 @@ Now that we have an idea of what the general differences and similarities are fo
 \NormalTok{mod\_dur }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(duration }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_dur)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: duration ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_dur
+## 
+## REML criterion at convergence: -3416.3
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.8215 -0.5539 -0.0851  0.4095  7.5763 
+## 
+## Random effects:
+##  Groups   Name        Variance  Std.Dev.
+##  word     (Intercept) 0.0007328 0.02707 
+##  speaker  (Intercept) 0.0001517 0.01231 
+##  Residual             0.0010189 0.03192 
+## Number of obs: 896, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                  Estimate Std. Error        df t value Pr(>|t|)   
+## (Intercept)      0.064761   0.013130  6.339137   4.932  0.00225 **
+## islandMauke     -0.001702   0.014390  5.858906  -0.118  0.90982   
+## islandPenrhyn    0.019477   0.018068  5.690570   1.078  0.32459   
+## islandRarotonga -0.018439   0.014557  6.292463  -1.267  0.25014   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.876              
+## islndPnrhyn -0.698  0.637       
+## islandRrtng -0.869  0.793  0.632
+\end{verbatim}
 
 The p-values for each island are as follows. Atiu's p-value = 0.00225, Mauke's p-value = 0.90982, Penrhyn's p-value = 0.32459, and Rarotonga's p-value = 0.25014.
 
@@ -392,7 +417,7 @@ In the same way we did for the duration question, we will first look at a boxplo
   \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ island, }\AttributeTok{y =}\NormalTok{ intensity, }\AttributeTok{color =}\NormalTok{ island) }\SpecialCharTok{+}
   \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}
-    \AttributeTok{title =} \StringTok{"Intensity by island"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Compare [v] intensity by island"}\NormalTok{,}
     \AttributeTok{x =} \StringTok{"Island"}\NormalTok{,}
     \AttributeTok{y =} \StringTok{"Intensity"}
 \NormalTok{  ) }
@@ -400,12 +425,7 @@ In the same way we did for the duration question, we will first look at a boxplo
 \end{Shaded}
 
 \begin{figure}
-
-{\centering \includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/print-intensity-plot-1} 
-
-}
-
-\caption{ }\label{fig:print-intensity-plot}
+\includegraphics[width=1500px]{D2_CIM_files/figure-latex/print-intensity-plot-1} \caption{ }\label{fig:print-intensity-plot}
 \end{figure}
 
 Initially, it is clear that Penrhyn has the lowest mean intensity for w\textasciitilde v. Mauke and Rarotonga have nearly the same mean intensity, and Atiu's mean is slighly lower, but not as low as Penrhyn's mean.
@@ -419,6 +439,41 @@ Now that we know the general patterns, we can fit our linear mixed effects model
 \end{Shaded}
 
 The p-values for each island are as follows. Atiu's p-value = 0.00161, Mauke's p-value = 0.84133, Penrhyn's p-value = 0.62670 and Rarotonga's p-value = 0.86632.
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: intensity ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_intense
+## 
+## REML criterion at convergence: 5865.9
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.2068 -0.5148  0.1031  0.5991  2.5860 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept)  19.16    4.377  
+##  speaker  (Intercept) 117.38   10.834  
+##  Residual              34.24    5.851  
+## Number of obs: 894, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error     df t value Pr(>|t|)   
+## (Intercept)       57.919     10.864  6.184   5.331  0.00161 **
+## islandMauke        2.534     12.137  6.165   0.209  0.84133   
+## islandPenrhyn     -7.853     15.347  6.156  -0.512  0.62670   
+## islandRarotonga    2.095     11.947  6.261   0.175  0.86632   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.894              
+## islndPnrhyn -0.707  0.633       
+## islandRrtng -0.908  0.813  0.643
+\end{verbatim}
 
 \subsection{4.3 Voicing by island}\label{voicing-by-island}
 
@@ -481,7 +536,7 @@ This time, to compare f0 across the islands visually, we can plot this data onto
   \FunctionTok{facet\_grid}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{island,}
              \AttributeTok{scales =} \StringTok{"free\_x"}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}
-    \AttributeTok{title =} \StringTok{"F0 by island"}\NormalTok{, }
+    \AttributeTok{title =} \StringTok{"Compare F0 across islands"}\NormalTok{, }
     \AttributeTok{x =} \StringTok{"Duration"}\NormalTok{, }
     \AttributeTok{y =} \StringTok{"F0 (Hz)"}
 \NormalTok{  ) }
@@ -490,14 +545,7 @@ This time, to compare f0 across the islands visually, we can plot this data onto
 
 As you can see, I created an individual facet for each island and each color represents data from a particular speaker.
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\linewidth]{D2_CIM_files/figure-latex/print-f0-plot-1} 
-
-}
-
-\caption{ }\label{fig:print-f0-plot}
-\end{figure}
+\includegraphics{D2_CIM_files/figure-latex/print-f0-plot-1.pdf}
 
 It's clear that the most drastic slope is in the Penrhyn plot, and the data for the islands with more speakers are much more spread out across the plot.
 
@@ -510,6 +558,41 @@ To formally compare these different variables, we can again use a linear mixed e
 \end{Shaded}
 
 The p-values for each island in this model are as follows. Atiu's p-value = 0.00702, Mauke's p-value = 0.43464, Penrhyn's p-value is 0.93276, and Rarotonga's p-value = 0.14965.
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: f0 ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_f0
+## 
+## REML criterion at convergence: 8097.3
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.8763 -0.6582 -0.1477  0.5171  5.0606 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept) 130.1    11.41   
+##  speaker  (Intercept) 592.5    24.34   
+##  Residual             822.2    28.67   
+## Number of obs: 841, groups:  word, 134; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error      df t value Pr(>|t|)   
+## (Intercept)      140.935     24.584   3.466   5.733  0.00702 **
+## islandMauke       24.229     27.450   3.448   0.883  0.43464   
+## islandPenrhyn     -3.145     34.660   3.423  -0.091  0.93276   
+## islandRarotonga   49.950     27.269   3.564   1.832  0.14965   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.893              
+## islndPnrhyn -0.707  0.633       
+## islandRrtng -0.899  0.805  0.638
+\end{verbatim}
 
 \subsection{4.4 w\textasciitilde v distribution by island}\label{wv-distribution-by-island}
 
@@ -549,42 +632,50 @@ TA & Atiu & ava & 896.0441\\
 
 To visually compare the f2 values across these islands, here is a code chunk to generate another boxplot.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{f2\_plot }\OtherTok{\textless{}{-}}\NormalTok{ tidy\_f2 }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ island, }\AttributeTok{y =}\NormalTok{ f2, }\AttributeTok{color =}\NormalTok{ island) }\SpecialCharTok{+}
-  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}
-    \AttributeTok{title =} \StringTok{"F2 by island"}\NormalTok{,}
-    \AttributeTok{x =} \StringTok{"Island"}\NormalTok{,}
-    \AttributeTok{y =} \StringTok{"F2 (Hz)"}
-\NormalTok{  )}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{figure}
-
-{\centering \includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/print-f2-plot-1} 
-
-}
-
-\caption{ }\label{fig:print-f2-plot}
+\includegraphics[width=2700px]{D2_CIM_files/figure-latex/print-f2-plot-1} \caption{ }\label{fig:print-f2-plot}
 \end{figure}
 
-From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The other three islands had more similar means, but Mauke and Penrhyn had some instances of w\textasciitilde v that had extremely high F2 measurements. Regardless, the boxes for each island look different, so we know what to expect when we fit a linear mixed effects model. The code chunk for fitting this model is below.
+From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. \textbf{CONTINUE???}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mod\_f2 }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(f2 }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_f2)}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: f2 ~ island + (1 | speaker) + (1 | word)
+##    Data: tidy_f2
+## 
+## REML criterion at convergence: 13277
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.1832 -0.6452 -0.1646  0.5206  4.0860 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  word     (Intercept)  37558   193.80  
+##  speaker  (Intercept)   4625    68.01  
+##  Residual             155390   394.20  
+## Number of obs: 894, groups:  word, 145; speaker, 11
+## 
+## Fixed effects:
+##                 Estimate Std. Error       df t value Pr(>|t|)    
+## (Intercept)     1142.411     83.412    5.643  13.696 1.52e-05 ***
+## islandMauke      297.881     90.354    4.946   3.297  0.02190 *  
+## islandPenrhyn    384.930    111.231    4.466   3.461  0.02162 *  
+## islandRarotonga  389.099     94.770    6.027   4.106  0.00626 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Correlation of Fixed Effects:
+##             (Intr) islndM islndP
+## islandMauke -0.862              
+## islndPnrhyn -0.703  0.648       
+## islandRrtng -0.829  0.769  0.626
+\end{verbatim}
 
-The p-values for each island in this model are as follows. Atiu's p-value = 1.52e-05, Mauke's p-value = 0.02190, Penrhyn's p-value = 0.02162, and Rarotonga's p-value = 0.00626.
+\subsection{5.1 Data analysis}\label{data-analysis}
 
-\subsection{5.1 Reporting the results}\label{reporting-the-results}
-
-\textbf{FILL IN???}
+I used r cite\_r(``r-references.bib'') for all my analyses.
 
 \section{6.0 Conclusion}\label{conclusion}
 
