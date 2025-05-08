@@ -116,39 +116,6 @@
   \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 \makeatother
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
-  \fi
-  % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \ifLuaTeX
 \usepackage[bidi=basic]{babel}
 \else
@@ -266,7 +233,7 @@
 
 \section{1.0 Introduction}\label{introduction}
 
-In this paper, we will do a statistical analysis of {[}v{]} across a sample of islands in Cook Islands Māori (CIM). It's known that in many dialects and other varieties of Māori, this phoneme can be realized as {[}w{]} or {[}v{]}. This paper aims to take a statistical approach to this generalization.
+In this paper, we will do a statistical analysis of {[}v{]} across a sample of islands in Cook Islands Māori (CIM). It is known that in many dialects and other varieties of Māori, this phoneme can be realized as {[}w{]} or {[}v{]}. This paper aims to take a statistical approach to this generalization.
 
 This paper has four sub-questions to investigate. First, how does w\textasciitilde v duration vary by island and second, how does intensity for these phonemes vary by island. The other two questions are about identifying information about the surface forms of w\textasciitilde v by island. Specifically, we will model f0 and f2 to determine whether certain islands have a voiced phoneme realized. Finally, the f2 model will help us determine which islands have higher rates of {[}w{]}s surfacing and which have more {[}v{]}s surfacing.
 
@@ -274,7 +241,7 @@ This paper has four sub-questions to investigate. First, how does w\textasciitil
 
 Cook Islands Māori is an Eastern Polynesian language classified as \emph{Endangered}. It is very closely related to Aotearoa Māori, but is definitely different from it.
 
-It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce {[}v{]} as {[}w{]}, but it isn't clear to anyone who does this more and what conditions it.
+It is known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce {[}v{]} as {[}w{]}, but it is not clear to anyone who does this more and what conditions it.
 
 \textbf{???fill in}
 
@@ -284,19 +251,51 @@ It's known across both Aotearoa (NZ) Māori and CIM that some speakers regularly
 
 \section{3.0 Data}\label{data}
 
-\textbf{???fill in}
+The following large data set has many columns. Here I show a preview of the data set and then discuss which columns will be relevant to the analysis later in the paper.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(}\FunctionTok{head}\NormalTok{(untidy\_data))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tabular}{l|l|l|l|l|l|l|r|r|r|r|r|r|r|r|r|r}
+\hline
+speaker & island & Filename & TextGridLabel & Word & PreviousLabel & FollowingLabel & start & end & duration & f0\_20.point & f0\_50.point & f0\_80.point & F1\_midpoint & F2\_midpoint & F3\_midpoint & intensity\_midpoint\\
+\hline
+AAN & Rarotonga & AAN-RRAAT8-018 & a & rave & r & v & 1.10 & 1.13 & 0.03 & 144.0532 & 143.0606 & 141.8219 & 356.4547 & 1755.623 & 2797.351 & 40.29265\\
+\hline
+AAN & Rarotonga & AAN-RRAAT8-018 & v & rave & a & e & 1.13 & 1.16 & 0.03 & 141.7901 & 142.2725 & 143.3506 & 335.4101 & 1999.837 & 3192.717 & 39.22013\\
+\hline
+AAN & Rarotonga & AAN-RRAAT8-018 & e & rave & v & NA & 1.16 & 1.19 & 0.03 & 143.1055 & 142.6605 & 142.2108 & 341.6010 & 2362.305 & 3280.530 & 40.47651\\
+\hline
+AAN & Rarotonga & AAN-RRAAT8-052 & v & vaꞌine & NA & a & 1.73 & 1.76 & 0.03 & 263.7962 & 269.8593 & 270.8541 & 537.7380 & 1040.550 & 2898.961 & 52.75762\\
+\hline
+AAN & Rarotonga & AAN-RRAAT8-052 & a & vaꞌine & v & ꞌ & 1.76 & 1.79 & 0.03 & 265.8672 & 261.0071 & 263.7023 & 584.4075 & 1419.937 & 2876.166 & 55.72719\\
+\hline
+AAN & Rarotonga & AAN-RRAAT8-060 & a & rava & r & v & 0.75 & 0.80 & 0.05 & 203.7388 & 202.9822 & 201.2384 & 670.0677 & 1474.651 & 2556.541 & 52.94500\\
+\hline
+\end{tabular}
+
+First, note that there is no `id' column but there is a column for the speaker's initials. I will use speaker in place of `id' because that is what was in this original data set. The `island' column states what island that speaker is from. This data only contains data from the four islands Atiu, Mauke, Penrhyn and Rarotonga. Duration corresponds to the total duration of the phoneme, and intensity is measured at the midpoint of the phoneme.
+
+F0 values were taken at 20\%, 50\% and 80\% of each phoneme's total duration. Later, we will opt to use only the F0 values at 50\%, but that will be discussed more later. Finally, F2\_midpoint is f2 measured in Hz at the midpoint of that phoneme.
+
+All of the other columns are either straight forward information or will be irrelevant for this paper.
 
 \section{4.0 Analysis}\label{analysis}
 
 This section readdresses the main questions about the w\textasciitilde v alternation. First, how does duration differ by island and second, how does intensity vary by island? Finally, do any islands have regular occurrence of {[}w{]} instead of {[}v{]} surfacing. For this final question, we will compare f0 and f2 separately.
 
-Note that in all of my models, I did not control for where w\textasciitilde v occurs in the word, since I am looking at general frequency information and not doing a phonological analysis of specific environments in which {[}w{]} or {[}v{]} occurs more.
+Note that in all of my models, I did not control for where w\textasciitilde v occurs in the word, since I am looking at general frequency information and not doing a phonological analysis of specific environments in which {[}w{]} or {[}v{]} occurs more. Another important thing to note is that for each island, there were different numbers of speakers contributing to the data set. All of the Atiu data came from one speaker and it was the same for Penrhyn. The Mauke data came from four speakers and the Rarotonga data came from five speakers.
 
-???discuss autocorrelation issue
+Since there are different numbers of speakers from each of these islands, the models I will use to investigate each question will be linear mixed models.
 
 \subsection{4.1 Duration by island}\label{duration-by-island}
 
-\textbf{???fill in}
+The first step of comparing duration of w\textasciitilde v across these four islands is to make a smaller, tidy data set that only contains the relevant information.
+
+Below, I filter the data so that it only contains rows with the ``v'' phoneme. Then I arrange it by island and then by word, and I select only the columns ``speaker'', ``island'', ``word'' and duration. Finally, I save this filtered data set as a new csv file.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -307,6 +306,8 @@ Note that in all of my models, I did not control for where w\textasciitilde v oc
   \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_dur.csv"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+After we have done this tidying process, the duration data set looks like this.
 
 \begin{tabular}{l|l|l|r}
 \hline
@@ -326,6 +327,8 @@ TA & Atiu & ava & 0.13\\
 \hline
 \end{tabular}
 
+For a visual comparison, we will look at boxplots comparing duration across these four islands. The code chunk for the box plot is here and the actual plot is below it.
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{plot\_dur }\OtherTok{\textless{}{-}}\NormalTok{ tidy\_dur }\SpecialCharTok{|\textgreater{}}
@@ -340,17 +343,15 @@ TA & Atiu & ava & 0.13\\
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
-\includegraphics[width=0.75\linewidth]{D2_CIM_files/figure-latex/print-duration-plot-1} \caption{ }\label{fig:print-duration-plot}
-\end{figure}
+\includegraphics{D2_CIM_files/figure-latex/print-duration-plot-1.pdf}
+
+The boxplot shows that average (mean) durations were pretty similar across these three islands. But for some reason, Penrhyn had a much larger range of durations than the other islands.
+
+Now that we have an idea of what the general differences and similarities are for duration, we can fit the linear mixed effect model. In the code chunk. you can see that I account for the fact that number of speakers varies across the islands in the data set, and also that there are many instances of each word. These instances of each `word' are repeated by each speaker multiple times and by several speakers multiple times.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{mod\_dur }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(duration }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_dur)}
-
-\NormalTok{dur\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod\_dur)}
-
-\FunctionTok{print}\NormalTok{(dur\_summary)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -389,9 +390,11 @@ TA & Atiu & ava & 0.13\\
 ## islandRrtng -0.869  0.793  0.632
 \end{verbatim}
 
+The p-values for each island are as follows. Atiu's p-value = 0.00225, Mauke's p-value = 0.90982, Penrhyn's p-value = 0.32459, and Rarotonga's p-value = 0.25014.
+
 \subsection{4.2 Intensity by island}\label{intensity-by-island}
 
-\textbf{???fill in}
+Next is the intensity comparison across the four islands. Starting from the raw data set, we must filter it again so that it only has instances of the ``v'' phoneme and we filter everything except the ``speaker'', ``island'', ``word'', and ``intensity'' columns. The tidying process is shown in the code chunk here.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -402,6 +405,8 @@ TA & Atiu & ava & 0.13\\
   \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_intense.csv"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+Once the new data set has been made, it looks roughly like the following table, but extended of course.
 
 \begin{tabular}{l|l|l|r}
 \hline
@@ -421,19 +426,37 @@ TA & Atiu & ava & 53.07335\\
 \hline
 \end{tabular}
 
+In the same way we did for the duration question, we will first look at a boxplot to visually see any clear differences in intensity across the Cook Islands. The code chunk to make the plot is below, and then the actual plot is printed below it.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot\_intense }\OtherTok{\textless{}{-}}\NormalTok{ tidy\_intense }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ island, }\AttributeTok{y =}\NormalTok{ intensity, }\AttributeTok{color =}\NormalTok{ island) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Compare [v] intensity by island"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Island"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Intensity"}
+\NormalTok{  ) }
+\end{Highlighting}
+\end{Shaded}
+
 \begin{figure}
-\includegraphics[width=2700px]{D2_CIM_files/figure-latex/print-intensity-plot-1} \caption{ }\label{fig:print-intensity-plot}
+\includegraphics[width=1500px]{D2_CIM_files/figure-latex/print-intensity-plot-1} \caption{ }\label{fig:print-intensity-plot}
 \end{figure}
+
+Initially, it is clear that Penrhyn has the lowest mean intensity for w\textasciitilde v. Mauke and Rarotonga have nearly the same mean intensity, and Atiu's mean is slighly lower, but not as low as Penrhyn's mean.
+
+Now that we know the general patterns, we can fit our linear mixed effects model. Dur to the same reasons as before, I model speaker and word as mixed effects in the intensity by island model. The code chunk below shows how I fit the model in R.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{mod\_intense }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(intensity }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_intense)}
-
-\NormalTok{intense\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod\_intense)}
-
-\FunctionTok{print}\NormalTok{(intense\_summary)}
 \end{Highlighting}
 \end{Shaded}
+
+The p-values for each island are as follows. Atiu's p-value = 0.00161, Mauke's p-value = 0.84133, Penrhyn's p-value = 0.62670 and Rarotonga's p-value = 0.86632.
 
 \begin{verbatim}
 ## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
@@ -472,7 +495,13 @@ TA & Atiu & ava & 53.07335\\
 
 \subsection{4.3 Voicing by island}\label{voicing-by-island}
 
-\textbf{???fill in}
+Moving on to the formant questions, first we will investigate how voicing of w\textasciitilde v differs across these four islands.
+
+This time, we tidy the raw data set in a similar way but with one additional step. Since we have f0 values at three different intervals of the same morpheme, if we were to put all of those formant values in a new column and the percentage in another new column, then it would fabricate 3 times as many tokens that were not elicited from the speakers.
+
+In order to limit this autocorrelation issue, I chose to only keep f0 values at the 50\% interval of the phoneme. I chose the 50\% interval because the middle of the duration seemed like the smartest choice to represent the average f0 value across the phoneme's duration.
+
+The code chunk below shows how I tidied this mini-data-set to answer the voicing question.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -488,6 +517,8 @@ TA & Atiu & ava & 53.07335\\
   \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_f0.csv"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+Once we have made this new, tidy data set, it looks like this. Again, if I showed the full table, it would have more than this one word and this one island. This is just the top few rows of the sorted table.
 
 \begin{tabular}{l|l|l|r|r}
 \hline
@@ -506,6 +537,8 @@ TA & Atiu & ava & 118.2318 & 0.05\\
 TA & Atiu & ava & 142.7506 & 0.13\\
 \hline
 \end{tabular}
+
+This time, to compare f0 across the islands visually, we can plot this data onto a scatterplot. First, here is the code chunk to create the scatterplots.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -528,17 +561,21 @@ TA & Atiu & ava & 142.7506 & 0.13\\
 \end{Highlighting}
 \end{Shaded}
 
+As you can see, I created an individual facet for each island and each color represents data from a particular speaker.
+
 \includegraphics{D2_CIM_files/figure-latex/print-f0-plot-1.pdf}
+
+It's clear that the most drastic slope is in the Penrhyn plot, and the data for the islands with more speakers are much more spread out across the plot.
+
+To formally compare these different variables, we can again use a linear mixed effects model to see how f0 varies across these four Cook Islands. The model fitting is shown in the code chunk below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{mod\_f0 }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(f0 }\SpecialCharTok{\textasciitilde{}}\NormalTok{ island }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{speaker) }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{word), }\AttributeTok{data =}\NormalTok{ tidy\_f0)}
-
-\NormalTok{f0\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod\_f0) }
-
-\FunctionTok{print}\NormalTok{(f0\_summary)}
 \end{Highlighting}
 \end{Shaded}
+
+The p-values for each island in this model are as follows. Atiu's p-value = 0.00702, Mauke's p-value = 0.43464, Penrhyn's p-value is 0.93276, and Rarotonga's p-value = 0.14965.
 
 \begin{verbatim}
 ## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
@@ -577,7 +614,9 @@ TA & Atiu & ava & 142.7506 & 0.13\\
 
 \subsection{4.4 w\textasciitilde v distribution by island}\label{wv-distribution-by-island}
 
-\textbf{???fill in}
+Finally we turn to the main research question: is there a correlation between island and how many {[}w{]} tokens surface?
+
+For this question, we tidy the raw data set once again so that it only has data for ``v'', speaker, island, word, and f2 values.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -588,6 +627,8 @@ TA & Atiu & ava & 142.7506 & 0.13\\
   \FunctionTok{write\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"tidy\_data"}\NormalTok{, }\StringTok{"tidy\_f2.csv"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+Once the data has been tidied, it generally looks like this.
 
 \begin{tabular}{l|l|l|r}
 \hline
@@ -607,9 +648,13 @@ TA & Atiu & ava & 896.0441\\
 \hline
 \end{tabular}
 
+To visually compare the f2 values across these islands, here is a code chunk to generate another boxplot.
+
 \begin{figure}
 \includegraphics[width=2700px]{D2_CIM_files/figure-latex/print-f2-plot-1} \caption{ }\label{fig:print-f2-plot}
 \end{figure}
+
+From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. \textbf{CONTINUE???}
 
 \begin{verbatim}
 ## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
@@ -648,7 +693,7 @@ TA & Atiu & ava & 896.0441\\
 
 \subsection{5.1 Data analysis}\label{data-analysis}
 
-I used R (Version 4.5.0; R Core Team, 2024) and the R-packages \emph{broom} (Version 1.0.8; Robinson, Hayes, \& Couch, 2025), \emph{dplyr} (Version 1.1.4; Wickham, François, Henry, Müller, \& Vaughan, 2023), \emph{ds4ling} (Version 1.0; Casillas, 2025), \emph{forcats} (Version 1.0.0; Wickham, 2023a), \emph{ggplot2} (Version 3.5.2; Wickham, 2016), \emph{ggpubr} (Kassambara, 2023), \emph{here} (Version 1.0.1; Müller, 2020), \emph{lme4} (Version 1.1.37; Bates, Mächler, Bolker, \& Walker, 2015), \emph{lmerTest} (Version 3.1.3; Kuznetsova, Brockhoff, \& Christensen, 2017), \emph{lubridate} (Version 1.9.4; Grolemund \& Wickham, 2011), \emph{Matrix} (Version 1.7.3; Bates, Maechler, \& Jagan, 2025), \emph{papaja} (Version 0.1.3; Aust \& Barth, 2024), \emph{purrr} (Version 1.0.4; Wickham \& Henry, 2025), \emph{readr} (Version 2.1.5; Wickham, Hester, \& Bryan, 2024), \emph{stringr} (Version 1.5.1; Wickham, 2023b), \emph{tibble} (Version 3.2.1; Müller \& Wickham, 2023), \emph{tidyr} (Version 1.3.1; Wickham, Vaughan, \& Girlich, 2024), \emph{tidyverse} (Version 2.0.0; Wickham et al., 2019) and \emph{tinylabels} (Version 0.2.5; Barth, 2023) for all my analyses.
+I used r cite\_r(``r-references.bib'') for all my analyses.
 
 \section{6.0 Conclusion}\label{conclusion}
 
@@ -658,70 +703,6 @@ I used R (Version 4.5.0; R Core Team, 2024) and the R-packages \emph{broom} (Ver
 
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}
-
-\phantomsection\label{refs}
-\begin{CSLReferences}{1}{0}
-\bibitem[\citeproctext]{ref-R-papaja}
-Aust, F., \& Barth, M. (2024). \emph{{papaja}: {Prepare} reproducible {APA} journal articles with {R Markdown}}. \url{https://doi.org/10.32614/CRAN.package.papaja}
-
-\bibitem[\citeproctext]{ref-R-tinylabels}
-Barth, M. (2023). \emph{{tinylabels}: Lightweight variable labels}. Retrieved from \url{https://cran.r-project.org/package=tinylabels}
-
-\bibitem[\citeproctext]{ref-R-lme4}
-Bates, D., Mächler, M., Bolker, B., \& Walker, S. (2015). Fitting linear mixed-effects models using {lme4}. \emph{Journal of Statistical Software}, \emph{67}(1), 1--48. \url{https://doi.org/10.18637/jss.v067.i01}
-
-\bibitem[\citeproctext]{ref-R-Matrix}
-Bates, D., Maechler, M., \& Jagan, M. (2025). \emph{Matrix: Sparse and dense matrix classes and methods}. \url{https://doi.org/10.32614/CRAN.package.Matrix}
-
-\bibitem[\citeproctext]{ref-R-ds4ling}
-Casillas, J. (2025). \emph{ds4ling: Datasets and functions developed for SPAN658: Data science for linguists}. Retrieved from \url{https://github.com/jvcasillas/ds4ling}
-
-\bibitem[\citeproctext]{ref-R-lubridate}
-Grolemund, G., \& Wickham, H. (2011). Dates and times made easy with {lubridate}. \emph{Journal of Statistical Software}, \emph{40}(3), 1--25. Retrieved from \url{https://www.jstatsoft.org/v40/i03/}
-
-\bibitem[\citeproctext]{ref-R-ggpubr}
-Kassambara, A. (2023). \emph{Ggpubr: 'ggplot2' based publication ready plots}. \url{https://doi.org/10.32614/CRAN.package.ggpubr}
-
-\bibitem[\citeproctext]{ref-R-lmerTest}
-Kuznetsova, A., Brockhoff, P. B., \& Christensen, R. H. B. (2017). {lmerTest} package: Tests in linear mixed effects models. \emph{Journal of Statistical Software}, \emph{82}(13), 1--26. \url{https://doi.org/10.18637/jss.v082.i13}
-
-\bibitem[\citeproctext]{ref-R-here}
-Müller, K. (2020). \emph{Here: A simpler way to find your files}. \url{https://doi.org/10.32614/CRAN.package.here}
-
-\bibitem[\citeproctext]{ref-R-tibble}
-Müller, K., \& Wickham, H. (2023). \emph{Tibble: Simple data frames}. \url{https://doi.org/10.32614/CRAN.package.tibble}
-
-\bibitem[\citeproctext]{ref-R-base}
-R Core Team. (2024). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
-
-\bibitem[\citeproctext]{ref-R-broom}
-Robinson, D., Hayes, A., \& Couch, S. (2025). \emph{Broom: Convert statistical objects into tidy tibbles}. \url{https://doi.org/10.32614/CRAN.package.broom}
-
-\bibitem[\citeproctext]{ref-R-ggplot2}
-Wickham, H. (2016). \emph{ggplot2: Elegant graphics for data analysis}. Springer-Verlag New York. Retrieved from \url{https://ggplot2.tidyverse.org}
-
-\bibitem[\citeproctext]{ref-R-forcats}
-Wickham, H. (2023a). \emph{Forcats: Tools for working with categorical variables (factors)}. \url{https://doi.org/10.32614/CRAN.package.forcats}
-
-\bibitem[\citeproctext]{ref-R-stringr}
-Wickham, H. (2023b). \emph{Stringr: Simple, consistent wrappers for common string operations}. \url{https://doi.org/10.32614/CRAN.package.stringr}
-
-\bibitem[\citeproctext]{ref-R-tidyverse}
-Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., \ldots{} Yutani, H. (2019). Welcome to the {tidyverse}. \emph{Journal of Open Source Software}, \emph{4}(43), 1686. \url{https://doi.org/10.21105/joss.01686}
-
-\bibitem[\citeproctext]{ref-R-dplyr}
-Wickham, H., François, R., Henry, L., Müller, K., \& Vaughan, D. (2023). \emph{Dplyr: A grammar of data manipulation}. \url{https://doi.org/10.32614/CRAN.package.dplyr}
-
-\bibitem[\citeproctext]{ref-R-purrr}
-Wickham, H., \& Henry, L. (2025). \emph{Purrr: Functional programming tools}. \url{https://doi.org/10.32614/CRAN.package.purrr}
-
-\bibitem[\citeproctext]{ref-R-readr}
-Wickham, H., Hester, J., \& Bryan, J. (2024). \emph{Readr: Read rectangular text data}. \url{https://doi.org/10.32614/CRAN.package.readr}
-
-\bibitem[\citeproctext]{ref-R-tidyr}
-Wickham, H., Vaughan, D., \& Girlich, M. (2024). \emph{Tidyr: Tidy messy data}. \url{https://doi.org/10.32614/CRAN.package.tidyr}
-
-\end{CSLReferences}
 
 
 \clearpage
