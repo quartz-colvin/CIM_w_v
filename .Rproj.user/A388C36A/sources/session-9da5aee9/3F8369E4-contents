@@ -61,16 +61,24 @@ untidy_data <- read_csv(here("untidy_data", "cim-v-w-202410.csv"))
 
 In this paper, we will do a statistical analysis of [v] across a sample of islands in Cook Islands Māori (CIM). It is known that in many dialects and other varieties of Māori, this phoneme can be realized as [w] or [v]. This paper aims to take a statistical approach to this generalization. 
 
-This paper has four sub-questions to investigate. First, how does w~v duration vary by island and second, how does intensity for these phonemes vary by island. The other two questions are about identifying information about the surface forms of w~v by island. Specifically, we will model f0 and f2 to determine whether certain islands have a voiced phoneme realized. Finally, the f2 model will help us determine which islands have higher rates of [w]s surfacing and which have more [v]s surfacing.
+This paper has four sub-questions to investigate. First, how does the duration of w~v vary by island and second, how does intensity for w~v vary by island. The other two questions are about identifying information about the surface forms of w~v by island. Specifically, we will model f0 and f2 to determine whether certain islands realize a devoiced phoneme. Finally, an f2 model will help us determine which islands have higher rates of [w]s surfacing and which have more [v]s surfacing.
 
 ## 1.1 Background (CIM)
 
-Cook Islands Māori is an Eastern Polynesian language classified as *Endangered*. It is very closely related to Aotearoa Māori, but is definitely different from it. 
+Cook Islands Māori is an Eastern Polynesian language indigenous to the Cook Islands. CIM is classified as *Endangered* and has little intergenerational transmission. It is very closely related to Aotearoa Māori (New Zealand Māori), but is definitely different enough to be classified as a separate, but related language. 
 
-It is known across both Aotearoa (NZ) Māori and CIM that some speakers regularly pronounce [v] as [w], but it is not clear to anyone who does this more and what conditions it.
+It is known across both Aotearoa Māori and CIM speakers that some speakers regularly pronounce their [v]s as [w]s, but it is not clear to anyone who does this more and what conditions it.
 
-**???fill in**
+In hopes of answering this question, I will compare various aspects of w~v phonemes across a sample of the Cook Islands. The islands in this study are Atiu, Mauke, Penrhyn, and Rarotonga. 
 
+
+```{r, fig.align = "center", echo=FALSE, out.width="75%", fig.cap="Map of Cook Islands."}
+
+knitr::include_graphics("./figs/cook-islands-map.png")
+
+```
+
+In the map above, it's clear that Penrhyn is far in the northern group while the other three islands in our sample are part of the southern group. Lastly, it's relevant to note that Rarotongan CIM is considered to be the standard dialect of CIM and it hosts the capital of the Cook Islands. 
 
 # 2.0 Methods
 
