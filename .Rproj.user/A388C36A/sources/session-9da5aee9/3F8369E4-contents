@@ -4,10 +4,12 @@ shorttitle        : "Cook Islands Māori"
 
 author: 
   - name          : "Quartz Colvin"
-    affiliation   : "Rutgers University"
-    corresponding : no    # Define only one corresponding author
-    address       : "Postal address"
+    affiliation   : "1"
     email         : "quartz.colvin@rutgers.edu"
+
+affiliation:
+  - id            : "1"
+    institution   : "Rutgers University"
 
 keywords          : "keywords"
 wordcount         : "X"
@@ -74,16 +76,23 @@ In hopes of answering this question, I will compare various aspects of w~v phone
 
 ```{r, fig.align = "center", echo=FALSE, out.width="75%", fig.cap="Map of Cook Islands."}
 
-knitr::include_graphics("./figs/cook-islands-map.png")
+#knitr::include_graphics("./figs/cook-islands-map.png")
 
 ```
 
-In the map above, it's clear that Penrhyn is far in the northern group while the other three islands in our sample are part of the southern group. Lastly, it's relevant to note that Rarotongan CIM is considered to be the standard dialect of CIM and it hosts the capital of the Cook Islands. 
+In the map above, you can see that Penrhyn is far in the northern group while the other three islands in our sample are part of the southern group. Lastly, it's relevant to note that Rarotongan CIM is considered to be the standard dialect of CIM and it hosts the capital of the Cook Islands. 
 
 # 2.0 Methods
 
-**???fill in**
+The data for this project comes from a [**large digital corpus**](https://catalog.paradisec.org.au/collections/SN1) managed by [**PARADISEC**](https://www.paradisec.org.au/) (Nicholas 2012). Much of the data in this corpus was collected for Nicholas's dissertation work and while there is a *lot* of data, it is largely unorganized. 
 
+In order to make large corpora like this as useful for linguistic research or revitalization projects as possible, the data needs to be fully annotated and organized. Given the sheer amount of data, it would take humans too long to annotate it all, and thus a team of linguists and Cook Islanders have started working together to develop NLP tools to accelerate this documentation (Coto-Solano et al. 2018). 
+
+As part of this broader collaborative NLP project, they have trained an improved forced alignment tool for CIM. So far, forced-aligned data has been used to investigate the glottal stop phoneme (Coto-Solano et al. 2018), but this segmented data can be used to do all kinds of phonetic analysis. 
+
+The data in this paper comes from the PARADESEC corpus and was aligned by phoneme, and then corrected. The final Praat TextGrids are also available in the corpus. All acoustic measurements for these phonemes were extracted from Praat. 
+
+To reiterate, all of the data collection and processing to a usable format for this project was not done by me. Full credit for all of those previous steps goes to the linguists who worked on data collection and processing the data (Coto-Solano et al. 2018).
 
 
 
@@ -307,7 +316,7 @@ The p-values for each island are as follows. Atiu's p-value = 0.00161, Mauke's p
 
 ## 4.3 Voicing by island 
 
-Moving on to the formant questions, first we will investigate how voicing of w~v differs across these four islands. 
+Moving on to the formant questions, first we will investigate how voicing of w~v differs across these four islands. In acoustic measurements, an F0 lower than 80 Hz is considered voiceless. 
 
 This time, we tidy the raw data set in a similar way but with one additional step. Since we have f0 values at three different intervals of the same morpheme, if we were to put all of those formant values in a new column and the percentage in another new column, then it would fabricate 3 times as many tokens that were not elicited from the speakers. 
 
@@ -415,7 +424,7 @@ The p-values for each island in this model are as follows. Atiu's p-value = 0.00
 
 ## 4.4 w~v distribution by island
 
-Finally we turn to the main research question: is there a correlation between island and how many [w] tokens surface? 
+Finally we turn to the main research question: is there a correlation between island and how many [w] tokens surface? The acoustic measurement indicating a [w] is **less than 850 Hz.**
 
 For this question, we tidy the raw data set once again so that it only has data for "v", speaker, island, word, and f2 values. 
 
@@ -502,13 +511,194 @@ mod_f2 <- lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2)
 The p-values for each island in this model are as follows. Atiu's p-value = 1.52e-05, Mauke's p-value = 0.02190, Penrhyn's p-value = 0.02162, and Rarotonga's p-value = 0.00626. 
 
 
-## 5.1 Reporting the results
+## 5.1 Results
 
-**FILL IN???**
+Recall that we had the following p-values in each model for each island. 
+
+```{r}
+#| label: p-vals-table
+#| echo: false
+#| message: false
+#| warning: false
+
+p_vals <- data.frame(
+  Island = c("Atiu", "Mauke", "Penrhyn", "Rarotonga"),
+  Duration = c(0.00225, 0.90982, 0.32459, 0.25014),
+  Intensity = c(0.00161, 0.84133, 0.62670, 0.86632),
+  F0 = c(0.00702, 0.43464, 0.93276, 0.14965),
+  F2 = c(1.52e-05, 0.02190, 0.02162, 0.00626)
+)
+
+knitr::kable(p_vals, align = "c", caption = "P-values from each model.")
+
+```
+
+In the duration model, only Atiu did *not* have a statistically significant (> 0.05) p-value (0.00225), but the other three islands had statistically significant p-values. Penrhyn and Rarotonga had very similar p-values but Mauke had a significantly higher p-value. 
+
+In the intensity model, again, all of the islands had statistically significant p-values (> 0.05) except Atiu. The highest p-values amongst the other three islands was for Make and Rarotonga. 
+
+The model for F0 revealed that each island except for Atiu had a significant p-value. Penrhyn had the highest p-value in the F0 column. 
+
+Recall that an F0 value lower than **100 Hz** indicates that the phoneme is voiceless. We can tidy the F0 dataset once again to add a new column stating whether the w~v in that row surfaces as voiced or voiceless. The counts of voiced and voiceless tokens for each island are summarized in the following table.
+
+```{r}
+#| label: voicing-stats
+#| echo: false
+#| message: false
+#| warning: false
+
+voicing <- tidy_f0 |> 
+select(island, word, f0) |> 
+  mutate(voiced = if_else(
+    condition = f0 > 100,
+    true = "voiced",
+    false = "voiceless"
+    ) 
+  ) 
+
+```
+
+
+```{r}
+#| label: glimpse-voicing
+#| echo: false
+#| message: false
+#| warning: false
+
+#knitr::kable(head(voicing))
+
+```
+
+```{r}
+#| label: voicing-freq
+#| echo: false
+
+voicing_counts <- voicing |>
+  group_by(island, voiced) |>
+  summarise(total_count=n(),
+            .groups = 'drop') |>
+  mutate(freq = paste0(round(total_count))
+  ) |>
+  select(island, voiced, freq) |>
+  drop_na() |>
+  t()
+
+knitr::kable(voicing_counts)
+
+```
+
+With the count information, we can manually calculate the percentages of voiceless w~v tokens surfacing in each group (island) of the data set. 
+
+```{r}
+#| label: voiceless-percentages
+#| echo: false
+#| message: false
+#| warning: false
+  
+mauke_voiceless <- (14/(404 + 14 + 34)) * 100
+  
+
+pen_voiceless <- (1/(167 + 1 + 2)) * 100
+  
+
+raro_voiceless <- (2/(139 + 2 + 15)) * 100
+
+```
+
+So, to answer the voicing question, only Atiu had zero voiceless tokens surfacing. Mauke had a voiceless surface form `r mauke_voiceless`% of the time, which was the highest percentage of voiceless surface forms in the data set. Penrhyn and Rarotonga had similar rates of voiceless surface forms, with voiceless phonemes surfacing `r pen_voiceless`% of the time for Penrhyn, and `r raro_voiceless`% of the time for Rarotonga. 
+
+
+
+
+
+Finally, the F2 model revealed no statistically significant differences in F2 values between these four islands, as all of the p-values in the F2 column are less than 0.05.
+
+The final research question for us to address is the w~v question. An F2 value **less than 850 Hz** is taken to indicate a [w] phoneme on the surface instead of a [v]. To answer this question in percentages, we can create an additional column that states whether F2 is greater or less than 850 Hz. If F2 is less than 850, the value in the new column is "w", and if it is greater than 850, the value in the new column is "v". 
+
+Once we have the counts of "w" and "v" surface forms for each island, we can calculate the percentages. The table with the frequency column is shown below. 
+
+
+
+```{r}
+#| label: final-form
+#| echo: false
+#| message: false
+#| warning: false
+
+wv_dat <- tidy_f2 |> 
+  select(island, word, f2) |> 
+  mutate(surface_form = if_else(
+    condition = f2 > 850,
+    true = "v",
+    false = "w"
+    ) 
+  ) 
+
+```
+
+
+```{r}
+#| label: glimpse-wv
+#| echo: false
+#| message: false
+#| warning: false
+
+#knitr::kable(head(wv_dat))
+
+```
+
+```{r}
+#| label: w-or-v-final
+#| echo: false
+
+freq_table <- wv_dat |>
+  group_by(island, surface_form) |>
+  summarise(total_count=n(),
+            .groups = 'drop') |>
+  mutate(freq = paste0(round(total_count))
+  ) |>
+  select(island, surface_form, freq) |>
+  drop_na() |>
+  t()
+
+knitr::kable(freq_table)
+
+```
+
+```{r}
+#| label: real-percentages
+#| echo: false
+#| message: false
+#| warning: false
+
+atiu_w <- (21/(97 + 21)) * 100
+
+  
+mauke_w <- (26/(424 + 26 + 2)) * 100
+  
+
+pen_w <- (7/(163 + 7)) * 100
+  
+
+raro_w <- (5/(151 + 5)) * 100
+
+```
+
+I manually calculated the percentages of [w]s surfacing in each group (island) based on the frequencies in the table above. The percent of [w]s in Atiu was `r atiu_w`%, `r mauke_w`% for Mauke, `r pen_w`% for Penrhyn and `r raro_w`% for Rarotonga.
+
+
 
 # 6.0 Conclusion
 
-**???fill in**
+Through doing this statistical analysis of w~v tokens across Atiu, Mauke, Penrhyn, and Rarotonga, we found that duration, intensity, and F0 by island are statistically significant for all islands except Atiu. Duration was the most significant for Mauke, and intensity and F0 were the most significant for Penrhyn. 
+
+The F2 model revealed no statistical significance between the F2 values and which island a speaker was from. 
+
+However, to answer the voiced or voiceless question, we calculated percentages that show that all islands except Atiu had voiceless surface forms for w~v, with Mauke having the highest percentage of `r mauke_voiceless`%. 
+
+In order to answer the final question, which islands have more [w] surface forms, we also calculated percentages. These percentages showed that all of these four islands had [w] phonemes realized, but the highest percentage of [w]s surfacing was in Atiu, where [v] was realized as [w] `r atiu_w`% of the time. 
+
+
 
 # References
 
@@ -519,6 +709,16 @@ The p-values for each island in this model are as follows. Atiu's p-value = 1.52
 ```
 
 
+\begingroup
+
+Coto-Solano, Nicholas \& Wray. 2018. Development of Natural Language Processing Tools for Cook Islands Māori. In *Proceedings of Australasian Language Technology Association Workshop*, pages 26-33.
+
+
+Nicholas, Sally Akevai (collector), 2012. Te Vairanga Tuatua o te Te Reo Māori o te Pae Tonga: Cook Islands Māori (Southern dialects) . Collection SN1 at catalog.paradisec.org.au [Open Access]. https://dx.doi.org/10.4225/72/56E9793466307
+
+Thieberger \& Barwick. 2012. Keeping records of language diversity in melanesia, the pacific and regional archive for digital sources in endangered cultures (paradisec). *Melanesian languages on the edge of Asia: Challenges for the 21st Century,* pages 239-53.
+
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}
 
+\endgroup
