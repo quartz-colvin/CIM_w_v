@@ -1,30 +1,72 @@
-\documentclass[a4paper,11pt]{article}
-\usepackage[margin=1in]{geometry}
-
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-
-\usepackage{graphicx}%
-\usepackage{multirow}%
-\usepackage{amsmath,amssymb,amsfonts}%
-\usepackage{amsthm}%
-\usepackage{mathrsfs}%
-\usepackage[title]{appendix}%
-\usepackage{xcolor}%
-
+\documentclass[
+  english,
+  ,man,floatsintext]{apa6}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+\usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
 \newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-
-\usepackage{textcomp}%
-\usepackage{manyfoot}%
-\usepackage{booktabs}%
-\usepackage{algorithm}%
-\usepackage{algorithmicx}%
-\usepackage{algpseudocode}%
-\usepackage{listings}%
-\usepackage{framed}% 
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
 \definecolor{shadecolor}{RGB}{248,248,248}
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
 \newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
@@ -59,85 +101,181 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx}
-%%%%
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\ifLuaTeX
+  \usepackage[english]{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
 
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
 
-\usepackage{tipa}
-\usepackage{fge}
-\usepackage{tipx}
-\usepackage{multicol}
-\usepackage{soul}
-\usepackage{tikz}
-\usepackage{tikz-qtree}
-\usepackage{fge}
- \usepackage{qtree}
-\usepackage[utf8]{inputenc}
-\usepackage{mathptmx}
-\usepackage{leipzig}
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\centering\begin{threeparttable}}
+%   {\end{threeparttable}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\centering\begin{ThreePartTable}}{\end{ThreePartTable}\end{landscape}}
 
-\usepackage{hyperref}
-\usepackage{gb4e}
-\makeglossaries
-%%%%
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
 
-\usepackage{gb4e}
-\usepackage{cite}
-%\usepackage[sectionbib]{natbib}
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
 
-\newcommand{\secref}[1]{\S\ref{#1}}
+% Overwrite redefinition of paragraph and subparagraph by the default LaTeX template
+% See https://github.com/crsh/papaja/issues/292
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\parindent}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries\itshape\typesectitle}}
 
+\renewcommand{\subparagraph}[1]{\@startsection{subparagraph}{5}{1em}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-\z@\relax}%
+  {\normalfont\normalsize\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
+\makeatother
 
-\raggedbottom
+\makeatletter
+\usepackage{etoolbox}
+\patchcmd{\maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\patchcmd{\maketitle}
+  {\section{\protect\normalfont{\@title}}}
+  {\section*{\protect\normalfont{\@title}}}
+  {}{\typeout{Failed to patch title.}}
+\makeatother
 
-
+\usepackage{xpatch}
+\makeatletter
+\xapptocmd\appendix
+  {\xapptocmd\section
+    {\addcontentsline{toc}{section}{\appendixname\ifoneappendix\else~\theappendix\fi: #1}}
+    {}{\InnerPatchFailed}%
+  }
+{}{\PatchFailed}
+\makeatother
+\keywords{keywords\newline\indent Word count: X}
+\usepackage{csquotes}
+\usepackage[titles]{tocloft}
+\cftpagenumbersoff{figure}
+\renewcommand{\cftfigpresnum}{\itshape\figurename\enspace}
+\renewcommand{\cftfigaftersnum}{.\space}
+\setlength{\cftfigindent}{0pt}
+\setlength{\cftafterloftitleskip}{0pt}
+\settowidth{\cftfignumwidth}{Figure 10.\qquad}
+\cftpagenumbersoff{table}
+\renewcommand{\cfttabpresnum}{\itshape\tablename\enspace}
+\renewcommand{\cfttabaftersnum}{.\space}
+\setlength{\cfttabindent}{0pt}
+\setlength{\cftafterloftitleskip}{0pt}
+\settowidth{\cfttabnumwidth}{Table 10.\qquad}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Variation of {[}v{]} in Cook Islands Māori},
+  pdfauthor={Quartz Colvin1},
+  pdflang={en-EN},
+  pdfkeywords={keywords},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
 
 \title{Variation of {[}v{]} in Cook Islands Māori}
-\author{Quartz Colvin}
+\author{Quartz Colvin\textsuperscript{1}}
 \date{}
 
+
+\shorttitle{Cook Islands Māori}
+
+\affiliation{\vspace{0.5cm}\textsuperscript{1} Rutgers University}
 
 \begin{document}
 \maketitle
 
-\section{Introduction}\label{introduction}
+\section{1.0 Introduction}\label{introduction}
 
 In this paper, we will do a statistical analysis of {[}v{]} across a sample of islands in Cook Islands Māori (CIM). It is known that in many dialects and other varieties of Māori, this phoneme can be realized as {[}w{]} or {[}v{]}. This paper aims to take a statistical approach to this generalization.
 
 This paper has four sub-questions to investigate. First, how does the duration of w\textasciitilde v vary by island and second, how does intensity for w\textasciitilde v vary by island. The other two questions are about identifying information about the surface forms of w\textasciitilde v by island. Specifically, we will model f0 and f2 to determine whether certain islands realize a devoiced phoneme. Finally, an f2 model will help us determine which islands have higher rates of {[}w{]}s surfacing and which have more {[}v{]}s surfacing.
 
-\subsection{Background (CIM)}\label{background-cim}
+\subsection{1.1 Background (CIM)}\label{background-cim}
 
 Cook Islands Māori is an Eastern Polynesian language indigenous to the Cook Islands. CIM is classified as \emph{Endangered} and has little intergenerational transmission. It is very closely related to Aotearoa Māori (New Zealand Māori), but is definitely different enough to be classified as a separate, but related language.
 
-It is known across both Aotearoa Māori and CIM speakers that some speakers regularly pronounce their {[}v{]}s as {[}w{]}s, but it is not clear to anyone who does this more and what conditions it. In hopes of answering this question, I will compare various aspects of w\textasciitilde v phonemes across a sample of the Cook Islands. The islands in this study are Atiu, Mauke, Penrhyn, and Rarotonga.
+It is known across both Aotearoa Māori and CIM speakers that some speakers regularly pronounce their {[}v{]}s as {[}w{]}s, but it is not clear to anyone who does this more and what conditions it.
 
-\begin{figure}[!htbp]
+In hopes of answering this question, I will compare various aspects of w\textasciitilde v phonemes across a sample of the Cook Islands. The islands in this study are Atiu, Mauke, Penrhyn, and Rarotonga.
 
-{\centering \includegraphics[width=0.4\linewidth]{./figs/cook-islands-map} 
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{./figs/cook-islands-map} 
 
 }
-\caption{Map of Cook Islands.}\label{fig:unnamed-chunk-1}
+
+\caption{ }\label{fig:unnamed-chunk-1}
 \end{figure}
 
 In the map above, you can see that Penrhyn is far in the northern group while the other three islands in our sample are part of the southern group. Lastly, it's relevant to note that Rarotongan CIM is considered to be the standard dialect of CIM and it hosts the capital of the Cook Islands.
 
-\section{Methods}\label{methods}
+\section{2.0 Methods}\label{methods}
 
 The data for this project comes from a \href{https://catalog.paradisec.org.au/collections/SN1}{\textbf{large digital corpus}} managed by \href{https://www.paradisec.org.au/}{\textbf{PARADISEC}} (Nicholas 2012). Much of the data in this corpus was collected for Nicholas's dissertation work and while there is a \emph{lot} of data, it is largely unorganized.
 
 In order to make large corpora like this as useful for linguistic research or revitalization projects as possible, the data needs to be fully annotated and organized. Given the sheer amount of data, it would take humans too long to annotate it all, and thus a team of linguists and Cook Islanders have started working together to develop NLP tools to accelerate this documentation (Coto-Solano et al.~2018).
 
-As part of this broader collaborative NLP project, they have trained an improved forced alignment tool for CIM. So far, forced-aligned data has been used to investigate the glottal stop phoneme (Coto-Solano et al.~2018), but this segmented data can be used to do all kinds of phonetic analysis. The data in this paper comes from the PARADESEC corpus and was aligned by phoneme, and then corrected. The final Praat TextGrids are also available in the corpus. All acoustic measurements for these phonemes were extracted from Praat.
+As part of this broader collaborative NLP project, they have trained an improved forced alignment tool for CIM. So far, forced-aligned data has been used to investigate the glottal stop phoneme (Coto-Solano et al.~2018), but this segmented data can be used to do all kinds of phonetic analysis.
+
+The data in this paper comes from the PARADESEC corpus and was aligned by phoneme, and then corrected. The final Praat TextGrids are also available in the corpus. All acoustic measurements for these phonemes were extracted from Praat.
 
 To reiterate, all of the data collection and processing to a usable format for this project was not done by me. Full credit for all of those previous steps goes to the linguists who worked on data collection and processing the data (Coto-Solano et al.~2018).
 
-\section{Data}\label{data}
+\section{3.0 Data}\label{data}
 
 The following large data set has many columns. Here I show a preview of the data set and then discuss which columns will be relevant to the analysis later in the paper.
 
-\begin{figure}[!htbp]
+\begin{figure}
 
-{\centering \includegraphics[width=0.7\linewidth]{./figs/raw\_data} 
+{\centering \includegraphics[width=0.6\linewidth]{./figs/raw_data} 
 
 }
 
@@ -146,22 +284,26 @@ The following large data set has many columns. Here I show a preview of the data
 
 First, note that there is no `id' column but there is a column for the speaker's initials. I will use speaker in place of `id' because that is what was in this original data set. The `island' column states what island that speaker is from. This data only contains data from the four islands Atiu, Mauke, Penrhyn and Rarotonga. Duration corresponds to the total duration of the phoneme, and intensity is measured at the midpoint of the phoneme.
 
-F0 values were taken at 20\%, 50\% and 80\% of each phoneme's total duration. Later, we will opt to use only the F0 values at 50\%, but that will be discussed more later. Finally, F2\_midpoint is f2 measured in Hz at the midpoint of that phoneme. All of the other columns are either straight-forward information or will be irrelevant for this paper.
+F0 values were taken at 20\%, 50\% and 80\% of each phoneme's total duration. Later, we will opt to use only the F0 values at 50\%, but that will be discussed more later. Finally, F2\_midpoint is f2 measured in Hz at the midpoint of that phoneme.
 
-\section{Analysis}\label{analysis}
+All of the other columns are either straight-forward information or will be irrelevant for this paper.
+
+\section{4.0 Analysis}\label{analysis}
 
 This section readdresses the main questions about the w\textasciitilde v alternation. First, how does duration differ by island and second, how does intensity vary by island? Finally, do any islands have regular occurrence of {[}w{]} instead of {[}v{]} surfacing. For this final question, we will compare f0 and f2 separately.
 
-Note that in all of my models, I did not control for where w\textasciitilde v occurs in the word, since I am looking at general frequency information and not doing a phonological analysis of specific environments in which {[}w{]} or {[}v{]} occurs more. Another important thing to note is that for each island, there were different numbers of speakers contributing to the data set. All of the Atiu data came from one speaker and it was the same for Penrhyn. The Mauke data came from four speakers and the Rarotonga data came from five speakers. Since there are different numbers of speakers from each of these islands, the models I will use to investigate each question will be linear mixed models.
+Note that in all of my models, I did not control for where w\textasciitilde v occurs in the word, since I am looking at general frequency information and not doing a phonological analysis of specific environments in which {[}w{]} or {[}v{]} occurs more. Another important thing to note is that for each island, there were different numbers of speakers contributing to the data set. All of the Atiu data came from one speaker and it was the same for Penrhyn. The Mauke data came from four speakers and the Rarotonga data came from five speakers.
 
-\subsection{Duration by island}\label{duration-by-island}
+Since there are different numbers of speakers from each of these islands, the models I will use to investigate each question will be linear mixed models.
 
-The first step of comparing duration of w\textasciitilde v across these four islands is to make a smaller, tidy data set that only contains the relevant information. Below, I filter the data so that it only contains rows with the ``v'' phoneme. Then I arrange it by island and then by word, and I select only the columns ``speaker'', ``island'', ``word'' and duration. Finally, I save this filtered data set as a new csv file. After we have done this tidying process, the duration data set looks like this.
+\subsection{4.1 Duration by island}\label{duration-by-island}
 
+The first step of comparing duration of w\textasciitilde v across these four islands is to make a smaller, tidy data set that only contains the relevant information.
 
-\begin{table}[!htbp]
-\centering
-\caption{Duration tidy data.}
+Below, I filter the data so that it only contains rows with the ``v'' phoneme. Then I arrange it by island and then by word, and I select only the columns ``speaker'', ``island'', ``word'' and duration. Finally, I save this filtered data set as a new csv file.
+
+The tidied duration dataset looks like this.
+
 \begin{tabular}{l|l|l|r}
 \hline
 speaker & island & word & duration\\
@@ -179,17 +321,16 @@ TA & Atiu & ava & 0.05\\
 TA & Atiu & ava & 0.13\\
 \hline
 \end{tabular}
-\end{table}
 
-For a visual comparison, we will look at boxplots comparing duration across these four islands. 
+For a visual comparison, we will look at boxplots comparing duration across these four islands.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\linewidth]{D2\_CIM\_files/figure-latex/print-duration-plot-1} 
+{\centering \includegraphics[width=0.5\linewidth]{AFLA_manuscript_files/figure-latex/print-duration-plot-1} 
 
 }
 
-\caption{Duration boxplot}\label{fig:print-duration-plot}
+\caption{ }\label{fig:print-duration-plot}
 \end{figure}
 
 The boxplot shows that average (mean) durations were pretty similar across these three islands. But for some reason, Penrhyn had a much larger range of durations than the other islands.
@@ -202,13 +343,12 @@ Now that we have an idea of what the general differences and similarities are fo
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Intensity by island}\label{intensity-by-island}
+\subsection{4.2 Intensity by island}\label{intensity-by-island}
 
-Next is the intensity comparison across the four islands. Starting from the raw data set, we must filter it again so that it only has instances of the ``v'' phoneme and we filter everything except the ``speaker'', ``island'', ``word'', and ``intensity'' columns. Once the new data set has been made, it looks roughly like the following table, but extended of course.
+Next is the intensity comparison across the four islands. Starting from the raw data set, we must filter it again so that it only has instances of the ``v'' phoneme and we filter everything except the ``speaker'', ``island'', ``word'', and ``intensity'' columns. The tidying process is shown in the code chunk here.
 
-\begin{table}[!htbp]
-\centering
-\caption{Duration tidy data.}
+Once the new data set has been made, it looks roughly like the following table, but extended of course.
+
 \begin{tabular}{l|l|l|r}
 \hline
 speaker & island & word & intensity\\
@@ -226,20 +366,21 @@ TA & Atiu & ava & 49.59224\\
 TA & Atiu & ava & 53.07335\\
 \hline
 \end{tabular}
-\end{table}
 
-In the same way we did for the duration question, we will first look at a boxplot to visually see any clear differences in intensity across the Cook Islands. The code chunk to make the plot is below, and then the actual plot is printed below it.
+In the same way we did for the duration question, we will first look at a boxplot to visually see any clear differences in intensity across the Cook Islands.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\linewidth]{D2\_CIM\_files/figure-latex/print-intensity-plot-1} 
+{\centering \includegraphics[width=0.75\linewidth]{AFLA_manuscript_files/figure-latex/print-intensity-plot-1} 
 
 }
 
-\caption{Intensity boxplot}\label{fig:print-intensity-plot}
+\caption{ }\label{fig:print-intensity-plot}
 \end{figure}
 
-Initially, it is clear that Penrhyn has the lowest mean intensity for w\textasciitilde v. Mauke and Rarotonga have nearly the same mean intensity, and Atiu's mean is slighly lower, but not as low as Penrhyn's mean. Now that we know the general patterns, we can fit our linear mixed effects model. Dur to the same reasons as before, I model speaker and word as mixed effects in the intensity by island model. The code chunk below shows how I fit the model in R.
+Initially, it is clear that Penrhyn has the lowest mean intensity for w\textasciitilde v. Mauke and Rarotonga have nearly the same mean intensity, and Atiu's mean is slighly lower, but not as low as Penrhyn's mean.
+
+Now that we know the general patterns, we can fit our linear mixed effects model. Dur to the same reasons as before, I model speaker and word as mixed effects in the intensity by island model. The code chunk below shows how I fit the model in R.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -247,19 +388,16 @@ Initially, it is clear that Penrhyn has the lowest mean intensity for w\textasci
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Voicing by island}\label{voicing-by-island}
+\subsection{4.3 Voicing by island}\label{voicing-by-island}
 
 Moving on to the formant questions, first we will investigate how voicing of w\textasciitilde v differs across these four islands. In acoustic measurements, an F0 lower than 80 Hz is considered voiceless.
 
 This time, we tidy the raw data set in a similar way but with one additional step. Since we have f0 values at three different intervals of the same morpheme, if we were to put all of those formant values in a new column and the percentage in another new column, then it would fabricate 3 times as many tokens that were not elicited from the speakers.
 
-In order to limit this autocorrelation issue, I chose to only keep f0 values at the 50\% interval of the phoneme. I chose the 50\% interval because the middle of the duration seemed like the smartest choice to represent the average f0 value across the phoneme's duration. The code chunk below shows how I tidied this mini-data-set to answer the voicing question.
+In order to limit this autocorrelation issue, I chose to only keep f0 values at the 50\% interval of the phoneme. I chose the 50\% interval because the middle of the duration seemed like the smartest choice to represent the average f0 value across the phoneme's duration.
 
 Once we have made this new, tidy data set, it looks like this. Again, if I showed the full table, it would have more than this one word and this one island. This is just the top few rows of the sorted table.
 
-\begin{table}[!htbp]
-\centering
-\caption{F0 tidy data}
 \begin{tabular}{l|l|l|r|r}
 \hline
 speaker & island & word & f0 & duration\\
@@ -277,20 +415,21 @@ TA & Atiu & ava & 118.2318 & 0.05\\
 TA & Atiu & ava & 142.7506 & 0.13\\
 \hline
 \end{tabular}
-\end{table}
 
-This time, to compare f0 across the islands visually, we can plot this data onto a scatterplot. As you can see, I created an individual facet for each island and each color represents data from a particular speaker.
+This time, to compare f0 across the islands visually, we can plot this data onto a scatterplot.
+
+As you can see, I created an individual facet for each island and each color represents data from a particular speaker.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.75\linewidth]{D2\_CIM\_files/figure-latex/print-f0-plot-1} 
+{\centering \includegraphics[width=0.9\linewidth]{AFLA_manuscript_files/figure-latex/print-f0-plot-1} 
 
 }
 
-\caption{F0 by island}\label{fig:print-f0-plot}
+\caption{ }\label{fig:print-f0-plot}
 \end{figure}
 
-It's clear that the most drastic slope is in the Penrhyn plot, and the data for the islands with more speakers are much more spread out across the plot. To formally compare these different variables, we can again use a linear mixed effects model to see how f0 varies across these four Cook Islands. The model fitting is shown in the code chunk below.
+It is clear that the most drastic slope is in the Penrhyn plot, and the data for the islands with more speakers are much more spread out across the plot. To formally compare these different variables, we can again use a linear mixed effects model to see how f0 varies across these four Cook Islands. The model fitting is shown in the code chunk below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -298,15 +437,14 @@ It's clear that the most drastic slope is in the Penrhyn plot, and the data for 
 \end{Highlighting}
 \end{Shaded}
 
+\subsection{4.4 w\textasciitilde v distribution by island}\label{wv-distribution-by-island}
 
-\subsection{w \textasciitilde v distribution by island}\label{wv-distribution-by-island}
+Finally we turn to the main research question: is there a correlation between island and how many {[}w{]} tokens surface? The acoustic measurement indicating a {[}w{]} is \textbf{less than 850 Hz.}
 
-Finally we turn to the main research question: is there a correlation between island and how many {[}w{]} tokens surface? The acoustic measurement indicating a {[}w{]} is \textbf{less than 850 Hz.} For this question, we tidy the raw data set once again so that it only has data for ``v'', speaker, island, word, and f2 values. Once the data has been tidied, it generally looks like this.
+For this question, we tidy the raw data set once again so that it only has data for ``v'', speaker, island, word, and f2 values.
 
+Once the data has been tidied, it generally looks like this.
 
-\begin{table}[!htbp]
-\centering
-\caption{F2 tidy data.}
 \begin{tabular}{l|l|l|r}
 \hline
 speaker & island & word & f2\\
@@ -324,17 +462,16 @@ TA & Atiu & ava & 984.4541\\
 TA & Atiu & ava & 896.0441\\
 \hline
 \end{tabular}
-\end{table}
 
 To visually compare the f2 values across these islands, we generate another boxplot.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\linewidth]{D2\_CIM\_files/figure-latex/print-f2-plot-1} 
+{\centering \includegraphics[width=0.75\linewidth]{AFLA_manuscript_files/figure-latex/print-f2-plot-1} 
 
 }
 
-\caption{F2 boxplot}\label{fig:print-f2-plot}
+\caption{ }\label{fig:print-f2-plot}
 \end{figure}
 
 From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The other three islands had more similar means, but Mauke and Penrhyn had some instances of w\textasciitilde v that had extremely high F2 measurements. Regardless, the boxes for each island look different, so we know what to expect when we fit a linear mixed effects model. The code chunk for fitting this model is below.
@@ -345,18 +482,10 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 \end{Highlighting}
 \end{Shaded}
 
+\subsection{5.1 Results}\label{results}
 
+Model summary table for \textbf{duration.}
 
-
-
-
-\subsection{Results}\label{results}
-
-
-\textcolor{red}{INTRO???}
-
-\begin{table}[!htbp]
-\centering
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
   & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
@@ -370,15 +499,9 @@ dur\_add & 6 & -3397.532 & -3368.745 & 1704.766 & -3409.532 & 31.72802 & 1 & 0\\
 mod\_dur & 7 & -3433.078 & -3399.493 & 1723.539 & -3447.078 & 37.54595 & 1 & 0\\
 \hline
 \end{tabular}
-\caption{Model summary for duration.}
-\end{table}
 
-\textcolor{red}{SUMMARIZE???}
+Model summary for \textbf{intensity.}
 
-
-\begin{table}[!htbp]
-\centering
-\small
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
   & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
@@ -392,14 +515,9 @@ intensity\_add & 6 & 5977.433 & 6006.207 & -2982.717 & 5965.433 & 524.83480 & 1 
 mod\_intense & 7 & 5902.351 & 5935.921 & -2944.176 & 5888.351 & 77.08165 & 1 & 0\\
 \hline
 \end{tabular}
-\caption{Model summary for intensity.}
-\end{table}
 
-\textcolor{red}{SUMMARIZE???}
+Model summary for voicing (f0).
 
-
-\begin{table}[!htbp]
-\centering
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
   & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
@@ -413,17 +531,9 @@ f0\_add & 6 & 8153.415 & 8181.822 & -4070.707 & 8141.415 & 91.78646 & 1 & 0.00e+
 mod\_f0 & 7 & 8139.651 & 8172.793 & -4062.826 & 8125.651 & 15.76368 & 1 & 7.18e-05\\
 \hline
 \end{tabular}
-\caption{Model summary for f0}
-\end{table}
 
+Model summary for f2.
 
-\textcolor{red}{SUMMARIZE???}
-
-
-
-
-\begin{table}[!htbp]
-\centering
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
   & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
@@ -437,18 +547,13 @@ f2\_add & 6 & 13394.49 & 13423.27 & -6691.246 & 13382.49 & 1.987579 & 1 & 0.1585
 mod\_f2 & 7 & 13330.46 & 13364.03 & -6658.229 & 13316.46 & 66.034384 & 1 & 0.0000000\\
 \hline
 \end{tabular}
-\caption{Model summary for f2.}
-\end{table}
 
-\textcolor{red}{SUMMARIZE???}
-
-
-
-
+\textbf{\emph{SUMMARIZE}}
 
 Recall that we had the following p-values in each model for each island.
 
-\begin{table}[!htbp]
+\begin{table}
+
 \caption{\label{tab:p-vals-table}P-values from each model.}
 \centering
 \begin{tabular}[t]{c|c|c|c|c}
@@ -466,13 +571,14 @@ Rarotonga & 0.25014 & 0.86632 & 0.14965 & 0.0062600\\
 \end{tabular}
 \end{table}
 
-In the duration model, only Atiu did \emph{not} have a statistically significant (\textgreater{} 0.05) p-value (0.00225), but the other three islands had statistically significant p-values. Penrhyn and Rarotonga had very similar p-values but Mauke had a significantly higher p-value. In the intensity model, again, all of the islands had statistically significant p-values (\textgreater{} 0.05) except Atiu. The highest p-values amongst the other three islands was for Make and Rarotonga. The model for F0 revealed that each island except for Atiu had a significant p-value. Penrhyn had the highest p-value in the F0 column.
+In the duration model, only Atiu did \emph{not} have a statistically significant (\textgreater{} 0.05) p-value (0.00225), but the other three islands had statistically significant p-values. Penrhyn and Rarotonga had very similar p-values but Mauke had a significantly higher p-value.
+
+In the intensity model, again, all of the islands had statistically significant p-values (\textgreater{} 0.05) except Atiu. The highest p-values amongst the other three islands was for Make and Rarotonga.
+
+The model for F0 revealed that each island except for Atiu had a significant p-value. Penrhyn had the highest p-value in the F0 column.
 
 Recall that an F0 value lower than \textbf{100 Hz} indicates that the phoneme is voiceless. We can tidy the F0 dataset once again to add a new column stating whether the w\textasciitilde v in that row surfaces as voiced or voiceless. The counts of voiced and voiceless tokens for each island are summarized in the following table.
 
-\begin{table}[!htbp]
-\centering
-\caption{Voiced and voiceless phoneme counts.}
 \begin{tabular}{l|l|l|l|l|l|l|l}
 \hline
 island & Atiu & Mauke & Mauke & Penrhyn & Penrhyn & Rarotonga & Rarotonga\\
@@ -482,9 +588,10 @@ voiced & voiced & voiced & voiceless & voiced & voiceless & voiced & voiceless\\
 freq & 114 & 404 & 14 & 167 & 1 & 139 & 2\\
 \hline
 \end{tabular}
-\end{table}
 
-With the count information, we can manually calculate the percentages of voiceless w\textasciitilde v tokens surfacing in each group (island) of the data set. So, to answer the voicing question, only Atiu had zero voiceless tokens surfacing. Mauke had a voiceless surface form 3.10\% of the time, which was the highest percentage of voiceless surface forms in the data set. Penrhyn and Rarotonga had similar rates of voiceless surface forms, with voiceless phonemes surfacing 0.59\% of the time for Penrhyn, and 1.28\% of the time for Rarotonga.
+With the count information, we can manually calculate the percentages of voiceless w\textasciitilde v tokens surfacing in each group (island) of the data set.
+
+So, to answer the voicing question, only Atiu had zero voiceless tokens surfacing. Mauke had a voiceless surface form 3.10\% of the time, which was the highest percentage of voiceless surface forms in the data set. Penrhyn and Rarotonga had similar rates of voiceless surface forms, with voiceless phonemes surfacing 0.59\% of the time for Penrhyn, and 1.28\% of the time for Rarotonga.
 
 Finally, the F2 model revealed no statistically significant differences in F2 values between these four islands, as all of the p-values in the F2 column are less than 0.05.
 
@@ -492,9 +599,6 @@ The final research question for us to address is the w\textasciitilde v question
 
 Once we have the counts of ``w'' and ``v'' surface forms for each island, we can calculate the percentages. The table with the frequency column is shown below.
 
-\begin{table}[!htbp]
-\centering
-\caption{Frequency counts.}
 \begin{tabular}{l|l|l|l|l|l|l|l|l}
 \hline
 island & Atiu & Atiu & Mauke & Mauke & Penrhyn & Penrhyn & Rarotonga & Rarotonga\\
@@ -504,30 +608,34 @@ surface\_form & v & w & v & w & v & w & v & w\\
 freq & 97 & 21 & 424 & 26 & 163 & 7 & 151 & 5\\
 \hline
 \end{tabular}
-\end{table}
 
 I manually calculated the percentages of {[}w{]}s surfacing in each group (island) based on the frequencies in the table above. The percent of {[}w{]}s in Atiu was 17.80\%, 5.75\% for Mauke, 4.12\% for Penrhyn and 3.21\% for Rarotonga.
 
-\section{Conclusion}\label{conclusion}
+\section{6.0 Conclusion}\label{conclusion}
 
 Through doing this statistical analysis of w\textasciitilde v tokens across Atiu, Mauke, Penrhyn, and Rarotonga, we found that duration, intensity, and F0 by island are statistically significant for all islands except Atiu. Duration was the most significant for Mauke, and intensity and F0 were the most significant for Penrhyn.
 
-The F2 model revealed no statistical significance between the F2 values and which island a speaker was from. However, to answer the voiced or voiceless question, we calculated percentages that show that all islands except Atiu had voiceless surface forms for w\textasciitilde v, with Mauke having the highest percentage of 3.10\%.
+The F2 model revealed no statistical significance between the F2 values and which island a speaker was from.
+
+However, to answer the voiced or voiceless question, we calculated percentages that show that all islands except Atiu had voiceless surface forms for w\textasciitilde v, with Mauke having the highest percentage of 3.10\%.
 
 In order to answer the final question, which islands have more {[}w{]} surface forms, we also calculated percentages. These percentages showed that all of these four islands had {[}w{]} phonemes realized, but the highest percentage of {[}w{]}s surfacing was in Atiu, where {[}v{]} was realized as {[}w{]} 17.80\% of the time.
 
+\section{References}\label{references}
 
-\begin{thebibliography}{20}
-\addtolength{\leftmargin}{0.2in} % sets up alignment with the following line.
-\setlength{\itemindent}{-0.2in}
+\begingroup
 
-\bibitem{CotoSolano} Coto-Solano, Nicholas \& Wray. 2018. Development of Natural Language Processing Tools for Cook Islands Māori. In \emph{Proceedings of Australasian Language Technology Association Workshop}, pages 26-33.
+Coto-Solano, Nicholas \& Wray. 2018. Development of Natural Language Processing Tools for Cook Islands Māori. In \emph{Proceedings of Australasian Language Technology Association Workshop}, pages 26-33.
 
-\bibitem{Nicholas} Nicholas, Sally Akevai (collector), 2012. Te Vairanga Tuatua o te Te Reo Māori o te Pae Tonga: Cook Islands Māori (Southern dialects) . Collection SN1 at catalog.paradisec.org.au {[}Open Access{]}. \url{https://dx.doi.org/10.4225/72/56E9793466307}
+Nicholas, Sally Akevai (collector), 2012. Te Vairanga Tuatua o te Te Reo Māori o te Pae Tonga: Cook Islands Māori (Southern dialects) . Collection SN1 at catalog.paradisec.org.au {[}Open Access{]}. \url{https://dx.doi.org/10.4225/72/56E9793466307}
 
-\bibitem{Thieberger} Thieberger \& Barwick. 2012. Keeping records of language diversity in melanesia, the pacific and regional archive for digital sources in endangered cultures (paradisec). \emph{Melanesian languages on the edge of Asia: Challenges for the 21st Century,} pages 239-53.
+Thieberger \& Barwick. 2012. Keeping records of language diversity in melanesia, the pacific and regional archive for digital sources in endangered cultures (paradisec). \emph{Melanesian languages on the edge of Asia: Challenges for the 21st Century,} pages 239-53.
 
-\end{thebibliography}
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\endgroup
+
 
 \clearpage
 \renewcommand{\listfigurename}{Figure captions}
