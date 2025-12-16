@@ -359,7 +359,7 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 \centering
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
+  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
 \hline
 dur\_null & 2 & -3287.577 & -3277.981 & 1645.789 & -3291.577 & NA & NA & NA\\
 \hline
@@ -373,15 +373,17 @@ mod\_dur & 7 & -3433.078 & -3399.493 & 1723.539 & -3447.078 & 37.54595 & 1 & 0\\
 \caption{Model summary for duration.}
 \end{table}
 
-\textcolor{red}{SUMMARIZE???}
+The duration data were analyzed using a linear mixed effects model. Duration was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
+
+\textcolor{red}{SUMMARIZE???}
 
 \begin{table}[!htbp]
 \centering
 \small
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
+  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
 \hline
 intensity\_null & 2 & 6613.473 & 6623.065 & -3304.737 & 6609.473 & NA & NA & NA\\
 \hline
@@ -395,14 +397,22 @@ mod\_intense & 7 & 5902.351 & 5935.921 & -2944.176 & 5888.351 & 77.08165 & 1 & 0
 \caption{Model summary for intensity.}
 \end{table}
 
-\textcolor{red}{SUMMARIZE???}
+The intensity data were analyzed using a linear mixed effects model. Intensity was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
+
+\textcolor{red}{
+\begin{itemize}
+\item FIXED EFFECTS: coefficients (betas), standard errors (SE), t-values, p-values, effect size
+\item RANDOM EFFECTS: variance components (std dev), residual variance
+\item MODEL FIT \& ASSUMPTIONS: BIC/AIC (lower values indicate better model fit when comparing models), residual plots (qq-plot, residual vs fitted, residual vs order)
+\end{itemize}
+}
 
 
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
+  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
 \hline
 f0\_null & 2 & 8419.866 & 8429.335 & -4207.933 & 8415.866 & NA & NA & NA\\
 \hline
@@ -417,7 +427,11 @@ mod\_f0 & 7 & 8139.651 & 8172.793 & -4062.826 & 8125.651 & 15.76368 & 1 & 7.18e-
 \end{table}
 
 
+The f0 data were analyzed using a linear mixed effects model. F0 (Hz) was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
+
 \textcolor{red}{SUMMARIZE???}
+
+
 
 
 
@@ -426,7 +440,7 @@ mod\_f0 & 7 & 8139.651 & 8172.793 & -4062.826 & 8125.651 & 15.76368 & 1 & 7.18e-
 \centering
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr(>Chisq)\\
+  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
 \hline
 f2\_null & 2 & 13451.07 & 13460.66 & -6723.536 & 13447.07 & NA & NA & NA\\
 \hline
@@ -440,7 +454,11 @@ mod\_f2 & 7 & 13330.46 & 13364.03 & -6658.229 & 13316.46 & 66.034384 & 1 & 0.000
 \caption{Model summary for f2.}
 \end{table}
 
+The f2 data were analyzed using a linear mixed effects model. F2 was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
+
 \textcolor{red}{SUMMARIZE???}
+
+
 
 
 
