@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.10)  16 DEC 2025 13:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.10)  18 DEC 2025 12:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1586,7 +1586,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 101.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 101.
-<./figs/cook-islands-map.png, id=50, 830.6232pt x 908.193pt>
+<./figs/cook-islands-map.png, id=86, 830.6232pt x 908.193pt>
 File: ./figs/cook-islands-map.png Graphic file (type png)
 <use ./figs/cook-islands-map.png>
 Package pdftex.def Info: ./figs/cook-islands-map.png  used on input line 116.
@@ -1599,7 +1599,7 @@ Package pdftex.def Info: ./figs/cook-islands-map.png  used on input line 116.
 {C:/Users/court/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/cour
 t/OneDrive/Desktop/MiKTeX_updated/fonts/enc/dvips/base/8r.enc} <./figs/cook-isl
 ands-map.png (PNG copy)>]
-<./figs/raw_data.png, id=62, 438.8897pt x 215.30438pt>
+<./figs/raw_data.png, id=98, 438.8897pt x 215.30438pt>
 File: ./figs/raw_data.png Graphic file (type png)
 <use ./figs/raw_data.png>
 Package pdftex.def Info: ./figs/raw_data.png  used on input line 140.
@@ -1611,8 +1611,8 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 165.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 165.
-<D2_CIM_files/figure-latex/print-duration-plot-1.pdf, id=70, 469.755pt x 325.21
-5pt>
+<D2_CIM_files/figure-latex/print-duration-plot-1.pdf, id=106, 469.755pt x 325.2
+15pt>
 File: D2_CIM_files/figure-latex/print-duration-plot-1.pdf Graphic file (type pd
 f)
 <use D2_CIM_files/figure-latex/print-duration-plot-1.pdf>
@@ -1631,8 +1631,8 @@ LaTeX Font Warning: Font shape `OML/cmtt/m/n' undefined
 
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 201.
-<D2_CIM_files/figure-latex/print-intensity-plot-1.pdf, id=82, 469.755pt x 325.2
-15pt>
+<D2_CIM_files/figure-latex/print-intensity-plot-1.pdf, id=118, 469.755pt x 325.
+215pt>
 File: D2_CIM_files/figure-latex/print-intensity-plot-1.pdf Graphic file (type p
 df)
 <use D2_CIM_files/figure-latex/print-intensity-plot-1.pdf>
@@ -1640,45 +1640,50 @@ Package pdftex.def Info: D2_CIM_files/figure-latex/print-intensity-plot-1.pdf
 used on input line 235.
 (pdftex.def)             Requested size: 226.48395pt x 156.79616pt.
 [4 <./D2_CIM_files/figure-latex/print-intensity-plot-1.pdf>]
-<D2_CIM_files/figure-latex/print-f0-plot-1.pdf, id=96, 469.755pt x 325.215pt>
+<D2_CIM_files/figure-latex/print-f0-plot-1.pdf, id=132, 469.755pt x 325.215pt>
 File: D2_CIM_files/figure-latex/print-f0-plot-1.pdf Graphic file (type pdf)
 <use D2_CIM_files/figure-latex/print-f0-plot-1.pdf>
 Package pdftex.def Info: D2_CIM_files/figure-latex/print-f0-plot-1.pdf  used on
  input line 286.
 (pdftex.def)             Requested size: 339.72592pt x 235.19672pt.
  [5 <./D2_CIM_files/figure-latex/print-f0-plot-1.pdf>]
-<D2_CIM_files/figure-latex/print-f2-plot-1.pdf, id=111, 469.755pt x 325.215pt>
+<D2_CIM_files/figure-latex/print-f2-plot-1.pdf, id=147, 469.755pt x 325.215pt>
 File: D2_CIM_files/figure-latex/print-f2-plot-1.pdf Graphic file (type pdf)
 <use D2_CIM_files/figure-latex/print-f2-plot-1.pdf>
 Package pdftex.def Info: D2_CIM_files/figure-latex/print-f2-plot-1.pdf  used on
  input line 333.
 (pdftex.def)             Requested size: 226.48395pt x 156.79616pt.
-
-Overfull \hbox (1.95914pt too wide) in paragraph at lines 360--373
- [][] 
- []
-
-[6 <./D2_CIM_files/figure-latex/print-f2-plot-1.pdf>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 384.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 372.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 384.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 372.
+ [6 <./D2_CIM_files/figure-latex/print-f2-plot-1.pdf>]
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 4
-08.
+07.
 
 (C:\Users\court\OneDrive\Desktop\MiKTeX_updated\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-LaTeX Font Info:    Trying to load font information for OML+ptm on input line 4
-87.
+Overfull \hbox (1.95914pt too wide) in paragraph at lines 418--431
+ [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 442--443
+
+ []
+
+[7] [8] [9]
+LaTeX Font Info:    Trying to load font information for OML+ptm on input line 6
+98.
 
 (C:\Users\court\OneDrive\Desktop\MiKTeX_updated\tex/latex/psnfss\omlptm.fd
 File: omlptm.fd 
 )
 LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 487.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 698.
 
-[7] [8] [9]
+[10] [11]
 
 Package glossaries Warning: No \printglossary or \printglossaries found. 
 (Remove \makeglossaries if you don't want any glossaries.) 
@@ -1693,29 +1698,26 @@ L3 programming layer <2025-10-24>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `9_dec_revision.out' has not changed.
-(rerunfilecheck)             Checksum: B46B535596A270897878041187B44CA9;1326.
+(rerunfilecheck)             Checksum: BA3CA5C2452EB65D26D23A3E13E0B5F8;2679.
  ) 
 Here is how much of TeX's memory you used:
- 36150 strings out of 467871
- 681581 string characters out of 5417413
- 1105160 words of memory out of 5000000
- 64404 multiletter control sequences out of 15000+600000
+ 36178 strings out of 467871
+ 681952 string characters out of 5417413
+ 1102174 words of memory out of 5000000
+ 64413 multiletter control sequences out of 15000+600000
  672560 words of font info for 153 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,9n,94p,2493b,488s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,9n,94p,2493b,534s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/court/OneDrive/Desktop/MiKTeX_updated/fonts/type1/public/amsfonts/c
 m/cmmi10.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_updated/fonts/type1/public
 /amsfonts/cm/cmtt10.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_updated/fonts/t
 ype1/urw/times/utmb8a.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_updated/fonts
 /type1/urw/times/utmr8a.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_updated/fon
 ts/type1/urw/times/utmri8a.pfb>
-Output written on 9_dec_revision.pdf (9 pages, 1190656 bytes).
+Output written on 9_dec_revision.pdf (11 pages, 1202931 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 42 named destinations out of 1000 (max. 500000)
- 131 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 239 PDF objects out of 1000 (max. 8388607)
+ 61 named destinations out of 1000 (max. 500000)
+ 203 words of extra memory for PDF output out of 10000 (max. 10000000)
 

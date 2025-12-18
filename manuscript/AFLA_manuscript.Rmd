@@ -443,9 +443,79 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 mod_f2 <- lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2)
 ```
 
+---
 
+---
+
+---
+
+---
+
+---
 
 ## 5.1 Results
+
+Summary tables for duration, intensity, f0, and f2.
+
+```{r}
+#| label: summary-tables
+#| echo: false
+#| message: false
+#| warning: false
+
+lmer(duration ~ island + (1|speaker) + (1|word), tidy_dur) |> 
+  summary()
+
+lmer(intensity ~ island + (1|speaker) + (1|word), data = tidy_intense) |>
+  summary()
+
+lmer(f0 ~ island + (1|speaker) + (1|word), data = tidy_f0) |>
+  summary()
+
+lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2) |>
+  summary()
+
+```
+
+
+
+
+Model fit for duration, intensity, f0, and f2.
+
+- Residuals for duration: `r mean(resid(mod_dur))` (these residuals should all be 0)
+
+- Residuals for intensity: `r mean(resid(mod_intense))`
+
+- Residuals for f0: `r mean(resid(mod_f0))`
+
+- Residuals for f2: `r mean(resid(mod_f2))`
+
+```{r}
+#| label: diagnosis
+#| warning: false
+#| message: false
+#| echo: false
+
+#ds4ling::diagnosis(mod_dur)
+
+# residuals - mean should be 0
+#mean(resid(mod_dur))
+
+
+# multicollinearity - dealt with by using nested model comparison; the 'anova()' fx
+
+
+# homoskedasticity
+
+
+# autocorrelation
+
+
+
+```
+
+
+
 
 Model summary table for **duration.**
 
@@ -466,6 +536,9 @@ dur_anova <- anova(mod_dur, dur_add, dur_island, dur_null)
 knitr::kable(dur_anova)
 
 ```
+
+
+
 
 Model summary for **intensity.**
 

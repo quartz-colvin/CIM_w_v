@@ -141,7 +141,7 @@ The following large data set has many columns. Here I show a preview of the data
 
 }
 
-\caption{ }\label{fig:unnamed-chunk-2}
+\caption{ }\label{fig:Raw data}
 \end{figure}
 
 First, note that there is no `id' column but there is a column for the speaker's initials. I will use speaker in place of `id' because that is what was in this original data set. The `island' column states what island that speaker is from. This data only contains data from the four islands Atiu, Mauke, Penrhyn and Rarotonga. Duration corresponds to the total duration of the phoneme, and intensity is measured at the midpoint of the phoneme.
@@ -350,10 +350,68 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 
 
 
-\subsection{Results}\label{results}
-
+\section{Results}\label{results}
 
 \textcolor{red}{INTRO???}
+
+
+
+
+\subsection{Duration}
+
+Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{duration} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
+
+\textcolor{red}{interpret fixed effects ??? }
+
+Standard error 
+
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r|r|r}
+\hline
+  & coefficients (betas) & SE & t-val & p-val & effect size \\
+\hline
+(intercept) & ??? & 0.013130 & 4.932 & ??? & \\
+Mauke & ??? & 0.014390 & -0.118 & ??? & \\
+Penrhyn & ??? & 0.018068 & 1.078 & ??? & \\
+Rarotonga & ??? & 0.014557 & -1.267 & ??? &
+\end{tabular}
+\caption{Duration fixed effects}
+\end{table}
+
+
+
+\textcolor{red}{interpret random effects ??? }
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r}
+\hline
+ group & name & Std. Dev. & Variance  \\
+\hline
+word & (intercept) & 0.02707 & 0.0007328 \\
+speaker & (intercept) & 0.01231 & 0.0001517 \\
+Residual &  & 0.03192 & 0.0010189 
+\end{tabular}
+\caption{Duration random effects}
+\end{table}
+
+
+\subsubsection{Model fit and assumptions:}
+
+\textcolor{red}{interpret ??? }
+\begin{itemize}
+\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
+\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
+\end{itemize}
+
+
+
+
+Significance of main effects and all possible interactions were assessed using hierarchical partitioning of the variance via nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 \begin{table}[!htbp]
 \centering
@@ -373,10 +431,67 @@ mod\_dur & 7 & -3433.078 & -3399.493 & 1723.539 & -3447.078 & 37.54595 & 1 & 0\\
 \caption{Model summary for duration.}
 \end{table}
 
-The duration data were analyzed using a linear mixed effects model. Duration was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 
-\textcolor{red}{SUMMARIZE???}
+
+
+
+\subsection{Intensity}
+
+
+Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{intensity} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. \\
+
+\textcolor{red}{interpret fixed effects ??? }
+
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r|r|r}
+\hline
+  & coefficients (betas) & SE & t-val & p-val & effect size \\
+\hline
+intercept & ??? & 10.864 & 5.331 & ??? & ??? \\
+Mauke & ??? & 12.137 & 0.209 & ??? & ??? \\
+Penrhyn & ??? & 15.347 & -0.512 & ??? & ??? \\
+Rarotonga & ??? & 11.947 & 0.175 & ??? & ???
+\end{tabular}
+\caption{Intensity fixed effects}
+\end{table}
+
+
+\textcolor{red}{interpret random effects ??? }
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r}
+\hline
+ group & name & Std. Dev. & Variance  \\
+\hline
+word & (intercept) & 4.377 & 19.16 \\
+speaker & (intercept) & 10.834 & 117.38 \\
+Residual &  & 5.851 & 34.24 
+\end{tabular}
+\caption{Intensity random effects}
+\end{table}
+
+
+
+
+
+
+
+\subsubsection{Model fit and assumptions:}
+
+\textcolor{red}{interpret ??? }
+
+\begin{itemize}
+\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
+\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
+\end{itemize}
+
+The intensity data were analyzed using a linear mixed effects model. Intensity was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 \begin{table}[!htbp]
 \centering
@@ -397,15 +512,64 @@ mod\_intense & 7 & 5902.351 & 5935.921 & -2944.176 & 5888.351 & 77.08165 & 1 & 0
 \caption{Model summary for intensity.}
 \end{table}
 
-The intensity data were analyzed using a linear mixed effects model. Intensity was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
-\textcolor{red}{
+
+
+
+
+
+
+\subsection{F0}
+
+Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{intensity} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
+
+\textcolor{red}{interpret fixed effects ??? }
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r|r|r}
+\hline
+  & coefficients (betas) & SE & t-val & p-val & effect size \\
+\hline
+intercept & ??? & 24.584 & 5.733 & ??? & ??? \\
+Mauke & ??? & 27.450 & 0.883 & ??? & ??? \\
+Penrhyn & ??? & 34.660 & -0.091 & ??? & ??? \\
+Rarotonga & ??? & 27.269 & 1.832 & ??? & ???
+\end{tabular}
+\caption{F0 fixed effects}
+\end{table}
+
+
+
+\textcolor{red}{interpret random effects ??? }
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r}
+\hline
+ group & name & Std. Dev. & Variance  \\
+\hline
+word & (intercept) & 11.41 & 130.1 \\
+speaker & (intercept) & 24.34 & 592.5 \\
+Residual &  & 28.67 & 822.2 
+\end{tabular}
+\caption{F0 random effects}
+\end{table}
+
+
+\subsubsection{Model fit and assumptions:}
+
+\textcolor{red}{interpret ??? }
+
 \begin{itemize}
-\item FIXED EFFECTS: coefficients (betas), standard errors (SE), t-values, p-values, effect size
-\item RANDOM EFFECTS: variance components (std dev), residual variance
-\item MODEL FIT \& ASSUMPTIONS: BIC/AIC (lower values indicate better model fit when comparing models), residual plots (qq-plot, residual vs fitted, residual vs order)
+\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
+\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
 \end{itemize}
-}
+
+
+The f0 data were analyzed using a linear mixed effects model. F0 (Hz) was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 
 \begin{table}[!htbp]
@@ -427,14 +591,63 @@ mod\_f0 & 7 & 8139.651 & 8172.793 & -4062.826 & 8125.651 & 15.76368 & 1 & 7.18e-
 \end{table}
 
 
-The f0 data were analyzed using a linear mixed effects model. F0 (Hz) was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
-
-\textcolor{red}{SUMMARIZE???}
 
 
 
 
 
+
+
+\subsection{F2}
+
+Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{f2} (Hz) as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
+
+\textcolor{red}{interpret fixed effects ??? }
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r|r|r}
+\hline
+  & coefficients (betas) & SE & t-val & p-val & effect size \\
+\hline
+intercept & ??? & 83.412 & 13.696 & ??? & ??? \\
+Mauke & ??? & 90.354 & 3.297 & ??? & ??? \\
+Penrhyn & ??? & 111.231 & 3.461 & ??? & ??? \\
+Rarotonga & ??? & 94.770 & 4.106 & ??? & ???
+\end{tabular}
+\caption{F2 fixed effects}
+\end{table}
+
+\textcolor{red}{interpret random effects ??? }
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l|r|r|r}
+\hline
+ group & name & Std. Dev. & Variance  \\
+\hline
+word & (intercept) & 193.80 & 37558 \\
+speaker & (intercept) & 68.01 & 4625 \\
+Residual &  & 394.20 & 155390 
+\end{tabular}
+\caption{F2 random effects}
+\end{table}
+
+
+\subsubsection{Model fit and assumptions:}
+
+\textcolor{red}{interpret ??? }
+
+\begin{itemize}
+\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
+\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
+\end{itemize}
+
+
+
+The f2 data were analyzed using a linear mixed effects model. F2 was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 \begin{table}[!htbp]
 \centering
@@ -454,15 +667,13 @@ mod\_f2 & 7 & 13330.46 & 13364.03 & -6658.229 & 13316.46 & 66.034384 & 1 & 0.000
 \caption{Model summary for f2.}
 \end{table}
 
-The f2 data were analyzed using a linear mixed effects model. F2 was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
-
-\textcolor{red}{SUMMARIZE???}
 
 
 
+\pagebreak
+\subsection{P-values and formant models}
 
-
-
+\textcolor{red}{WHAT TO DO WITH THIS SECTION??? }
 
 Recall that we had the following p-values in each model for each island.
 
