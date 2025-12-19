@@ -352,7 +352,7 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 
 \section{Results}\label{results}
 
-\textcolor{red}{INTRO???}
+This section interprets the statistical results for each individual model, and interprets a nested model comparison for each of the four models from the previous section. 
 
 
 
@@ -362,7 +362,7 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{duration} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
 
 
-The \textbf{standard error (SE)} for each island were very small, around 0.01, indicating that the mean of the sample is an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all lower than 2, indicating that they are not statistically significant between the islands. The \textbf{degrees of freedom (df)} for Mauke and Penrhyn were a little under 6 and the df for Rarotonga was a bit above 6. This indicates \textcolor{red}{what the hell's it indicate???}. For each island, the betas are very close to 0, which indicates \textcolor{red}{???what!}. 
+The fixed effects for this individual model are in Table \ref{dur-fixed}. The \textbf{standard error (SE)} for each island were very small, around 0.01, indicating that the mean of the sample is an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all lower than 2, indicating that they are not statistically significant between the islands. The \textbf{degrees of freedom (df)} for Mauke and Penrhyn were a little under 6 and the df for Rarotonga was a bit above 6. For each island, the betas are very close to 0, which indicates there is not a linear relationship between duration and island. 
 
 
 \begin{table}[!htbp]
@@ -372,23 +372,18 @@ The \textbf{standard error (SE)} for each island were very small, around 0.01, i
 \hline
   & betas & SE & t-val & df \\
 \hline
-(intercept) & 0.064761 & 0.013130 & 4.932 & 6.339137 \\
+Atiu & 0.064761 & 0.013130 & 4.932 & 6.339137 \\
 Mauke & -0.001702 & 0.014390 & -0.118 & 5.858906 \\
 Penrhyn & 0.019477 & 0.018068 & 1.078 & 5.690570 \\
 Rarotonga & -0.018439 & 0.014557 & -1.267 & 6.292463 
 \end{tabular}
 \caption{Duration fixed effects}
+\label{dur-fixed}
 \end{table}
 
 
 
-
-
-% standard deviation is a measure of how dispersed the data is in relation to the mean. small standard deviation means more data is clustered around the mean;  larger means its more spread out 
-
-% variance is the average squared distance between the data points and the mean. higher values indicate greater variability
-
-\textcolor{red}{interpret random effects ??? }
+As for the random effects for the duration model, these are shown in Table \ref{dur-random}. The standard deviations for both word and speaker were very small, indicating that the data for these two variables were very clustered around the mean. Variance was also extremely small.
 
 \begin{table}[!htbp]
 \centering
@@ -402,40 +397,42 @@ speaker & (intercept) & 0.01231 & 0.0001517 \\
 Residual &  & 0.03192 & 0.0010189 
 \end{tabular}
 \caption{Duration random effects}
+\label{dur-random}
 \end{table}
 
 
-\subsubsection{Model fit and assumptions:}
+\noindent{\textbf{Model fit and assumptions.}}
 
-\textcolor{red}{interpret ??? }
-
-\begin{itemize}
-\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
-\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
-\end{itemize}
+The model summary for the nested model comparison is in Table \ref{dur-nested}. For this, I utilized the 'anova()' function in R and ommited the columns I don't interpret.
 
 
-
-
-Significance of main effects and all possible interactions were assessed using hierarchical partitioning of the variance via nested model comparisons. Experiment-wise, alpha was set at 0.05.
+Significance of main effects and all possible interactions were assessed using hierarchical partitioning of the variance via nested model comparisons. Experiment-wise, alpha was set at 0.05. The model summary table for the nested model comparison for duration is shown in the following table. 
 
 \begin{table}[!htbp]
 \centering
-\begin{tabular}{l|r|r|r|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
+   & AIC & BIC & logLik  & Chisq & Pr($>$Chisq)\\
 \hline
-dur\_null & 2 & -3287.577 & -3277.981 & 1645.789 & -3291.577 & NA & NA & NA\\
+dur\_null & -3287.577 & -3277.981 & 1645.789  & NA & NA\\
 \hline
-dur\_island & 5 & -3367.804 & -3343.815 & 1688.902 & -3377.804 & 86.22701 & 3 & 0\\
+dur\_island & -3367.804 & -3343.815 & 1688.902  & 86.22701  & 0\\
 \hline
-dur\_add & 6 & -3397.532 & -3368.745 & 1704.766 & -3409.532 & 31.72802 & 1 & 0\\
+dur\_add  & -3397.532 & -3368.745 & 1704.766  & 31.72802  & 0\\
 \hline
-mod\_dur & 7 & -3433.078 & -3399.493 & 1723.539 & -3447.078 & 37.54595 & 1 & 0\\
+mod\_dur & -3433.078 & -3399.493 & 1723.539  & 37.54595  & 0\\
 \hline
 \end{tabular}
 \caption{Model summary for duration.}
+\label{dur-nested}
 \end{table}
+
+The Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC) were extremely large negative numbers for  each nested model, indicating that we have a well-fit model. The log-likelihood (logLik) values were also very large, further indicating that the model is well-fit to the data. The values for Chisq were high; the values for the additive model and the whole duration model were in the 30s, but the Chisq value for the dur\_island model was much larger at 86.22701. These values quantify the difference in fit between the models being compared. The greatest difference was for the island parameter.
+
+Lastly, the Pr($\>$Chisq) values for each model (excluding the null model) were 0. As this is less than 0.05, this suggests that the most complex model was a better fit than the nested models, which means the extra effects taken into account in the larger model were necessary. 
+
+
+%\textcolor{red}{residual plots (qq-plot, residual vs. fitted, residual vs order)???}
 
 
 
@@ -447,7 +444,7 @@ mod\_dur & 7 & -3433.078 & -3399.493 & 1723.539 & -3447.078 & 37.54595 & 1 & 0\\
 
 Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{intensity} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
 
-The \textbf{standard error (SE)} for each island were {large, around 11-15, indicating that the mean of the sample is not an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all lower than 2, indicating that they are not statistically significant between the islands. 
+The model summary fixed effects for the individual intensity model is shown in Table \ref{intensity-fixed}. The \textbf{standard error (SE)} for each island were {large, around 11-15, indicating that the mean of the sample is not an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all lower than 2, indicating that they are not statistically significant between the islands. 
 
 
 \begin{table}[!htbp]
@@ -457,17 +454,20 @@ The \textbf{standard error (SE)} for each island were {large, around 11-15, indi
 \hline
   & betas & SE & t-val  & df \\
 \hline
-intercept & 57.919 & 10.864 & 5.331  & 6.184 \\
+Atiu & 57.919 & 10.864 & 5.331  & 6.184 \\
 Mauke & 2.534 & 12.137 & 0.209  & 6.165 \\
 Penrhyn & -7.853 & 15.347 & -0.512 & 6.156 \\
 Rarotonga & 2.095 & 11.947 & 0.175 & 6.261
 \end{tabular}
 \caption{Intensity fixed effects}
+\label{intensity-fixed}
 \end{table}
 
-The \textbf{degrees of freedom (df)} for all islands were around 6. This indicates \textcolor{red}{what the hell's it indicate???}. For Mauke, beta was 2.534, which indicates \textcolor{red}{???what!}. For Penrhyn, beta was -7.853, which indicates \textcolor{red}{???what!}. For Rarotonga, beta was 2.095, which indicates \textcolor{red}{???what!}. 
+The \textbf{degrees of freedom (df)} for all islands were around 6. For Mauke, beta was 2.534, which indicates that being a speaker from Mauke, intensity is expected to be higher. For Penrhyn, beta was -7.853, which indicates that being a speaker from Penrhyn, intensity is expected to be much lower. For Rarotonga, beta was 2.095, which indicates a speaker from Rarotonga is expected to have higher intensity, similar to Mauke. Atiu had the largest positive value for beta at 58, indicating the highest linear relationship between being a speaker from Atiu and having higher intensity.
 
-\textcolor{red}{interpret random effects ??? }
+As for the random effects, which are reported in Table \ref{intensity-random}, standard deviation for word and speaker were higher for the intensity model. For word, standard deviation was 4.377, so the data for intensity by word were less clustered around the mean. 
+
+The standard deviation was even higher for speaker, at 10.834, so the speaker data was even more spread out. Variance values were consistent with this, as the variance for word was high at 19.16, and the variance for speaker was much larger at 117.38. 
 
 \begin{table}[!htbp]
 \centering
@@ -481,48 +481,46 @@ speaker & (intercept) & 10.834 & 117.38 \\
 Residual &  & 5.851 & 34.24 
 \end{tabular}
 \caption{Intensity random effects}
+\label{intensity-random}
 \end{table}
 
 
 
 
 
+\noindent{\textbf{Model fit and assumptions.}}
 
-
-\subsubsection{Model fit and assumptions:}
-
-\textcolor{red}{interpret ??? }
-
-\begin{itemize}
-\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
-\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
-\end{itemize}
+The model summary for the nested model comparison is in Table \ref{intensity-nested}. For this, I utilized the 'anova()' function in R and ommited the columns I don't interpret.
 
 The intensity data were analyzed using a linear mixed effects model. Intensity was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 \begin{table}[!htbp]
 \centering
 \small
-\begin{tabular}{l|r|r|r|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
+   & AIC & BIC & logLik  & Chisq  & Pr($>$Chisq)\\
 \hline
-intensity\_null & 2 & 6613.473 & 6623.065 & -3304.737 & 6609.473 & NA & NA & NA\\
+intensity\_null &  6613.473 & 6623.065 & -3304.737  & NA  & NA\\
 \hline
-intensity\_island & 5 & 6500.268 & 6524.246 & -3245.134 & 6490.268 & 119.20555 & 3 & 0\\
+intensity\_island &  6500.268 & 6524.246 & -3245.134  & 119.20555  & 0\\
 \hline
-intensity\_add & 6 & 5977.433 & 6006.207 & -2982.717 & 5965.433 & 524.83480 & 1 & 0\\
+intensity\_add &  5977.433 & 6006.207 & -2982.717  & 524.83480 & 0\\
 \hline
-mod\_intense & 7 & 5902.351 & 5935.921 & -2944.176 & 5888.351 & 77.08165 & 1 & 0\\
+mod\_intense & 5902.351 & 5935.921 & -2944.176  & 77.08165  & 0\\
 \hline
 \end{tabular}
 \caption{Model summary for intensity.}
+\label{intensity-nested}
 \end{table}
 
 
+The AIC and BIC were extremely large numbers for  each nested model, indicating that we do \textit{not} have a well-fit model. The log-likelihood (logLik) values were very small, further indicating that the model is not well-fit to the data. The values for Chisq were extremely high; the values for the island model were 119.20555, the value for the additive model was 524.83480, and the value for the whole intensity model was 77.08165. 
+
+These values quantify the difference in fit between the models being compared. The greatest difference was for the additive model, which included \textit{intensity, island} and \textit{speaker} parameters, excluding the \textit{word} parameter. Lastly, the Pr($\>$Chisq) values for each model (excluding the null model) were 0. As this is less than 0.05, this suggests that the most complex model was a better fit than the nested models, which means the extra effects taken into account in the larger model were necessary. 
 
 
-
+%\textcolor{red}{residual plots (qq-plot, residual vs. fitted, residual vs order)???}
 
 
 
@@ -530,7 +528,9 @@ mod\_intense & 7 & 5902.351 & 5935.921 & -2944.176 & 5888.351 & 77.08165 & 1 & 0
 
 Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{intensity} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
 
-\textcolor{red}{interpret fixed effects ??? }
+The fixed effects for the individual F0 model are reported in Table \ref{f0-fixed}. The \textbf{standard error (SE)} for each island were very large, at least 24, indicating that the mean of the sample is not an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all lower than 2, indicating that they are not statistically significant between the islands. The \textbf{degrees of freedom (df)} for all islands were around 3.4. 
+
+For each island, the betas are very spread out. For Mauke, beta was about 24, Penrhyn's beta was -3, and Rarotonga's beta was nearly 50. This indicates that a speaker from Mauke or Rarotonga is expected to have an increased f0 value (the increase is greater for Rarotonga). But, for Penrhyn, the f0 is expected to be lower for a speaker from Penrhyn. Again, Atiu has the highest positive number for beta, at 141, indicating a strong linear relationship between being from Atiu and having a higher f0 value.
 
 \begin{table}[!htbp]
 \centering
@@ -539,17 +539,20 @@ Data were analyzed using a linear mixed effects model (as implemented by the lme
 \hline
   & betas & SE & t-val & df \\
 \hline
-intercept & 140.935 & 24.584 & 5.733 & 3.466 \\
+Atiu & 140.935 & 24.584 & 5.733 & 3.466 \\
 Mauke & 24.229 & 27.450 & 0.883 & 3.448 \\
 Penrhyn & -3.145 & 34.660 & -0.091 & 3.423 \\
 Rarotonga & 49.950 & 27.269 & 1.832 & 3.564
 \end{tabular}
 \caption{F0 fixed effects}
+\label{f0-fixed}
 \end{table}
 
 
 
-\textcolor{red}{interpret random effects ??? }
+As for the random effects, reported in Table \ref{f0-random}, the standard deviations for word and speaker were somewhat large, with standard deviation for word being 11.41 and standard deviation for speaker being 24.34. This indicates that the data for both was spread out, but more so for speaker. 
+
+Variance for both word and speaker were also large, with variance for word being 130.1, and variance for speaker being 592.5. So, variability in this model was quite high.
 
 \begin{table}[!htbp]
 \centering
@@ -563,39 +566,52 @@ speaker & (intercept) & 24.34 & 592.5 \\
 Residual &  & 28.67 & 822.2 
 \end{tabular}
 \caption{F0 random effects}
+\label{f0-random}
 \end{table}
 
 
-\subsubsection{Model fit and assumptions:}
 
-\textcolor{red}{interpret ??? }
 
-\begin{itemize}
-\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
-\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
-\end{itemize}
 
+
+
+
+\noindent{\textbf{Model fit and assumptions.}}
+
+
+The model summary for the nested model comparison is in Table \ref{f0-nested}. For this, I utilized the 'anova()' function in R and ommited the columns I don't interpret.
 
 The f0 data were analyzed using a linear mixed effects model. F0 (Hz) was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 
 \begin{table}[!htbp]
 \centering
-\begin{tabular}{l|r|r|r|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
+  & AIC & BIC & logLik  & Chisq  & Pr($>$Chisq)\\
 \hline
-f0\_null & 2 & 8419.866 & 8429.335 & -4207.933 & 8415.866 & NA & NA & NA\\
+f0\_null & 8419.866 & 8429.335 & -4207.933 & NA  & NA\\
 \hline
-f0\_island & 5 & 8243.201 & 8266.874 & -4116.601 & 8233.201 & 182.66463 & 3 & 0.00e+00\\
+f0\_island & 8243.201 & 8266.874 & -4116.601  & 182.66463  & 0.00e+00\\
 \hline
-f0\_add & 6 & 8153.415 & 8181.822 & -4070.707 & 8141.415 & 91.78646 & 1 & 0.00e+00\\
+f0\_add &  8153.415 & 8181.822 & -4070.707  & 91.78646  & 0.00e+00\\
 \hline
-mod\_f0 & 7 & 8139.651 & 8172.793 & -4062.826 & 8125.651 & 15.76368 & 1 & 7.18e-05\\
+mod\_f0 & 8139.651 & 8172.793 & -4062.826 & 15.76368  & 7.18e-05\\
 \hline
 \end{tabular}
 \caption{Model summary for f0}
+\label{f0-nested}
 \end{table}
+
+The AIC and BIC were extremely large numbers for  each nested model, indicating that we do \textit{not} have a well-fit model. The log-likelihood (logLik) values were very small (negative) numbers, further indicating that the model is not well-fit to the data. 
+
+The values for Chisq were somewhat high; the values for the island model were 182.66, the value for the additive model was 91.79, and the value for the whole intensity model was 15.76. These values quantify the difference in fit between the models being compared. The greatest difference was for the island model, which included \textit{f0} and \textit{island} parameters, excluding the \textit{speaker} and \textit{word} parameters. 
+
+Lastly, the Pr($\>$Chisq) values for each model (excluding the null model) were extremely small. As they are all less than 0.05, this suggests that the most complex model was a better fit than the nested models, which means the extra effects taken into account in the larger model were necessary. 
+
+
+%\textcolor{red}{residual plots (qq-plot, residual vs. fitted, residual vs order)???}
+
 
 
 
@@ -609,7 +625,7 @@ mod\_f0 & 7 & 8139.651 & 8172.793 & -4062.826 & 8125.651 & 15.76368 & 1 & 7.18e-
 
 Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{f2} (Hz) as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
 
-\textcolor{red}{interpret fixed effects ??? }
+The fixed effects for the individual f2 model are reported in Table \ref{f2-fixed}. The \textbf{standard error (SE)} for each island were very large, at least 83, indicating that the mean of the sample is not an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all higher than 2, indicating that they \textit{are} statistically significant between the islands. 
 
 \begin{table}[!htbp]
 \centering
@@ -618,15 +634,22 @@ Data were analyzed using a linear mixed effects model (as implemented by the lme
 \hline
   & betas & SE & t-val & df \\
 \hline
-intercept & 1142.411 & 83.412 & 13.696 & 5.643 \\
+Atiu & 1142.411 & 83.412 & 13.696 & 5.643 \\
 Mauke & 297.881 & 90.354 & 3.297 & 4.946 \\
 Penrhyn & 384.930 & 111.231 & 3.461 & 4.466 \\
 Rarotonga & 389.099 & 94.770 & 4.106 & 6.027
 \end{tabular}
 \caption{F2 fixed effects}
+\label{f2-fixed}
 \end{table}
 
-\textcolor{red}{interpret random effects ??? }
+
+The \textbf{degrees of freedom (df)} for Mauke and Penrhyn were under 5 and the df for Rarotonga was a bit above 6. For each island, the betas are very large. For Atiu, beta was 1142.41, Mauke's beta was 297, Penrhyn was 384, and Rarotonga was 389. This indicates all islands are associated with a large increase in F2, with the highest being Atiu. 
+
+
+As for random effects, reported in Table \ref{f2-random}, standard deviations for word and speaker were quite high again. For word, the standard deviation was high at 193.80, and for speaker it was at 68.01. This indicates that for both word and speaker, the data was quite spread out, but the data for word was much more spread out around the mean. 
+
+Variability was also very large for word and speaker in the F2 model, with variance for word being 37558 and variance for speaker being 4625. 
 
 \begin{table}[!htbp]
 \centering
@@ -640,47 +663,67 @@ speaker & (intercept) & 68.01 & 4625 \\
 Residual &  & 394.20 & 155390 
 \end{tabular}
 \caption{F2 random effects}
+\label{f2-random}
 \end{table}
 
 
-\subsubsection{Model fit and assumptions:}
-
-\textcolor{red}{interpret ??? }
-
-\begin{itemize}
-\item BIC/AIC (lower values indicate better model fit when complaring models) = ???
-\item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
-\end{itemize}
 
 
+
+
+
+
+
+
+\noindent{\textbf{Model fit and assumptions.}}
+
+The model summary for the nested model comparison is in Table \ref{f2-nested}. For this, I utilized the 'anova()' function in R and ommited the columns I don't interpret.
 
 The f2 data were analyzed using a linear mixed effects model. F2 was the criterion with \textit{island, speaker} and \textit{word} as predictors. Main effects and the interactions between \textit{island, speaker} and \textit{word} were assessed using nested model comparisons. Experiment-wise, alpha was set at 0.05.
 
 \begin{table}[!htbp]
 \centering
-\begin{tabular}{l|r|r|r|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r|r}
 \hline
-  & npar & AIC & BIC & logLik & -2*log(L) & Chisq & Df & Pr($>$Chisq)\\
+   & AIC & BIC & logLik  & Chisq &  Pr($>$Chisq)\\
 \hline
-f2\_null & 2 & 13451.07 & 13460.66 & -6723.536 & 13447.07 & NA & NA & NA\\
+f2\_null  & 13451.07 & 13460.66 & -6723.536  & NA  & NA\\
 \hline
-f2\_island & 5 & 13394.48 & 13418.46 & -6692.240 & 13384.48 & 62.592574 & 3 & 0.0000000\\
+f2\_island & 13394.48 & 13418.46 & -6692.240  & 62.592574  & 0.0000000\\
 \hline
-f2\_add & 6 & 13394.49 & 13423.27 & -6691.246 & 13382.49 & 1.987579 & 1 & 0.1585942\\
+f2\_add  & 13394.49 & 13423.27 & -6691.246  & 1.987579 & 0.1585942\\
 \hline
-mod\_f2 & 7 & 13330.46 & 13364.03 & -6658.229 & 13316.46 & 66.034384 & 1 & 0.0000000\\
+mod\_f2  & 13330.46 & 13364.03 & -6658.229 & 66.034384 &  0.0000000\\
 \hline
 \end{tabular}
 \caption{Model summary for f2.}
+\label{f2-nested}
 \end{table}
 
-
-
-
 \pagebreak
-\subsection{P-values and formant models}
+The AIC and BIC were extremely large numbers for  each nested model, indicating that we do \textit{not} have a well-fit model. The log-likelihood (logLik) values were very small (negative) numbers, further indicating that the model is not well-fit to the data. 
 
-\textcolor{red}{WHAT TO DO WITH THIS SECTION??? }
+The values for Chisq were somewhat high, except for the additive model. The Chisq value for f2\_island was high at 62.59, and the value for the full mod\_f2 was 66.03. The additive model's Chisq value was low at 1.99. These values quantify the difference in fit between the models being compared. The greatest difference was for the island model and the full model. The island model included \textit{f2, island} parameters and the full model included \textit{f2, island, speaker,} and \textit{word}. Since the additive model was so low, the \textit{speaker} parameter didn't indicate a huge difference in the model fit. 
+
+Lastly, the Pr($\>$Chisq) values for each model (excluding the null model) were extremely small, but the additive model was slightly larger at 0.16. Since the additive model was greater than 0.05, this indicates that the less complex models were a better fit than the more complex ones in the nested model comparison. 
+
+
+%\textcolor{red}{residual plots (qq-plot, residual vs. fitted, residual vs order)???}
+
+
+\subsection{Interim summary}
+
+
+\textcolor{red}{fill in ???}
+
+
+
+
+
+
+
+
+\subsection{Formant models}
 
 Recall that we had the following p-values in each model for each island.
 
