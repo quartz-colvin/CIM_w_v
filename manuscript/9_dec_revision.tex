@@ -361,27 +361,32 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 
 Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{duration} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
 
-\textcolor{red}{interpret fixed effects ??? }
 
-Standard error 
+The \textbf{standard error (SE)} for each island were very small, around 0.01, indicating that the mean of the sample is an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all lower than 2, indicating that they are not statistically significant between the islands. The \textbf{degrees of freedom (df)} for Mauke and Penrhyn were a little under 6 and the df for Rarotonga was a bit above 6. This indicates \textcolor{red}{what the hell's it indicate???}. For each island, the betas are very close to 0, which indicates \textcolor{red}{???what!}. 
 
 
 \begin{table}[!htbp]
 \centering
 \small
-\begin{tabular}{l|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r}
 \hline
-  & coefficients (betas) & SE & t-val & p-val & effect size \\
+  & betas & SE & t-val & df \\
 \hline
-(intercept) & ??? & 0.013130 & 4.932 & ??? & \\
-Mauke & ??? & 0.014390 & -0.118 & ??? & \\
-Penrhyn & ??? & 0.018068 & 1.078 & ??? & \\
-Rarotonga & ??? & 0.014557 & -1.267 & ??? &
+(intercept) & 0.064761 & 0.013130 & 4.932 & 6.339137 \\
+Mauke & -0.001702 & 0.014390 & -0.118 & 5.858906 \\
+Penrhyn & 0.019477 & 0.018068 & 1.078 & 5.690570 \\
+Rarotonga & -0.018439 & 0.014557 & -1.267 & 6.292463 
 \end{tabular}
 \caption{Duration fixed effects}
 \end{table}
 
 
+
+
+
+% standard deviation is a measure of how dispersed the data is in relation to the mean. small standard deviation means more data is clustered around the mean;  larger means its more spread out 
+
+% variance is the average squared distance between the data points and the mean. higher values indicate greater variability
 
 \textcolor{red}{interpret random effects ??? }
 
@@ -403,6 +408,7 @@ Residual &  & 0.03192 & 0.0010189
 \subsubsection{Model fit and assumptions:}
 
 \textcolor{red}{interpret ??? }
+
 \begin{itemize}
 \item BIC/AIC (lower values indicate better model fit when complaring models) = ???
 \item residual plots (qq-plot, residual vs. fitted, residual vs order) = ???
@@ -439,26 +445,27 @@ mod\_dur & 7 & -3433.078 & -3399.493 & 1723.539 & -3447.078 & 37.54595 & 1 & 0\\
 \subsection{Intensity}
 
 
-Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{intensity} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. \\
+Data were analyzed using a linear mixed effects model (as implemented by the lme4 (version 1.1-37) package in R 4.5.0 (2025-04-11 ucrt)). This model included \textit{intensity} as the dependent variable, and \textit{island, speaker} and \textit{word} as fixed factors. 
 
-\textcolor{red}{interpret fixed effects ??? }
+The \textbf{standard error (SE)} for each island were {large, around 11-15, indicating that the mean of the sample is not an accurate reflection of the actual populations mean.  The \textbf{t-values} for each island were all lower than 2, indicating that they are not statistically significant between the islands. 
 
 
 \begin{table}[!htbp]
 \centering
 \small
-\begin{tabular}{l|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r}
 \hline
-  & coefficients (betas) & SE & t-val & p-val & effect size \\
+  & betas & SE & t-val  & df \\
 \hline
-intercept & ??? & 10.864 & 5.331 & ??? & ??? \\
-Mauke & ??? & 12.137 & 0.209 & ??? & ??? \\
-Penrhyn & ??? & 15.347 & -0.512 & ??? & ??? \\
-Rarotonga & ??? & 11.947 & 0.175 & ??? & ???
+intercept & 57.919 & 10.864 & 5.331  & 6.184 \\
+Mauke & 2.534 & 12.137 & 0.209  & 6.165 \\
+Penrhyn & -7.853 & 15.347 & -0.512 & 6.156 \\
+Rarotonga & 2.095 & 11.947 & 0.175 & 6.261
 \end{tabular}
 \caption{Intensity fixed effects}
 \end{table}
 
+The \textbf{degrees of freedom (df)} for all islands were around 6. This indicates \textcolor{red}{what the hell's it indicate???}. For Mauke, beta was 2.534, which indicates \textcolor{red}{???what!}. For Penrhyn, beta was -7.853, which indicates \textcolor{red}{???what!}. For Rarotonga, beta was 2.095, which indicates \textcolor{red}{???what!}. 
 
 \textcolor{red}{interpret random effects ??? }
 
@@ -528,14 +535,14 @@ Data were analyzed using a linear mixed effects model (as implemented by the lme
 \begin{table}[!htbp]
 \centering
 \small
-\begin{tabular}{l|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r}
 \hline
-  & coefficients (betas) & SE & t-val & p-val & effect size \\
+  & betas & SE & t-val & df \\
 \hline
-intercept & ??? & 24.584 & 5.733 & ??? & ??? \\
-Mauke & ??? & 27.450 & 0.883 & ??? & ??? \\
-Penrhyn & ??? & 34.660 & -0.091 & ??? & ??? \\
-Rarotonga & ??? & 27.269 & 1.832 & ??? & ???
+intercept & 140.935 & 24.584 & 5.733 & 3.466 \\
+Mauke & 24.229 & 27.450 & 0.883 & 3.448 \\
+Penrhyn & -3.145 & 34.660 & -0.091 & 3.423 \\
+Rarotonga & 49.950 & 27.269 & 1.832 & 3.564
 \end{tabular}
 \caption{F0 fixed effects}
 \end{table}
@@ -607,14 +614,14 @@ Data were analyzed using a linear mixed effects model (as implemented by the lme
 \begin{table}[!htbp]
 \centering
 \small
-\begin{tabular}{l|r|r|r|r|r}
+\begin{tabular}{l|r|r|r|r}
 \hline
-  & coefficients (betas) & SE & t-val & p-val & effect size \\
+  & betas & SE & t-val & df \\
 \hline
-intercept & ??? & 83.412 & 13.696 & ??? & ??? \\
-Mauke & ??? & 90.354 & 3.297 & ??? & ??? \\
-Penrhyn & ??? & 111.231 & 3.461 & ??? & ??? \\
-Rarotonga & ??? & 94.770 & 4.106 & ??? & ???
+intercept & 1142.411 & 83.412 & 13.696 & 5.643 \\
+Mauke & 297.881 & 90.354 & 3.297 & 4.946 \\
+Penrhyn & 384.930 & 111.231 & 3.461 & 4.466 \\
+Rarotonga & 389.099 & 94.770 & 4.106 & 6.027
 \end{tabular}
 \caption{F2 fixed effects}
 \end{table}

@@ -477,6 +477,10 @@ lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2) |>
 
 ```
 
+Beta coefficients: 
+
+- for duration: `r lm.beta.lmer(mod_dur)`
+
 
 
 
