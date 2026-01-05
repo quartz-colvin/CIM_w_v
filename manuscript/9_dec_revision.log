@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.5.24)  20 DEC 2025 15:59
+=======
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.10)  5 JAN 2026 09:39
+>>>>>>> Stashed changes
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1524,6 +1528,12 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 371.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 371.
+<<<<<<< Updated upstream
+=======
+ [7] [8] [9] [10]
+LaTeX Font Info:    Trying to load font information for OML+ptm on input line 7
+52.
+>>>>>>> Stashed changes
 
 Underfull \hbox (badness 10000) in paragraph at lines 406--407
 
@@ -1563,7 +1573,11 @@ LaTeX Font Info:    Trying to load font information for OML+ptm on input line 7
 File: omlptm.fd 
 )
 LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10.95> not available
+<<<<<<< Updated upstream
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 762.
+=======
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 752.
+>>>>>>> Stashed changes
 
 
 [11]
@@ -1593,6 +1607,7 @@ Package rerunfilecheck Info: File `9_dec_revision.out' has not changed.
 ### simple group (level 1) entered at line 449 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
+<<<<<<< Updated upstream
  36194 strings out of 469941
  681530 string characters out of 5469430
  1072800 words of memory out of 5000000
@@ -1607,6 +1622,22 @@ pe1/public/amsfonts/cm/cmtt10.pfb><C:/Users/court/AppData/Local/Programs/MiKTeX
 /fonts/type1/urw/times/utmr8a.pfb><C:/Users/court/AppData/Local/Programs/MiKTeX
 /fonts/type1/urw/times/utmri8a.pfb>
 Output written on 9_dec_revision.pdf (13 pages, 1212416 bytes).
+=======
+ 36158 strings out of 467871
+ 681503 string characters out of 5417413
+ 1097683 words of memory out of 5000000
+ 64398 multiletter control sequences out of 15000+600000
+ 672246 words of font info for 152 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 84i,9n,94p,2493b,663s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/court/OneDrive/Desktop/MiKTeX_updated/fonts/type1/pub
+lic/amsfonts/cm/cmmi10.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_updated/font
+s/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_u
+pdated/fonts/type1/urw/times/utmb8a.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX
+_updated/fonts/type1/urw/times/utmr8a.pfb><C:/Users/court/OneDrive/Desktop/MiKT
+eX_updated/fonts/type1/urw/times/utmri8a.pfb>
+Output written on 9_dec_revision.pdf (13 pages, 1211504 bytes).
+>>>>>>> Stashed changes
 PDF statistics:
  247 PDF objects out of 1000 (max. 8388607)
  60 named destinations out of 1000 (max. 500000)
