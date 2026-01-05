@@ -401,10 +401,6 @@ Residual &  & 0.03192 & 0.0010189
 \end{table}
 
 
-\noindent{\textbf{Model fit and assumptions.}}
-
-\textcolor{red}{fill in???}\\
-
 
 \noindent{\textbf{Nested model comparison.}}
 
@@ -483,15 +479,6 @@ Residual &  & 5.851 & 34.24
 \caption{Intensity random effects}
 \label{intensity-random}
 \end{table}
-
-
-
-
-
-
-\noindent{\textbf{Model fit and assumptions.}}
-
-\textcolor{red}{fill in???}\\
 
 
 \noindent{\textbf{Nested model comparison.}}
@@ -678,18 +665,6 @@ Residual &  & 394.20 & 155390
 \textbf{Variability} was also very large for word and speaker in the F2 model, with variance for word being 37558 and variance for speaker being 4625. \\
 
 
-
-
-
-
-
-
-
-\noindent{\textbf{Model fit and assumptions.}}
-
-\textcolor{red}{fill in???}\\
-
-
 \noindent{\textbf{Nested model comparison.}}
 
 The model summary for the nested model comparison is in Table \ref{f2-nested}. For this, I utilized the `anova()' function in R and ommited the columns I don't interpret.
@@ -728,14 +703,47 @@ Lastly, the \textbf{Pr($\>$Chisq)} values for each model (excluding the null mod
 \subsection{Interim summary}
 
 
-\textcolor{red}{fill in ???}
+So, what do all of these models and comparisons tell us about the w--v alternation in CIM? First of all, the duration models were well-fit and accurate to the population and the nested model comparison showed that the island a speaker was from made the greatest difference in duration. Penrhyn had the largest mean duration and Rarotonga mean had the smallest duration. 
+
+Second, Atiu had the highest intensity and Rarotonga and Mauke had fairly high intensity values. The nested model was not well-fit, but the greatest difference in the nested model comparison was for the model with all parameters except \textit{word}. So, intensity was more varied for \textit{island} and \textit{speaker} and \textit{word} was not as relevant in this comparison.
 
 
-duration: model accuate to population, no linear relationship beyween duration and island
+Third, the F0 model was not well-fit and had high variability. The islands Atiu and Rarotonga were more associated with higher F0 values. In the nested model comparison, the biggest difference was for the model with only \textit{island} and \textit{F0}, though the model was not well-fit. 
 
-duration NESTED: island mod made the biggest difference 
+%\textcolor{red}{was the Atiu speaker a woman?}
 
-intensity: 
+Finally, the F2 model was statistically significant and all islands had a large F2 value, with the highest being Atiu. The nested model comparison was not well-fit and the complex models were worse-fit. Speaker did not seem to make a big difference in model fit. 
+
+
+From these models and nested models, we can predict that Atiu and Rarotonga have more instances of voiced w--v phones (due to the F0 model), and Atiu should have the most w--v tokens with a high F2, so the phones should surface as [v] most often for speakers from Atiu. Duration also varied robustly between islands, and Penrhyn was associated with the highest durations and Rarotonga was associated with the smallest duration. 
+
+The intensity models did not seem to vary in a meaningful way.
+
+
+%\textcolor{red}{fill in ???}
+
+
+%duration: model accurate to population, no linear relationship between duration and island
+%duration NESTED: island mod made the biggest difference 
+
+
+%intensity: Atiu speakers associated with higher intensity, Raro and Mauke higher intensity too
+%NESTED intensity: model not well fit, greatest difference in model fit was for intensity+island+speaker (without word)
+
+
+
+%F0: not well fit, Atiu strongly associated with higher f0 (was the speaker a woman?), Raro also associated with higher f0, lots of variability
+
+%NESTED f0: not well-fit, biggest difference was for the island+f0 model
+
+
+
+%f2: f2 statistically significant between the islands, all islands associated with large f2 but highest was Atiu
+
+%NESTED f2: not well-fit, speaker parameter didnt have a big difference on the model fit, the complex models were worse-fit
+
+
+
 
 
 

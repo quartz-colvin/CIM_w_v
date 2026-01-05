@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.10)  5 JAN 2026 09:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.10)  5 JAN 2026 10:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1437,17 +1437,7 @@ Package: cite 2015/02/27  v 5.5
 dftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count429
-) (9_dec_revision.aux
-
-LaTeX Warning: Label `tab:p-vals-table' multiply defined.
-
-
-LaTeX Warning: Label `CotoSolano' multiply defined.
-
-
-LaTeX Warning: Label `Nicholas' multiply defined.
-
-)
+) (9_dec_revision.aux)
 \openout1 = `9_dec_revision.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 99.
@@ -1467,7 +1457,8 @@ LaTeX Font Info:    ... okay on input line 99.
 LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 99.
 LaTeX Font Info:    Trying to load font information for T3+cmr on input line 99
 .
- (C:\Users\court\OneDrive\Desktop\MiKTeX_updated\tex/latex/tipa\t3cmr.fd
+
+(C:\Users\court\OneDrive\Desktop\MiKTeX_updated\tex/latex/tipa\t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
 LaTeX Font Info:    ... okay on input line 99.
@@ -1667,40 +1658,27 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 371.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 371.
-
-Underfull \hbox (badness 10000) in paragraph at lines 406--407
-
- []
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 494--495
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 588--589
+ [7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 575--576
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 678--679
+Underfull \hbox (badness 10000) in paragraph at lines 665--666
 
  []
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 690--691
-
- []
-
+[10] [11]
 LaTeX Font Info:    Trying to load font information for OML+ptm on input line 7
-64.
+72.
+
 (C:\Users\court\OneDrive\Desktop\MiKTeX_updated\tex/latex/psnfss\omlptm.fd
 File: omlptm.fd 
 )
 LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 764.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 772.
 
-[11] [12] [13]
+[12] [13]
 
 Package glossaries Warning: No \printglossary or \printglossaries found. 
 (Remove \makeglossaries if you don't want any glossaries.) 
@@ -1716,30 +1694,30 @@ L3 programming layer <2025-10-24>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 
-LaTeX Warning: There were multiply-defined labels.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `9_dec_revision.out' has not changed.
 (rerunfilecheck)             Checksum: C315294AA9658A97F99B4E8D5DF92566;1916.
  )
 (\end occurred inside a group at level 1)
 
-### simple group (level 1) entered at line 449 ({)
+### simple group (level 1) entered at line 445 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
  36158 strings out of 467871
  681503 string characters out of 5417413
- 1096722 words of memory out of 5000000
+ 1096683 words of memory out of 5000000
  64398 multiletter control sequences out of 15000+600000
  672246 words of font info for 152 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,9n,94p,2493b,548s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,9n,94p,2493b,549s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/court/OneDrive/Desktop/MiKTeX_updated/fonts/type1/pub
 lic/amsfonts/cm/cmmi10.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_updated/font
 s/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX_u
 pdated/fonts/type1/urw/times/utmb8a.pfb><C:/Users/court/OneDrive/Desktop/MiKTeX
 _updated/fonts/type1/urw/times/utmr8a.pfb><C:/Users/court/OneDrive/Desktop/MiKT
 eX_updated/fonts/type1/urw/times/utmri8a.pfb>
-Output written on 9_dec_revision.pdf (13 pages, 1212652 bytes).
+Output written on 9_dec_revision.pdf (13 pages, 1213844 bytes).
 PDF statistics:
  247 PDF objects out of 1000 (max. 8388607)
  60 named destinations out of 1000 (max. 500000)
