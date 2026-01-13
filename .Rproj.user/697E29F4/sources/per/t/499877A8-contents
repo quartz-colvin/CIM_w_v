@@ -39,6 +39,7 @@ library("mgcv")
 library("devtools")
 library("broom")
 library("ggplot2")
+#library("ggplot")
 library("lmerTest")
 theme_update(# axis labels
              axis.title = element_text(size = 17),
@@ -74,7 +75,7 @@ It is known across both Aotearoa Māori and CIM speakers that some speakers regu
 In hopes of answering this question, I will compare various aspects of w~v phonemes across a sample of the Cook Islands. The islands in this study are Atiu, Mauke, Penrhyn, and Rarotonga. 
 
 
-```{r, fig.align = "center", echo=FALSE, out.width="75%", fig.cap="Map of Cook Islands."}
+```{r, fig.align = "center", echo=FALSE, out.width="50%"}
 
 knitr::include_graphics("./figs/cook-islands-map.png")
 
@@ -100,7 +101,7 @@ To reiterate, all of the data collection and processing to a usable format for t
 
 The following large data set has many columns. Here I show a preview of the data set and then discuss which columns will be relevant to the analysis later in  the paper. 
 
-```{r, fig.align = "center", echo=FALSE, out.width="80%", retina=3}
+```{r, fig.align = "center", echo=FALSE, out.width="60%", retina=3}
 knitr::include_graphics("./figs/raw_data.png")
 ```
 
@@ -137,7 +138,7 @@ Below, I filter the data so that it only contains rows with the "v" phoneme. The
 
 ```{r}
 #| label: tidy-duration
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -149,7 +150,7 @@ tidy_dur <- untidy_data |>
 
 ```
 
-After we have done this tidying process, the duration data set looks like this. 
+The tidied duration dataset looks like this. 
 
 ```{r, fig.align = "center", echo=FALSE, out.width="60%"}
 #| label: glimpse-duration
@@ -160,20 +161,19 @@ knitr::kable(head(tidy_dur))
 
 ```
 
-For a visual comparison, we will look at boxplots comparing duration across these four islands. The code chunk for the box plot is here and the actual plot is below it. 
+For a visual comparison, we will look at boxplots comparing duration across these four islands.
 
 ```{r}
 #| label: duration-plot
 #| warning: false
 #| message: false
-#| echo: true
+#| echo: false
 
 plot_dur <- tidy_dur |>
   ggplot() +
   aes(x = island, y = duration, color = island) +
   geom_boxplot() +
   labs(
-    title = "Duration by island",
     x = "Island",
     y = "Duration"
   )
@@ -181,7 +181,7 @@ plot_dur <- tidy_dur |>
 ```
 
 
-```{r, fig.align = "center", echo=FALSE, out.width="75%"}
+```{r, fig.align = "center", echo=FALSE, out.width="50%"}
 #| label: print-duration-plot
 #| warning: false
 #| message: false
@@ -206,21 +206,6 @@ mod_dur <- lmer(duration ~ island + (1|speaker) + (1|word), data = tidy_dur)
 ```
 
 
-```{r}
-#| label: summary-dur
-#| echo: false
-#| message: false
-#| warning: false 
-
-#dur_summary <- summary(mod_dur)
-
-#print(dur_summary)
-
-```
-
-The p-values for each island are as follows. Atiu's p-value = 0.00225, Mauke's p-value = 0.90982, Penrhyn's p-value = 0.32459, and Rarotonga's p-value = 0.25014. 
-
-
 
 
 ## 4.2 Intensity by island
@@ -229,7 +214,7 @@ Next is the intensity comparison across the four islands. Starting from the raw 
 
 ```{r}
 #| label: tidy-intensity
-#| echo: true
+#| echo: false
 #| warning: false
 #| message: false
 
@@ -253,21 +238,20 @@ knitr::kable(head(tidy_intense))
 
 ```
 
-In the same way we did for the duration question, we will first look at a boxplot to visually see any clear differences in intensity across the Cook Islands. The code chunk to make the plot is below, and then the actual plot is printed below it. 
+In the same way we did for the duration question, we will first look at a boxplot to visually see any clear differences in intensity across the Cook Islands.
 
 
 ```{r}
 #| label: intensity-by-island
 #| warning: false
 #| message: false
-#| echo: true
+#| echo: false
 
 plot_intense <- tidy_intense |>
   ggplot() +
   aes(x = island, y = intensity, color = island) +
   geom_boxplot() +
   labs(
-    title = "Intensity by island",
     x = "Island",
     y = "Intensity"
   ) 
@@ -298,20 +282,7 @@ mod_intense <- lmer(intensity ~ island + (1|speaker) + (1|word), data = tidy_int
 
 ```
 
-The p-values for each island are as follows. Atiu's p-value = 0.00161, Mauke's p-value = 0.84133, Penrhyn's p-value = 0.62670 and Rarotonga's p-value = 0.86632. 
 
-```{r}
-#| label: summary-intense
-#| echo: false
-#| message: false
-#| warning: false
-
-#intense_summary <- summary(mod_intense)
-
-#print(intense_summary)
-
-
-```
 
 
 ## 4.3 Voicing by island 
@@ -322,11 +293,9 @@ This time, we tidy the raw data set in a similar way but with one additional ste
 
 In order to limit this autocorrelation issue, I chose to only keep f0 values at the 50% interval of the phoneme. I chose the 50% interval because the middle of the duration seemed like the smartest choice to represent the average f0 value across the phoneme's duration. 
 
-The code chunk below shows how I tidied this mini-data-set to answer the voicing question. 
-
 ```{r}
 #| label: tidy-f0
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -355,11 +324,11 @@ knitr::kable(head(tidy_f0))
 
 ```
 
-This time, to compare f0 across the islands visually, we can plot this data onto a scatterplot. First, here is the code chunk to create the scatterplots.
+This time, to compare f0 across the islands visually, we can plot this data onto a scatterplot. 
 
 ```{r}
 #| label: plot-f0
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -375,7 +344,6 @@ f0_plot <- tidy_f0 |>
   facet_grid(.~island,
              scales = "free_x") +
   labs(
-    title = "F0 by island", 
     x = "Duration", 
     y = "F0 (Hz)"
   ) 
@@ -392,10 +360,7 @@ print(f0_plot)
 
 ```
 
-It's clear that the most drastic slope is in the Penrhyn plot, and the data for the islands with more speakers are much more spread out across the plot. 
-
-
-To formally compare these different variables, we can again use a linear mixed effects model to see how f0 varies across these four Cook Islands. The model fitting is shown in the code chunk below. 
+It is clear that the most drastic slope is in the Penrhyn plot, and the data for the islands with more speakers are much more spread out across the plot. To formally compare these different variables, we can again use a linear mixed effects model to see how f0 varies across these four Cook Islands. The model fitting is shown in the code chunk below. 
 
 ```{r}
 #| label: mod-f0
@@ -407,20 +372,6 @@ mod_f0 <- lmer(f0 ~ island + (1|speaker) + (1|word), data = tidy_f0)
 
 ```
 
-The p-values for each island in this model are as follows. Atiu's p-value = 0.00702, Mauke's p-value = 0.43464, Penrhyn's p-value is 0.93276, and Rarotonga's p-value = 0.14965. 
-
-
-```{r}
-#| label: summary-f0
-#| echo: false
-#| message: false
-#| warning: false
-
-#f0_summary <- summary(mod_f0) 
-
-#print(f0_summary)
-
-```
 
 ## 4.4 w~v distribution by island
 
@@ -430,7 +381,7 @@ For this question, we tidy the raw data set once again so that it only has data 
 
 ```{r}
 #| label: tidy-f2
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -454,11 +405,11 @@ knitr::kable(head(tidy_f2))
 
 ```
 
-To visually compare the f2 values across these islands, here is a code chunk to generate another boxplot. 
+To visually compare the f2 values across these islands, we generate another boxplot. 
 
 ```{r}
 #| label: plot-f2
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -467,7 +418,6 @@ f2_plot <- tidy_f2 |>
   aes(x = island, y = f2, color = island) +
   geom_boxplot() +
   labs(
-    title = "F2 by island",
     x = "Island",
     y = "F2 (Hz)"
   )
@@ -492,26 +442,178 @@ From looking at the f2 boxplot, it's clear that Atiu has the lowest mean f2. The
 #| warning: false
 
 mod_f2 <- lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2)
-
 ```
 
+---
 
-```{r}
-#| label: summary-f2
-#| message: false
-#| echo: false
-#| warning: false
+---
 
-#f2_summary <- summary(mod_f2)
+---
 
-#print(f2_summary)
+---
 
-```
-
-The p-values for each island in this model are as follows. Atiu's p-value = 1.52e-05, Mauke's p-value = 0.02190, Penrhyn's p-value = 0.02162, and Rarotonga's p-value = 0.00626. 
-
+---
 
 ## 5.1 Results
+
+Summary tables for duration, intensity, f0, and f2.
+
+```{r}
+#| label: summary-tables
+#| echo: false
+#| message: false
+#| warning: false
+
+lmer(duration ~ island + (1|speaker) + (1|word), tidy_dur) |> 
+  summary()
+
+lmer(intensity ~ island + (1|speaker) + (1|word), data = tidy_intense) |>
+  summary()
+
+lmer(f0 ~ island + (1|speaker) + (1|word), data = tidy_f0) |>
+  summary()
+
+lmer(f2 ~ island + (1|speaker) + (1|word), data = tidy_f2) |>
+  summary()
+
+```
+
+
+
+
+
+
+Model fit for duration, intensity, f0, and f2.
+
+- Residuals for duration: `r mean(resid(mod_dur))` (these residuals should all be 0)
+
+- Residuals for intensity: `r mean(resid(mod_intense))`
+
+- Residuals for f0: `r mean(resid(mod_f0))`
+
+- Residuals for f2: `r mean(resid(mod_f2))`
+
+```{r}
+#| label: diagnosis
+#| warning: false
+#| message: false
+#| echo: false
+
+#ds4ling::diagnosis(mod_dur)
+
+# residuals - mean should be 0
+#mean(resid(mod_dur))
+
+
+# multicollinearity - dealt with by using nested model comparison; the 'anova()' fx
+
+
+# homoskedasticity
+
+
+# autocorrelation
+
+
+
+```
+
+
+
+
+Model summary table for **duration.**
+
+```{r}
+#| label: duration-mods
+#| echo: false
+#| message: false
+#| warning: false
+
+dur_null <- lm(duration ~ 1, data = tidy_dur)
+
+dur_island <- lm(duration ~ island, data = tidy_dur)
+
+dur_add <- lmer(duration ~ island + (1|speaker), data = tidy_dur)
+
+dur_anova <- anova(mod_dur, dur_add, dur_island, dur_null)
+
+knitr::kable(dur_anova)
+
+```
+
+
+
+
+Model summary for **intensity.**
+
+```{r}
+#| label: intensity-mods
+#| echo: false
+#| message: false
+#| warning: false
+
+intensity_null <- lm(intensity ~ 1, data = tidy_intense)
+
+intensity_island <- lm(intensity ~ island, data = tidy_intense)
+
+intensity_add <- lmer(intensity ~ island + (1|speaker), data = tidy_intense)
+
+
+
+intensity_anova <- anova(mod_intense, intensity_add, intensity_island, intensity_null)
+
+knitr::kable(intensity_anova)
+
+```
+
+Model summary for voicing (f0).
+
+```{r}
+#| label: f0-mods
+#| echo: false
+#| message: false
+#| warning: false
+
+f0_null <- lm(f0 ~ 1, data = tidy_f0)
+
+f0_island <- lm(f0 ~ island, data = tidy_f0)
+
+f0_add <- lmer(f0 ~ island + (1|speaker), data = tidy_f0)
+
+
+
+f0_anova <- anova(mod_f0, f0_add, f0_island, f0_null)
+
+knitr::kable(f0_anova)
+
+```
+
+
+Model summary for f2.
+
+```{r}
+#| label: f2-mods
+#| echo: false
+#| message: false
+#| warning: false
+
+f2_null <- lm(f2 ~ 1, data = tidy_f2)
+
+f2_island <- lm(f2 ~ island, data = tidy_f2)
+
+f2_add <- lmer(f2 ~ island + (1|speaker), data = tidy_f2)
+
+
+
+f2_anova <- anova(mod_f2, f2_add, f2_island, f2_null)
+
+knitr::kable(f2_anova)
+
+```
+
+
+***SUMMARIZE***
+
+
 
 Recall that we had the following p-values in each model for each island. 
 
@@ -559,15 +661,6 @@ select(island, word, f0) |>
 ```
 
 
-```{r}
-#| label: glimpse-voicing
-#| echo: false
-#| message: false
-#| warning: false
-
-#knitr::kable(head(voicing))
-
-```
 
 ```{r}
 #| label: voicing-freq
@@ -637,15 +730,6 @@ wv_dat <- tidy_f2 |>
 ```
 
 
-```{r}
-#| label: glimpse-wv
-#| echo: false
-#| message: false
-#| warning: false
-
-#knitr::kable(head(wv_dat))
-
-```
 
 ```{r}
 #| label: w-or-v-final
@@ -664,6 +748,42 @@ freq_table <- wv_dat |>
 knitr::kable(freq_table)
 
 ```
+
+
+```{r}
+#| label: wv-df
+#| message: false
+#| echo: false
+#| warning: false
+
+
+island <- c("Atiu", "Atiu", "Mauke", "Mauke", "Penrhyn", "Penrhyn", "Rarotonga", "Rarotonga")
+surface_form <- c("v", "w", "v", "w", "v", "w", "v", "w")
+freq <- c(97, 21, 424, 26, 163, 7, 151, 5)
+
+# Create the data frame
+wv_df <- data.frame(Island = island, Surface_form = surface_form, freq = freq)
+
+```
+
+
+
+```{r}
+#| label: wv-barplot
+#| warning: false
+#| echo: false
+#| message: false
+
+ggplot(data = wv_df, aes(hue, x = island, y = freq, fill = surface_form)) + 
+  geom_col() + 
+  labs(
+    x = "Surface form by island",
+    y = "Frequency"
+  ) + 
+  theme_classic()
+
+```
+
 
 ```{r}
 #| label: real-percentages

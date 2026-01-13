@@ -39,6 +39,7 @@ library("mgcv")
 library("devtools")
 library("broom")
 library("ggplot2")
+#library("ggplot")
 library("lmerTest")
 theme_update(# axis labels
              axis.title = element_text(size = 17),
@@ -747,6 +748,42 @@ freq_table <- wv_dat |>
 knitr::kable(freq_table)
 
 ```
+
+
+```{r}
+#| label: wv-df
+#| message: false
+#| echo: false
+#| warning: false
+
+
+island <- c("Atiu", "Atiu", "Mauke", "Mauke", "Penrhyn", "Penrhyn", "Rarotonga", "Rarotonga")
+surface_form <- c("v", "w", "v", "w", "v", "w", "v", "w")
+freq <- c(97, 21, 424, 26, 163, 7, 151, 5)
+
+# Create the data frame
+wv_df <- data.frame(Island = island, Surface_form = surface_form, freq = freq)
+
+```
+
+
+
+```{r}
+#| label: wv-barplot
+#| warning: false
+#| echo: false
+#| message: false
+
+ggplot(data = wv_df, aes(hue, x = island, y = freq, fill = surface_form)) + 
+  geom_col() + 
+  labs(
+    x = "Surface form by island",
+    y = "Frequency"
+  ) + 
+  theme_classic()
+
+```
+
 
 ```{r}
 #| label: real-percentages
